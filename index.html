@@ -286,7 +286,70 @@
       </header>
       
       <main id="municipio-content">
-        <div class="loading">Carregando dados...</div>
+        <!-- Static content instead of dynamic loading -->
+        <div class="feature-card" style="display: block; background-color: white; min-height: 0; height: auto; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <div class="feature-content" style="padding: 20px; background-color: white;">
+            <div class="feature-title">Reabilitação Urbana</div>
+            <div class="feature-description">Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional. O Município oferece medidas de apoio que, em articulação com atores locais, promovem a recuperação do edificado, estimulando a fixação populacional em diversas ocupações.</div>
+            <ul class="feature-list">
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela" class="feature-list-link" target="_blank">Reabilitação do Centro Histórico de Palmela</a>
+              </li>
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo" class="feature-list-link" target="_blank">Reabilitação Urbana do Pinhal Novo</a>
+              </li>
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana" class="feature-list-link" target="_blank">Incentivos à reabilitação urbana</a>
+              </li>
+            </ul>
+            <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana" class="feature-button" target="_blank">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card" style="display: block; background-color: white; min-height: 0; height: auto; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <div class="feature-content" style="padding: 20px; background-color: white;">
+            <div class="feature-title">Planos Municipais de Ordenamento do Território</div>
+            <div class="feature-description">Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas. Esta transparência clarifica as regras de utilização do território. A partilha digital desta informação visa aproximar cidadãos e administração pública.</div>
+            <ul class="feature-list">
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal" class="feature-list-link" target="_blank">Plano Diretor Municipal</a>
+              </li>
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos" class="feature-list-link" target="_blank">Estudos de ordenamento do território</a>
+              </li>
+            </ul>
+            <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio" class="feature-button" target="_blank">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card" style="display: block; background-color: white; min-height: 0; height: auto; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <div class="feature-content" style="padding: 20px; background-color: white;">
+            <div class="feature-title">Habitação</div>
+            <div class="feature-description">A Constituição estabelece o direito à habitação para todos, cabendo ao Estado e autarquias implementar políticas adequadas. A Câmara de Palmela, reconhecendo o acesso à habitação como fundamental para integração social, dispõe de 32 fogos municipais sujeitos à Lei nº 81/2014, que define regras de atribuição e regime de arrendamento apoiado, complementados com acompanhamento social.</div>
+            <ul class="feature-list">
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/habitacao/estrategia-local-de-habitacao-elh" class="feature-list-link" target="_blank">Estratégia local de habitação</a>
+              </li>
+              <li class="feature-list-item">
+                <a href="https://www.cm-palmela.pt/viver/habitacao/habitacao-municipal-arrendamento-apoiado" class="feature-list-link" target="_blank">Habitação Municipal</a>
+              </li>
+            </ul>
+            <a href="https://www.cm-palmela.pt/viver/habitacao" class="feature-button" target="_blank">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card" style="display: block; background-color: white; min-height: 0; height: auto; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <div class="feature-content" style="padding: 20px; background-color: white;">
+            <div class="feature-title">Centro Histórico</div>
+            <div class="feature-description">Património, habitação, comércio, serviços, movimento associativo juvenil, cultural e desportivo, tradição, produtos locais, espaços de conhecimento, oportunidades de negócio, propostas de lazer, refúgios de tranquilidade.</div>
+            <ul class="feature-list">
+              <li class="feature-list-item">
+                <a href="http://centrohistorico.cm-palmela.pt/" class="feature-list-link" target="_blank">Portal do Centro Histórico de Palmela</a>
+              </li>
+            </ul>
+            <a href="https://www.cm-palmela.pt/viver/centro-historico" class="feature-button" target="_blank">Ver mais</a>
+          </div>
+        </div>
       </main>
     </div>
     
@@ -392,11 +455,11 @@
         if (selectedPage) {
           selectedPage.classList.add('active');
           
-          // Load data for municipio page if needed
-          if (pageId === 'municipio' && !selectedPage.dataset.loaded) {
-            loadMunicipioData();
-            selectedPage.dataset.loaded = 'true';
-          }
+          // Load data for municipio page if needed - DISABLED, using static content now
+          // if (pageId === 'municipio' && !selectedPage.dataset.loaded) {
+          //   loadMunicipioData();
+          //   selectedPage.dataset.loaded = 'true';
+          // }
           
           // Load data for projects page if needed
           if (pageId === 'projects' && !selectedPage.dataset.loaded) {
