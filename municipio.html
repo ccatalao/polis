@@ -2,10 +2,12 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Serviços Municipais - Polis</title>
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -121,9 +123,48 @@
     
     /* Mobile styles */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+        padding-bottom: 60px;
+      }
+      
+      .container {
+        width: 100%;
+      }
+      
+      header {
+        padding: 15px;
+      }
+      
+      main {
+        padding: 15px;
+      }
+      
       .card {
         padding: 15px;
         margin-bottom: 15px;
+      }
+      
+      .card-title {
+        font-size: 16px;
+      }
+      
+      .card-description {
+        font-size: 13px;
+      }
+      
+      .feature-list {
+        margin: 10px 0;
+        padding-left: 15px;
+      }
+      
+      .feature-item {
+        margin-bottom: 6px;
+      }
+      
+      .button, .back-button {
+        padding: 6px 12px;
+        font-size: 13px;
       }
     }
   </style>
