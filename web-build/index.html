@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Polis</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#3498db">
@@ -185,6 +188,37 @@
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
+    }
+    
+    /* Special styling for municipio cards without images */
+    #municipio-content .feature-card {
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      display: block; /* Change from flex to block to avoid image space */
+    }
+    
+    #municipio-content .feature-content {
+      padding: 20px;
+    }
+    
+    /* Remove any height constraints that might be causing the empty space */
+    #municipio-content .feature-card:before {
+      display: none;
+    }
+    
+    /* Ensure no min-height is applied to municipio cards */
+    #municipio-content .feature-card {
+      min-height: auto;
+    }
+    
+    /* Ensure mobile compatibility */
+    @media (max-width: 768px) {
+      #municipio-content .feature-card {
+        margin-bottom: 15px;
+      }
     }
   </style>
   <script src="./static/js/bundle.js" defer></script>
@@ -410,18 +444,7 @@
               data.municipio.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'feature-card';
-                
-                // Create image element with fallback
-                let imageContainer;
-                if (item.imageUrl) {
-                  imageContainer = document.createElement('img');
-                  imageContainer.src = item.imageUrl.webp || item.imageUrl.fallback;
-                  imageContainer.alt = item.title;
-                  imageContainer.className = 'feature-image';
-                } else {
-                  imageContainer = document.createElement('div');
-                  imageContainer.className = 'feature-image';
-                }
+                card.id = `municipio-card-${item.id}`; // Add unique ID for each card
                 
                 // Create content container
                 const content = document.createElement('div');
@@ -465,7 +488,7 @@
                 button.textContent = 'Ver mais';
                 button.target = '_blank';
                 
-                // Assemble the card
+                // Assemble the card - directly append to content, no image container
                 content.appendChild(title);
                 content.appendChild(description);
                 if (featuresList) {
@@ -473,9 +496,10 @@
                 }
                 content.appendChild(button);
                 
-                card.appendChild(imageContainer);
+                // Append content to card
                 card.appendChild(content);
                 
+                // Add the complete card to the municipio content
                 municipioContent.appendChild(card);
               });
             } else {
