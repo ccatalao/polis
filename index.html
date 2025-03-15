@@ -1,37 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Polis</title>
-    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
-    <style id="expo-reset">
-      /* These styles make the body full-height */
-      html,
-      body {
-        height: 100%;
-      }
-      /* These styles disable body scrolling if you are using <ScrollView> */
-      body {
-        overflow: hidden;
-      }
-      /* These styles make the root element full-height */
-      #root {
-        display: flex;
-        height: 100%;
-        flex: 1;
-      }
-    </style>
-  <link rel="shortcut icon" href="./favicon.ico" /></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polis</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+    main {
+      background-color: white;
+      padding: 20px;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+    .feature-card {
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .feature-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .feature-content {
+      padding: 15px;
+    }
+    .feature-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .feature-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .feature-button {
+      display: inline-block;
+      background-color: #3498db;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .tab-bar {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      color: #666;
+      text-decoration: none;
+    }
+    .tab.active {
+      color: #3498db;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Planeamento Urbano Informado</h1>
+      <p>Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis</p>
+    </header>
+    
+    <main>
+      <div class="feature-card">
+        <img src="./assets/images/home/municipio.webp" alt="Serviços Municipais" class="feature-image">
+        <div class="feature-content">
+          <div class="feature-title">Serviços Municipais</div>
+          <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
+          <a href="#municipio" class="feature-button">Ver mais</a>
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <img src="./assets/images/home/projects.webp" alt="Projetos europeus" class="feature-image">
+        <div class="feature-content">
+          <div class="feature-title">Projetos europeus</div>
+          <div class="feature-description">Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.</div>
+          <a href="#projects" class="feature-button">Ver mais</a>
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <img src="./assets/images/home/funding.webp" alt="Financiamento" class="feature-image">
+        <div class="feature-content">
+          <div class="feature-title">Financiamento</div>
+          <div class="feature-description">Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável.</div>
+          <a href="#funding" class="feature-button">Ver mais</a>
+        </div>
+      </div>
+      
+      <div class="feature-card">
+        <img src="./assets/images/home/publicacoes.webp" alt="Publicações de acesso aberto" class="feature-image">
+        <div class="feature-content">
+          <div class="feature-title">Publicações de acesso aberto</div>
+          <div class="feature-description">Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.</div>
+          <a href="#chapters" class="feature-button">Ver mais</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <div class="tab-bar">
+    <a href="#home" class="tab active">Home</a>
+    <a href="#municipio" class="tab">Município</a>
+    <a href="#projects" class="tab">Projetos</a>
+    <a href="#funding" class="tab">Financiamento</a>
+  </div>
 
-  <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <!-- The root element for your Expo app. -->
-    <div id="root"></div>
-  <script src="./_expo/static/js/web/AppEntry-21415d457c58c168ea160ebe2afb12f7.js" defer></script>
+  <script>
+    // Simple tab navigation
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
 </body>
-</html>
+</html> 
