@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polis</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#3498db">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
     html, body {
       height: 100%;
@@ -18,6 +23,7 @@
       max-width: 600px;
       margin: 0 auto;
       padding: 20px;
+      padding-bottom: 70px; /* Space for tab bar */
     }
     header {
       background-color: #3498db;
@@ -93,69 +99,307 @@
       color: #3498db;
       font-weight: bold;
     }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .about-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .about-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #3498db;
+    }
+    .about-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>Planeamento Urbano Informado</h1>
-      <p>Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis</p>
-    </header>
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+      <header>
+        <h1>Planeamento Urbano Informado</h1>
+        <p>Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis</p>
+      </header>
+      
+      <main>
+        <div class="feature-card">
+          <img src="./assets/images/home/municipio.webp" alt="Serviços Municipais" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Serviços Municipais</div>
+            <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
+            <a href="#municipio" class="feature-button" data-page="municipio">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/projects.webp" alt="Projetos europeus" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Projetos europeus</div>
+            <div class="feature-description">Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.</div>
+            <a href="#projects" class="feature-button" data-page="projects">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/funding.webp" alt="Financiamento" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Financiamento</div>
+            <div class="feature-description">Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável.</div>
+            <a href="#funding" class="feature-button" data-page="funding">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/publicacoes.webp" alt="Publicações de acesso aberto" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Publicações de acesso aberto</div>
+            <div class="feature-description">Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.</div>
+            <a href="#chapters" class="feature-button" data-page="chapters">Ver mais</a>
+          </div>
+        </div>
+      </main>
+    </div>
     
-    <main>
-      <div class="feature-card">
-        <img src="./assets/images/home/municipio.webp" alt="Serviços Municipais" class="feature-image">
-        <div class="feature-content">
-          <div class="feature-title">Serviços Municipais</div>
-          <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
-          <a href="#municipio" class="feature-button">Ver mais</a>
-        </div>
-      </div>
+    <!-- Municipio Page -->
+    <div id="municipio-page" class="page">
+      <header>
+        <h1>Serviços Municipais</h1>
+      </header>
       
-      <div class="feature-card">
-        <img src="./assets/images/home/projects.webp" alt="Projetos europeus" class="feature-image">
-        <div class="feature-content">
-          <div class="feature-title">Projetos europeus</div>
-          <div class="feature-description">Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.</div>
-          <a href="#projects" class="feature-button">Ver mais</a>
+      <main>
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Licenciamento Urbanístico</div>
+            <div class="feature-description">Informação sobre processos de licenciamento urbanístico e requisitos legais.</div>
+            <a href="#" class="feature-button">Consultar</a>
+          </div>
         </div>
-      </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Planos Municipais</div>
+            <div class="feature-description">Acesso aos planos municipais de ordenamento do território.</div>
+            <a href="#" class="feature-button">Consultar</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Habitação Social</div>
+            <div class="feature-description">Programas municipais de habitação social e apoio à habitação.</div>
+            <a href="#" class="feature-button">Consultar</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- Projects Page -->
+    <div id="projects-page" class="page">
+      <header>
+        <h1>Projetos Europeus</h1>
+      </header>
       
-      <div class="feature-card">
-        <img src="./assets/images/home/funding.webp" alt="Financiamento" class="feature-image">
-        <div class="feature-content">
-          <div class="feature-title">Financiamento</div>
-          <div class="feature-description">Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável.</div>
-          <a href="#funding" class="feature-button">Ver mais</a>
+      <main>
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Horizonte Europa</div>
+            <div class="feature-description">Programa-quadro de investigação e inovação da UE para 2021-2027.</div>
+            <a href="#" class="feature-button">Explorar</a>
+          </div>
         </div>
-      </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">URBACT</div>
+            <div class="feature-description">Programa europeu de cooperação territorial para o desenvolvimento urbano sustentável.</div>
+            <a href="#" class="feature-button">Explorar</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">LIFE</div>
+            <div class="feature-description">Instrumento financeiro da UE para o ambiente e ação climática.</div>
+            <a href="#" class="feature-button">Explorar</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- Funding Page -->
+    <div id="funding-page" class="page">
+      <header>
+        <h1>Financiamento</h1>
+      </header>
       
-      <div class="feature-card">
-        <img src="./assets/images/home/publicacoes.webp" alt="Publicações de acesso aberto" class="feature-image">
-        <div class="feature-content">
-          <div class="feature-title">Publicações de acesso aberto</div>
-          <div class="feature-description">Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.</div>
-          <a href="#chapters" class="feature-button">Ver mais</a>
+      <main>
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Fundos Estruturais</div>
+            <div class="feature-description">Informação sobre os fundos estruturais da UE disponíveis para projetos urbanos.</div>
+            <a href="#" class="feature-button">Ver detalhes</a>
+          </div>
         </div>
-      </div>
-    </main>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Banco Europeu de Investimento</div>
+            <div class="feature-description">Linhas de financiamento do BEI para projetos de desenvolvimento urbano.</div>
+            <a href="#" class="feature-button">Ver detalhes</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Programas Nacionais</div>
+            <div class="feature-description">Programas de financiamento nacionais para projetos de urbanismo e habitação.</div>
+            <a href="#" class="feature-button">Ver detalhes</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- Chapters Page -->
+    <div id="chapters-page" class="page">
+      <header>
+        <h1>Publicações</h1>
+      </header>
+      
+      <main>
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Revista de Urbanismo</div>
+            <div class="feature-description">Publicação trimestral com artigos sobre urbanismo e planeamento territorial.</div>
+            <a href="#" class="feature-button">Ler</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Estudos de Caso</div>
+            <div class="feature-description">Compilação de estudos de caso sobre intervenções urbanas bem-sucedidas.</div>
+            <a href="#" class="feature-button">Ler</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-content">
+            <div class="feature-title">Guias Práticos</div>
+            <div class="feature-description">Guias práticos para implementação de políticas urbanas sustentáveis.</div>
+            <a href="#" class="feature-button">Ler</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- About Page -->
+    <div id="about-page" class="page">
+      <header>
+        <h1>Sobre o Polis</h1>
+      </header>
+      
+      <main>
+        <div class="about-section">
+          <div class="about-title">A nossa missão</div>
+          <div class="about-text">O Polis é uma aplicação dedicada ao planeamento urbano informado, fornecendo recursos e ferramentas para profissionais, estudantes e entusiastas do urbanismo e ordenamento do território.</div>
+          <div class="about-text">A nossa missão é facilitar o acesso a informação relevante e atualizada sobre políticas de desenvolvimento local, projetos europeus, financiamento e publicações académicas na área do urbanismo.</div>
+        </div>
+        
+        <div class="about-section">
+          <div class="about-title">Contactos</div>
+          <div class="about-text">Email: info@polis-app.com</div>
+          <div class="about-text">Telefone: +351 123 456 789</div>
+        </div>
+      </main>
+    </div>
   </div>
   
   <div class="tab-bar">
-    <a href="#home" class="tab active">Home</a>
-    <a href="#municipio" class="tab">Município</a>
-    <a href="#projects" class="tab">Projetos</a>
-    <a href="#funding" class="tab">Financiamento</a>
+    <a href="#home" class="tab active" data-page="home">Home</a>
+    <a href="#municipio" class="tab" data-page="municipio">Município</a>
+    <a href="#projects" class="tab" data-page="projects">Projetos</a>
+    <a href="#funding" class="tab" data-page="funding">Financiamento</a>
+    <a href="#chapters" class="tab" data-page="chapters">Publicações</a>
+    <a href="#about" class="tab" data-page="about">Sobre</a>
   </div>
 
   <script>
-    // Simple tab navigation
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+    // Navigation system
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all tabs and pages
+      const tabs = document.querySelectorAll('.tab');
+      const pages = document.querySelectorAll('.page');
+      const featureButtons = document.querySelectorAll('.feature-button[data-page]');
+      
+      // Function to show a page
+      function showPage(pageId) {
+        // Hide all pages
+        pages.forEach(page => {
+          page.classList.remove('active');
+        });
+        
+        // Show the selected page
+        const selectedPage = document.getElementById(pageId + '-page');
+        if (selectedPage) {
+          selectedPage.classList.add('active');
+        }
+        
+        // Update active tab
+        tabs.forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.getAttribute('data-page') === pageId) {
+            tab.classList.add('active');
+          }
+        });
+        
+        // Update URL hash
+        window.location.hash = pageId;
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+      
+      // Handle tab clicks
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
+          const pageId = this.getAttribute('data-page');
+          showPage(pageId);
+        });
       });
+      
+      // Handle feature button clicks
+      featureButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const pageId = this.getAttribute('data-page');
+          showPage(pageId);
+        });
+      });
+      
+      // Handle URL hash changes
+      function handleHashChange() {
+        const hash = window.location.hash.substring(1) || 'home';
+        showPage(hash);
+      }
+      
+      window.addEventListener('hashchange', handleHashChange);
+      
+      // Initial page load
+      handleHashChange();
     });
   </script>
 </body>
