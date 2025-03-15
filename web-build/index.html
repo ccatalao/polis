@@ -248,7 +248,7 @@
           <div class="feature-content">
             <div class="feature-title">Serviços Municipais</div>
             <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
-            <a href="#municipio" class="feature-button" data-page="municipio">Ver mais</a>
+            <a href="municipio.html" class="feature-button">Ver mais</a>
           </div>
         </div>
         
@@ -407,7 +407,7 @@
       <i class="fas fa-home"></i>
       <span>Home</span>
     </a>
-    <a href="#municipio" class="tab" data-page="municipio">
+    <a href="municipio.html" class="tab">
       <i class="fas fa-building"></i>
       <span>Município</span>
     </a>
@@ -439,6 +439,12 @@
       
       // Function to show a page
       function showPage(pageId) {
+        // Special case for municipio - redirect to standalone page
+        if (pageId === 'municipio') {
+          window.location.href = 'municipio.html';
+          return;
+        }
+        
         // Hide all pages
         pages.forEach(page => {
           page.classList.remove('active');
@@ -448,12 +454,6 @@
         const selectedPage = document.getElementById(pageId + '-page');
         if (selectedPage) {
           selectedPage.classList.add('active');
-          
-          // Load data for municipio page if needed - DISABLED, using static content now
-          // if (pageId === 'municipio' && !selectedPage.dataset.loaded) {
-          //   loadMunicipioData();
-          //   selectedPage.dataset.loaded = 'true';
-          // }
           
           // Load data for projects page if needed
           if (pageId === 'projects' && !selectedPage.dataset.loaded) {
