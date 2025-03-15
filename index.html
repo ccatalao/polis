@@ -194,10 +194,31 @@
     #municipio-content .feature-card {
       border-radius: 8px;
       background-color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+      display: block; /* Change from flex to block to avoid image space */
     }
     
     #municipio-content .feature-content {
       padding: 20px;
+    }
+    
+    /* Remove any height constraints that might be causing the empty space */
+    #municipio-content .feature-card:before {
+      display: none;
+    }
+    
+    /* Ensure no min-height is applied to municipio cards */
+    #municipio-content .feature-card {
+      min-height: auto;
+    }
+    
+    /* Ensure mobile compatibility */
+    @media (max-width: 768px) {
+      #municipio-content .feature-card {
+        margin-bottom: 15px;
+      }
     }
   </style>
   <script src="./static/js/bundle.js" defer></script>
@@ -423,6 +444,7 @@
               data.municipio.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'feature-card';
+                card.id = `municipio-card-${item.id}`; // Add unique ID for each card
                 
                 // Create content container
                 const content = document.createElement('div');
@@ -466,7 +488,7 @@
                 button.textContent = 'Ver mais';
                 button.target = '_blank';
                 
-                // Assemble the card
+                // Assemble the card - directly append to content, no image container
                 content.appendChild(title);
                 content.appendChild(description);
                 if (featuresList) {
@@ -474,8 +496,10 @@
                 }
                 content.appendChild(button);
                 
+                // Append content to card
                 card.appendChild(content);
                 
+                // Add the complete card to the municipio content
                 municipioContent.appendChild(card);
               });
             } else {
