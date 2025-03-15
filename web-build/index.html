@@ -427,89 +427,147 @@
       // Function to load municipio data from JSON
       function loadMunicipioData() {
         const municipioContent = document.getElementById('municipio-content');
+        municipioContent.innerHTML = '<div class="loading">Carregando dados...</div>';
         
-        fetch('./data/municipio.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
+        // Hardcoded municipio data to avoid JSON loading issues
+        const municipioData = {
+          "municipio": [
+            {
+              "id": "reabilitacao-urbana",
+              "title": "Reabilitação Urbana",
+              "description": "Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional. O Município oferece medidas de apoio que, em articulação com atores locais, promovem a recuperação do edificado, estimulando a fixação populacional em diversas ocupações.",
+              "url": "https://www.cm-palmela.pt/viver/reabilitacao-urbana",
+              "features": [
+                {
+                  "feature": "Reabilitação do Centro Histórico de Palmela",
+                  "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela"
+                },
+                {
+                  "feature": "Reabilitação Urbana do Pinhal Novo",
+                  "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo"
+                },
+                {
+                  "feature": "Incentivos à reabilitação urbana",
+                  "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
+                }
+              ]
+            },
+            {
+              "id": "planos-municipais",
+              "title": "Planos Municipais de Ordenamento do Território",
+              "description": "Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas. Esta transparência clarifica as regras de utilização do território. A partilha digital desta informação visa aproximar cidadãos e administração pública.",
+              "url": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio",
+              "features": [
+                {
+                  "feature": "Plano Diretor Municipal",
+                  "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal"
+                },
+                {
+                  "feature": "Estudos de ordenamento do território",
+                  "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
+                }
+              ]
+            },
+            {
+              "id": "habitacao",
+              "title": "Habitação",
+              "description": "A Constituição estabelece o direito à habitação para todos, cabendo ao Estado e autarquias implementar políticas adequadas. A Câmara de Palmela, reconhecendo o acesso à habitação como fundamental para integração social, dispõe de 32 fogos municipais sujeitos à Lei nº 81/2014, que define regras de atribuição e regime de arrendamento apoiado, complementados com acompanhamento social.",
+              "url": "https://www.cm-palmela.pt/viver/habitacao",
+              "features": [
+                {
+                  "feature": "Estratégia local de habitação",
+                  "featureURL": "https://www.cm-palmela.pt/viver/habitacao/estrategia-local-de-habitacao-elh"
+                },
+                {
+                  "feature": "Habitação Municipal",
+                  "featureURL": "https://www.cm-palmela.pt/viver/habitacao/habitacao-municipal-arrendamento-apoiado"
+                }
+              ]
+            },
+            {
+              "id": "centro-historico",
+              "title": "Centro Histórico",
+              "description": "Património, habitação, comércio, serviços, movimento associativo juvenil, cultural e desportivo, tradição, produtos locais, espaços de conhecimento, oportunidades de negócio, propostas de lazer, refúgios de tranquilidade.",
+              "url": "https://www.cm-palmela.pt/viver/centro-historico",
+              "features": [
+                {
+                  "feature": "Portal do Centro Histórico de Palmela",
+                  "featureURL": "http://centrohistorico.cm-palmela.pt/"
+                }
+              ]
             }
-            return response.json();
-          })
-          .then(data => {
-            // Clear loading message
-            municipioContent.innerHTML = '';
+          ]
+        };
+        
+        // Clear loading message
+        municipioContent.innerHTML = '';
+        
+        // Render municipio items
+        if (municipioData.municipio && municipioData.municipio.length > 0) {
+          municipioData.municipio.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'feature-card';
+            card.id = `municipio-card-${item.id}`; // Add unique ID for each card
             
-            // Render municipio items
-            if (data.municipio && data.municipio.length > 0) {
-              data.municipio.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'feature-card';
-                card.id = `municipio-card-${item.id}`; // Add unique ID for each card
+            // Create content container
+            const content = document.createElement('div');
+            content.className = 'feature-content';
+            
+            // Add title
+            const title = document.createElement('div');
+            title.className = 'feature-title';
+            title.textContent = item.title;
+            
+            // Add description
+            const description = document.createElement('div');
+            description.className = 'feature-description';
+            description.textContent = item.description;
+            
+            // Add features list if available
+            let featuresList = null;
+            if (item.features && item.features.length > 0) {
+              featuresList = document.createElement('ul');
+              featuresList.className = 'feature-list';
+              
+              item.features.forEach(feature => {
+                const listItem = document.createElement('li');
+                listItem.className = 'feature-list-item';
                 
-                // Create content container
-                const content = document.createElement('div');
-                content.className = 'feature-content';
+                const link = document.createElement('a');
+                link.href = feature.featureURL;
+                link.className = 'feature-list-link';
+                link.textContent = feature.feature;
+                link.target = '_blank';
                 
-                // Add title
-                const title = document.createElement('div');
-                title.className = 'feature-title';
-                title.textContent = item.title;
-                
-                // Add description
-                const description = document.createElement('div');
-                description.className = 'feature-description';
-                description.textContent = item.description;
-                
-                // Add features list if available
-                let featuresList = null;
-                if (item.features && item.features.length > 0) {
-                  featuresList = document.createElement('ul');
-                  featuresList.className = 'feature-list';
-                  
-                  item.features.forEach(feature => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'feature-list-item';
-                    
-                    const link = document.createElement('a');
-                    link.href = feature.featureURL;
-                    link.className = 'feature-list-link';
-                    link.textContent = feature.feature;
-                    link.target = '_blank';
-                    
-                    listItem.appendChild(link);
-                    featuresList.appendChild(listItem);
-                  });
-                }
-                
-                // Add button
-                const button = document.createElement('a');
-                button.href = item.url;
-                button.className = 'feature-button';
-                button.textContent = 'Ver mais';
-                button.target = '_blank';
-                
-                // Assemble the card - directly append to content, no image container
-                content.appendChild(title);
-                content.appendChild(description);
-                if (featuresList) {
-                  content.appendChild(featuresList);
-                }
-                content.appendChild(button);
-                
-                // Append content to card
-                card.appendChild(content);
-                
-                // Add the complete card to the municipio content
-                municipioContent.appendChild(card);
+                listItem.appendChild(link);
+                featuresList.appendChild(listItem);
               });
-            } else {
-              municipioContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
             }
-          })
-          .catch(error => {
-            console.error('Error loading municipio data:', error);
-            municipioContent.innerHTML = '<div class="loading">Erro ao carregar dados. Por favor, tente novamente mais tarde.</div>';
+            
+            // Add button
+            const button = document.createElement('a');
+            button.href = item.url;
+            button.className = 'feature-button';
+            button.textContent = 'Ver mais';
+            button.target = '_blank';
+            
+            // Assemble the card - directly append to content, no image container
+            content.appendChild(title);
+            content.appendChild(description);
+            if (featuresList) {
+              content.appendChild(featuresList);
+            }
+            content.appendChild(button);
+            
+            // Append content to card
+            card.appendChild(content);
+            
+            // Add the complete card to the municipio content
+            municipioContent.appendChild(card);
           });
+        } else {
+          municipioContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+        }
       }
       
       // Function to load projects data from JSON
