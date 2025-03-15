@@ -411,18 +411,6 @@
                 const card = document.createElement('div');
                 card.className = 'feature-card';
                 
-                // Create image element with fallback
-                let imageContainer;
-                if (item.imageUrl) {
-                  imageContainer = document.createElement('img');
-                  imageContainer.src = item.imageUrl.webp || item.imageUrl.fallback;
-                  imageContainer.alt = item.title;
-                  imageContainer.className = 'feature-image';
-                } else {
-                  imageContainer = document.createElement('div');
-                  imageContainer.className = 'feature-image';
-                }
-                
                 // Create content container
                 const content = document.createElement('div');
                 content.className = 'feature-content';
@@ -473,7 +461,6 @@
                 }
                 content.appendChild(button);
                 
-                card.appendChild(imageContainer);
                 card.appendChild(content);
                 
                 municipioContent.appendChild(card);
