@@ -138,7 +138,7 @@ const getPublicationImage = (publicationId, categoryId) => {
   return require('../../assets/images/home/publicacoes.webp');
 };
 
-const PublicationCard = ({ title, description, url, publicationId, categoryId, imageUrl }) => {
+const PublicationCard = ({ title, description, url, publicationId, getPublicationImage }) => {
   const handlePress = async () => {
     // Check if the link can be opened
     const supported = await Linking.canOpenURL(url);
@@ -154,10 +154,8 @@ const PublicationCard = ({ title, description, url, publicationId, categoryId, i
     }
   };
 
-  // Use the imageUrl if provided, otherwise fall back to the hardcoded image
-  const imageSource = imageUrl 
-    ? { uri: imageUrl.webp || imageUrl.fallback }
-    : getPublicationImage(publicationId, categoryId);
+  // Use the getPublicationImage function passed from ChaptersScreen
+  const imageSource = getPublicationImage(publicationId);
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
@@ -177,7 +175,7 @@ const PublicationCard = ({ title, description, url, publicationId, categoryId, i
 };
 
 const ChapterDetailScreen = ({ route, navigation }) => {
-  const { chapter } = route.params;
+  const { chapter, getPublicationImage } = route.params;
   
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -201,8 +199,7 @@ const ChapterDetailScreen = ({ route, navigation }) => {
             description={item.description}
             url={item.url}
             publicationId={item.id}
-            categoryId={chapter.id}
-            imageUrl={item.imageUrl}
+            getPublicationImage={getPublicationImage}
           />
         )}
         contentContainerStyle={styles.listContent}

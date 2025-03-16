@@ -2,7 +2,6 @@
   "name": "polis",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
-  "homepage": "https://ccatalao.github.io/polis",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
@@ -12,11 +11,7 @@
     "build:dev:android": "npx eas build --profile development --platform android",
     "build:dev:ios": "npx eas build --profile development --platform ios",
     "build:preview:android": "npx eas build --profile preview --platform android",
-    "build:preview:ios": "npx eas build --profile preview --platform ios",
-    "copy:publications": "mkdir -p web-build/assets/images/publications && cp -r assets/images/publications/* web-build/assets/images/publications/",
-    "clean:web-build": "rm -rf web-build/images/municipio web-build/images/projetos web-build/images/revistas",
-    "predeploy": "rm -rf dist && mkdir -p dist && cp -r web-build/* dist/ && rm -rf dist/images/municipio dist/images/projetos dist/images/revistas && touch dist/.nojekyll",
-    "deploy": "npm run copy:publications && npm run clean:web-build && gh-pages -d dist"
+    "build:preview:ios": "npx eas build --profile preview --platform ios"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
@@ -26,6 +21,7 @@
     "expo": "^52.0.38",
     "expo-dev-client": "~3.3.12",
     "expo-image": "~1.10.5",
+    "expo-router": "^4.0.18",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -36,8 +32,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "eas-cli": "^15.0.15",
-    "gh-pages": "^6.1.1"
+    "eas-cli": "^15.0.15"
   },
   "private": true
 }

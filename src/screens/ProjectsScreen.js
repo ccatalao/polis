@@ -2,45 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 
-// Mock data for projects
-const mockProjectsData = [
-  {
-    "id": "urbact",
-    "title": "URBACT",
-    "description": "Programa europeu de cooperação territorial que promove o desenvolvimento urbano sustentável e integrado em cidades da Europa.",
-    "url": "https://urbact.eu/",
-    "features": [
-      "Intercâmbio de conhecimentos e boas práticas entre cidades europeias",
-      "Desenvolvimento de soluções para desafios urbanos comuns",
-      "Capacitação de profissionais urbanos e decisores locais"
-    ]
-  },
-  {
-    "id": "uia",
-    "title": "Urban Innovative Actions",
-    "description": "Iniciativa da União Europeia que fornece recursos para testar novas soluções para desafios urbanos.",
-    "url": "https://uia-initiative.eu/en",
-    "features": [
-      "Financiamento para projetos urbanos inovadores",
-      "Abordagem de desafios urbanos complexos",
-      "Partilha de conhecimentos e experiências entre cidades europeias"
-    ]
+// Import the projects data
+import projectsData from '../data/projects.json';
+
+const ProjectCard = ({ project }) => {
+  // Handle image paths similar to FundingScreen
+  let imageSource;
+  
+  if (project.imageUrl) {
+    // Map each image path to its require statement
+    const imageMappings = {
+      'cordis': require('../../assets/images/projects/cordis.webp'),
+      'urbact': require('../../assets/images/projects/urbact.webp'),
+      'jpi-urban': require('../../assets/images/projects/jpi-urban.webp'),
+      'keep-eu': require('../../assets/images/projects/keep-eu.webp'),
+      'espon': require('../../assets/images/projects/espon.webp'),
+      'uia': require('../../assets/images/projects/uia.webp')
+    };
+    
+    // Use the ID to get the correct image
+    imageSource = imageMappings[project.id] || require('../../assets/images/home/projects.webp');
+  } else {
+    imageSource = require('../../assets/images/home/projects.webp');
   }
-];
 
-const ProjectCard = ({ project, onPress }) => {
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{project.title}</Text>
-        <Text style={styles.cardDescription}>{project.description}</Text>
-        <Text style={styles.viewDetails}>Ver detalhes</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const ProjectDetailModal = ({ project, visible, onClose }) => {
   const handleOpenLink = async () => {
     try {
       const supported = await Linking.canOpenURL(project.url);
@@ -55,28 +40,36 @@ const ProjectDetailModal = ({ project, visible, onClose }) => {
     }
   };
 
-  if (!visible) return null;
-
   return (
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>{project.title}</Text>
-        <Text style={styles.modalDescription}>{project.description}</Text>
+    <View style={styles.card}>
+      <Image
+        source={imageSource}
+        style={styles.cardImage}
+        contentFit="cover"
+        transition={300}
+      />
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{project.title}</Text>
+        <Text style={styles.cardDescription}>{project.description}</Text>
         
-        <Text style={styles.featuresTitle}>Características:</Text>
-        {project.features.map((feature, index) => (
-          <Text key={index} style={styles.featureItem}>• {feature}</Text>
-        ))}
+        {project.features && project.features.length > 0 && (
+          <View style={styles.featuresContainer}>
+            <Text style={styles.featuresTitle}>Recursos:</Text>
+            {project.features.map((feature, index) => (
+              <TouchableOpacity 
+                key={index}
+                onPress={() => Linking.openURL(feature.featureURL)}
+                style={styles.featureItem}
+              >
+                <Text style={styles.featureText}>• {feature.feature}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
         
-        <View style={styles.modalActions}>
-          <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
-            <Text style={styles.linkButtonText}>Visitar site</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
+          <Text style={styles.linkButtonText}>Visitar site</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -85,27 +78,17 @@ const ProjectDetailModal = ({ project, visible, onClose }) => {
 const ProjectsScreen = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    // Simulate loading data from a file
-    setTimeout(() => {
-      setProjects(mockProjectsData);
+    // Load projects data from the imported JSON file
+    try {
+      setProjects(projectsData.projects);
+    } catch (error) {
+      console.error('Error loading projects data:', error);
+    } finally {
       setLoading(false);
-    }, 1000);
-    
-    // In a real app, we would load the data from a JSON file
+    }
   }, []);
-
-  const handleProjectPress = (project) => {
-    setSelectedProject(project);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   if (loading) {
     return (
@@ -129,21 +112,10 @@ const ProjectsScreen = () => {
         data={projects}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ProjectCard
-            project={item}
-            onPress={() => handleProjectPress(item)}
-          />
+          <ProjectCard project={item} />
         )}
         contentContainerStyle={styles.listContent}
       />
-      
-      {selectedProject && (
-        <ProjectDetailModal
-          project={selectedProject}
-          visible={modalVisible}
-          onClose={closeModal}
-        />
-      )}
     </View>
   );
 };
@@ -193,6 +165,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
+  cardImage: {
+    width: '100%',
+    height: 150,
+  },
   cardContent: {
     padding: 16,
   },
@@ -205,83 +181,39 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 12,
+    marginBottom: 16,
     lineHeight: 20,
   },
-  viewDetails: {
-    color: '#3498db',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  modalContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 20,
-    width: '100%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  modalDescription: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 15,
-    lineHeight: 22,
+  featuresContainer: {
+    marginBottom: 16,
   },
   featuresTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
     color: '#2c3e50',
+    marginBottom: 8,
   },
   featureItem: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 5,
-    lineHeight: 20,
+    paddingVertical: 4,
   },
-  modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
+  featureText: {
+    fontSize: 14,
+    color: '#3498db',
+    lineHeight: 20,
   },
   linkButton: {
     backgroundColor: '#3498db',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginTop: 8,
   },
   linkButtonText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 14,
-  },
-  closeButton: {
-    backgroundColor: '#e0e0e0',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-  },
-  closeButtonText: {
-    color: '#333',
-    fontWeight: '600',
-    fontSize: 14,
-  },
+  }
 });
 
 export default ProjectsScreen;

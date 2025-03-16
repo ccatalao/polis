@@ -2,40 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 
-// Mock data for funding opportunities
-const mockFundingData = [
-  {
-    "id": "horizon-europe",
-    "title": "Horizon Europe",
-    "description": "Programa de investigação e inovação da UE para 2021-2027, com um orçamento de 95,5 mil milhões de euros.",
-    "url": "https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe_en",
-    "deadline": "Várias datas ao longo do ano",
-    "eligibility": "Organizações de investigação, universidades, indústria, PMEs, organizações não governamentais e outros grupos sociais e económicos."
-  },
-  {
-    "id": "life",
-    "title": "Programa LIFE",
-    "description": "Instrumento financeiro da UE dedicado ao ambiente e à ação climática, com um orçamento de 5,4 mil milhões de euros para 2021-2027.",
-    "url": "https://cinea.ec.europa.eu/programmes/life_en",
-    "deadline": "Convites anuais, geralmente na primavera",
-    "eligibility": "Entidades públicas e privadas, incluindo autoridades locais, ONGs e empresas privadas."
+// Import the funding data
+import fundingData from '../data/funding.json';
+
+const FundingCard = ({ funding }) => {
+  // Update image handling to properly resolve paths
+  let imageSource;
+  
+  if (funding.imageUrl) {
+    // For relative paths in the JSON, we need to use require dynamically
+    // Since we can't use require with variables directly, we'll map the image paths
+    const imageMappings = {
+      // Map each image path to its require statement
+      'dut': require('../../assets/images/funding/dut.webp'),
+      'life': require('../../assets/images/funding/life.webp'),
+      'feder': require('../../assets/images/funding/feder.webp'),
+      'bauhaus': require('../../assets/images/funding/bauhaus.webp'),
+      'interreg': require('../../assets/images/funding/interreg.webp'),
+      'investeu': require('../../assets/images/funding/investeu.webp'),
+      'jtf': require('../../assets/images/funding/jtf.webp'),
+      'rrf': require('../../assets/images/funding/rrf.webp'),
+      'uia': require('../../assets/images/funding/uia.webp')
+    };
+    
+    // Use the ID to get the correct image
+    imageSource = imageMappings[funding.id] || require('../../assets/images/home/funding.webp');
+  } else {
+    imageSource = require('../../assets/images/home/funding.webp');
   }
-];
 
-const FundingCard = ({ funding, onPress }) => {
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{funding.title}</Text>
-        <Text style={styles.cardDescription} numberOfLines={2}>{funding.description}</Text>
-        <Text style={styles.deadline}>Prazo: {funding.deadline}</Text>
-        <Text style={styles.viewDetails}>Ver detalhes</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const FundingDetailModal = ({ funding, visible, onClose }) => {
   const handleOpenLink = async () => {
     try {
       const supported = await Linking.canOpenURL(funding.url);
@@ -50,33 +45,36 @@ const FundingDetailModal = ({ funding, visible, onClose }) => {
     }
   };
 
-  if (!visible) return null;
-
   return (
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>{funding.title}</Text>
-        <Text style={styles.modalDescription}>{funding.description}</Text>
+    <View style={styles.card}>
+      <Image
+        source={imageSource}
+        style={styles.cardImage}
+        contentFit="cover"
+        transition={300}
+      />
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{funding.title}</Text>
+        <Text style={styles.cardDescription}>{funding.description}</Text>
         
-        <View style={styles.infoSection}>
-          <Text style={styles.infoLabel}>Prazo:</Text>
-          <Text style={styles.infoValue}>{funding.deadline}</Text>
-        </View>
+        {funding.features && funding.features.length > 0 && (
+          <View style={styles.featuresContainer}>
+            <Text style={styles.featuresTitle}>Recursos:</Text>
+            {funding.features.map((feature, index) => (
+              <TouchableOpacity 
+                key={index}
+                onPress={() => Linking.openURL(feature.featureURL)}
+                style={styles.featureItem}
+              >
+                <Text style={styles.featureText}>• {feature.feature}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
         
-        <View style={styles.infoSection}>
-          <Text style={styles.infoLabel}>Elegibilidade:</Text>
-          <Text style={styles.infoValue}>{funding.eligibility}</Text>
-        </View>
-        
-        <View style={styles.modalActions}>
-          <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
-            <Text style={styles.linkButtonText}>Visitar site</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
+          <Text style={styles.linkButtonText}>Visitar site</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -85,27 +83,17 @@ const FundingDetailModal = ({ funding, visible, onClose }) => {
 const FundingScreen = () => {
   const [fundingOpportunities, setFundingOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedFunding, setSelectedFunding] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    // Simulate loading data from a file
-    setTimeout(() => {
-      setFundingOpportunities(mockFundingData);
+    // Load funding data from the imported JSON file
+    try {
+      setFundingOpportunities(fundingData.funding);
+    } catch (error) {
+      console.error('Error loading funding data:', error);
+    } finally {
       setLoading(false);
-    }, 1000);
-    
-    // In a real app, we would load the data from a JSON file
+    }
   }, []);
-
-  const handleFundingPress = (funding) => {
-    setSelectedFunding(funding);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   if (loading) {
     return (
@@ -129,21 +117,10 @@ const FundingScreen = () => {
         data={fundingOpportunities}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <FundingCard
-            funding={item}
-            onPress={() => handleFundingPress(item)}
-          />
+          <FundingCard funding={item} />
         )}
         contentContainerStyle={styles.listContent}
       />
-      
-      {selectedFunding && (
-        <FundingDetailModal
-          funding={selectedFunding}
-          visible={modalVisible}
-          onClose={closeModal}
-        />
-      )}
     </View>
   );
 };
@@ -193,6 +170,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
+  cardImage: {
+    width: '100%',
+    height: 150,
+  },
   cardContent: {
     padding: 16,
   },
@@ -205,91 +186,39 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  featuresContainer: {
+    marginBottom: 16,
+  },
+  featuresTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2c3e50',
     marginBottom: 8,
-    lineHeight: 20,
   },
-  deadline: {
+  featureItem: {
+    paddingVertical: 4,
+  },
+  featureText: {
     fontSize: 14,
-    color: '#e74c3c',
-    marginBottom: 12,
-    fontWeight: '500',
-  },
-  viewDetails: {
     color: '#3498db',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  modalContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 20,
-    width: '100%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  modalDescription: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 15,
-    lineHeight: 22,
-  },
-  infoSection: {
-    marginBottom: 12,
-  },
-  infoLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 4,
-  },
-  infoValue: {
-    fontSize: 14,
-    color: '#333',
     lineHeight: 20,
-  },
-  modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
   },
   linkButton: {
     backgroundColor: '#3498db',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginTop: 8,
   },
   linkButtonText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 14,
-  },
-  closeButton: {
-    backgroundColor: '#e0e0e0',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-  },
-  closeButtonText: {
-    color: '#333',
-    fontWeight: '600',
-    fontSize: 14,
-  },
+  }
 });
 
 export default FundingScreen;

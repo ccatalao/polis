@@ -32,7 +32,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.heroTitle}>Planeamento Urbano Informado</Text>
+        <Text style={styles.heroTitle}>Planeamento Urbano Sustentável</Text>
         <Text style={styles.heroSubtitle}>
           Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis
         </Text>

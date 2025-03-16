@@ -42,19 +42,7 @@ const mockMunicipioData = [
   }
 ];
 
-const ServiceCard = ({ service, onPress }) => {
-  return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{service.title}</Text>
-        <Text style={styles.cardDescription} numberOfLines={3}>{service.description}</Text>
-        <Text style={styles.viewDetails}>Ver detalhes</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const ServiceDetailModal = ({ service, visible, onClose }) => {
+const ServiceCard = ({ service }) => {
   const handleOpenLink = async (url) => {
     try {
       const supported = await Linking.canOpenURL(url);
@@ -69,37 +57,31 @@ const ServiceDetailModal = ({ service, visible, onClose }) => {
     }
   };
 
-  if (!visible) return null;
-
   return (
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>{service.title}</Text>
-        <Text style={styles.modalDescription}>{service.description}</Text>
+    <View style={styles.card}>
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{service.title}</Text>
+        <Text style={styles.cardDescription}>{service.description}</Text>
         
-        <Text style={styles.featuresTitle}>Serviços disponíveis:</Text>
-        {service.features.map((feature, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={styles.featureItem}
-            onPress={() => handleOpenLink(feature.featureURL)}
-          >
-            <Text style={styles.featureText}>• {feature.feature}</Text>
-          </TouchableOpacity>
-        ))}
-        
-        <View style={styles.modalActions}>
-          <TouchableOpacity 
-            style={styles.linkButton} 
-            onPress={() => handleOpenLink(service.url)}
-          >
-            <Text style={styles.linkButtonText}>Visitar site</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
+        <View style={styles.featuresContainer}>
+          <Text style={styles.featuresTitle}>Serviços disponíveis:</Text>
+          {service.features.map((feature, index) => (
+            <TouchableOpacity 
+              key={index} 
+              style={styles.featureItem}
+              onPress={() => handleOpenLink(feature.featureURL)}
+            >
+              <Text style={styles.featureText}>• {feature.feature}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
+        
+        <TouchableOpacity 
+          style={styles.linkButton} 
+          onPress={() => handleOpenLink(service.url)}
+        >
+          <Text style={styles.linkButtonText}>Visitar site</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -108,8 +90,6 @@ const ServiceDetailModal = ({ service, visible, onClose }) => {
 const MunicipioScreen = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     // Simulate loading data from a file
@@ -120,15 +100,6 @@ const MunicipioScreen = () => {
     
     // In a real app, we would load the data from a JSON file
   }, []);
-
-  const handleServicePress = (service) => {
-    setSelectedService(service);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   if (loading) {
     return (
@@ -152,21 +123,10 @@ const MunicipioScreen = () => {
         data={services}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ServiceCard
-            service={item}
-            onPress={() => handleServicePress(item)}
-          />
+          <ServiceCard service={item} />
         )}
         contentContainerStyle={styles.listContent}
       />
-      
-      {selectedService && (
-        <ServiceDetailModal
-          service={selectedService}
-          visible={modalVisible}
-          onClose={closeModal}
-        />
-      )}
     </View>
   );
 };
@@ -228,85 +188,39 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 12,
+    marginBottom: 16,
     lineHeight: 20,
   },
-  viewDetails: {
-    color: '#3498db',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  modalContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 20,
-    width: '100%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  modalDescription: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 15,
-    lineHeight: 22,
+  featuresContainer: {
+    marginBottom: 16,
   },
   featuresTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
     color: '#2c3e50',
+    marginBottom: 8,
   },
   featureItem: {
-    marginBottom: 8,
+    paddingVertical: 4,
   },
   featureText: {
     fontSize: 14,
     color: '#3498db',
     lineHeight: 20,
   },
-  modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
   linkButton: {
     backgroundColor: '#3498db',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
+    alignSelf: 'flex-start',
+    marginTop: 8,
   },
   linkButtonText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 14,
-  },
-  closeButton: {
-    backgroundColor: '#e0e0e0',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-  },
-  closeButtonText: {
-    color: '#333',
-    fontWeight: '600',
-    fontSize: 14,
-  },
+  }
 });
 
 export default MunicipioScreen;

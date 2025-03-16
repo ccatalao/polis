@@ -36,7 +36,7 @@ const FallbackComponent = () => (
 
 function ChaptersStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="ChaptersList" component={ChaptersScreen} options={{ title: 'Publicações' }} />
       <Stack.Screen name="ChapterDetail" component={ChapterDetailScreen} options={{ title: 'Detalhes' }} />
     </Stack.Navigator>
@@ -113,6 +113,8 @@ export default function App() {
             },
             tabBarActiveTintColor: '#3498db',
             tabBarInactiveTintColor: 'gray',
+            // Hide header for all screens
+            headerShown: false,
             // Improve web display of tab bar
             tabBarStyle: Platform.OS === 'web' ? { 
               paddingTop: 10,
@@ -123,7 +125,7 @@ export default function App() {
         >
           <Tab.Screen name="Home" component={HomeScreen} options={{ title: 'Início' }} />
           <Tab.Screen name="About" component={AboutScreen} options={{ title: 'Sobre' }} />
-          <Tab.Screen name="Chapters" component={ChaptersStack} options={{ title: 'Publicações', headerShown: false }} />
+          <Tab.Screen name="Chapters" component={ChaptersStack} options={{ title: 'Publicações' }} />
           <Tab.Screen name="Projects" component={ProjectsScreen} options={{ title: 'Projetos' }} />
           <Tab.Screen name="Funding" component={FundingScreen} options={{ title: 'Financiamento' }} />
           <Tab.Screen name="Municipio" component={MunicipioScreen} options={{ title: 'Serviços Municipais' }} />

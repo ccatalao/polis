@@ -20,8 +20,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/cordis.webp",
-        "fallback": "/images/projetos/cordis.jpeg",
+        "webp": "./assets/images/projects/cordis.webp",
+        "fallback": "./assets/images/projects/cordis.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -48,8 +48,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/urbact.webp",
-        "fallback": "/images/projetos/urbact.jpeg",
+        "webp": "./assets/images/projects/urbact.webp",
+        "fallback": "./assets/images/projects/urbact.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -57,7 +57,7 @@
       }
     },
     {
-      "id": "jpi-urban-europe",
+      "id": "jpi-urban",
       "title": "JPI Urban Europe Project Database",
       "description": "Base de dados focada em desenvolvimento urbano sustentável, com soluções inovadoras e resultados de implementação.",
       "url": "https://jpi-urbaneurope.eu/projects/",
@@ -68,8 +68,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/jpi-urban.webp",
-        "fallback": "/images/projetos/jpi-urban.jpeg",
+        "webp": "./assets/images/projects/jpi-urban.webp",
+        "fallback": "./assets/images/projects/jpi-urban.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -96,8 +96,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/keep-eu.webp",
-        "fallback": "/images/projetos/keep-eu.jpeg",
+        "webp": "./assets/images/projects/keep-eu.webp",
+        "fallback": "./assets/images/projects/keep-eu.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -124,8 +124,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/espon.webp",
-        "fallback": "/images/projetos/espon.jpeg",
+        "webp": "./assets/images/projects/espon.webp",
+        "fallback": "./assets/images/projects/espon.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -152,8 +152,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/projetos/uia.webp",
-        "fallback": "/images/projetos/uia.jpeg",
+        "webp": "./assets/images/projects/uia.webp",
+        "fallback": "./assets/images/projects/uia.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
