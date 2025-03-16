@@ -20,7 +20,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/cordis.webp",
+        "webp": "./assets/images/projects/cordis.jpeg",
         "fallback": "./assets/images/projects/cordis.jpeg",
         "thumbnail": {
           "width": 400,
@@ -48,7 +48,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/urbact.webp",
+        "webp": "./assets/images/projects/urbact.jpeg",
         "fallback": "./assets/images/projects/urbact.jpeg",
         "thumbnail": {
           "width": 400,
@@ -68,7 +68,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/jpi-urban.webp",
+        "webp": "./assets/images/projects/jpi-urban.jpeg",
         "fallback": "./assets/images/projects/jpi-urban.jpeg",
         "thumbnail": {
           "width": 400,
@@ -96,7 +96,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/keep-eu.webp",
+        "webp": "./assets/images/projects/keep-eu.jpeg",
         "fallback": "./assets/images/projects/keep-eu.jpeg",
         "thumbnail": {
           "width": 400,
@@ -124,7 +124,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/espon.webp",
+        "webp": "./assets/images/projects/espon.jpeg",
         "fallback": "./assets/images/projects/espon.jpeg",
         "thumbnail": {
           "width": 400,
@@ -152,7 +152,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/projects/uia.webp",
+        "webp": "./assets/images/projects/uia.jpeg",
         "fallback": "./assets/images/projects/uia.jpeg",
         "thumbnail": {
           "width": 400,

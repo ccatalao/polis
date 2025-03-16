@@ -78,6 +78,12 @@
       "router": {
         "disableStaticRendering": true
       }
+    },
+    "experiments": {
+      "tsconfigPaths": true
+    },
+    "packagerOpts": {
+      "config": "metro.config.js"
     }
   }
 } 

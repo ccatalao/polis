@@ -48,5 +48,20 @@ module.exports = async function (env, argv) {
     }
   });
 
+  // Add WebP support
+  config.module.rules.push({
+    test: /\.webp$/,
+    use: [
+      {
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'static/media/',
+          publicPath: '../static/media/',
+        },
+      },
+    ],
+  });
+
   return config;
 }; 
