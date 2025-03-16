@@ -8,89 +8,93 @@ import fundingData from '../data/funding.json';
 // Import image utilities
 import { getImagePath } from '../utils/imageUtils';
 
-const FundingCard = ({ funding }) => {
-  // Update image handling to properly resolve paths
-  let imageSource;
-  
-  if (funding.imageUrl) {
-    imageSource = getImagePath(funding.imageUrl);
-  } else if (funding.id) {
-    // If no imageUrl but has an id, construct the path
-    imageSource = getImagePath(`/images/funding/${funding.id}.jpeg`);
-  } else {
-    // Fallback to the default image
-    imageSource = getImagePath('/images/home/funding.jpeg');
-  }
+const FundingCard = ({ item, onPress }) => {
+  // Get the image source using the getImagePath utility
+  const getImageSource = () => {
+    try {
+      // First try to use the imageUrl if it exists
+      if (item.imageUrl) {
+        return getImagePath(item.imageUrl);
+      }
+      
+      // Fallback to constructing the path from the ID
+      return getImagePath(`/images/funding/${item.id}.jpeg`);
+    } catch (error) {
+      console.error('Error loading funding image:', error);
+      // Default image if there's an error
+      return getImagePath('/images/funding/default.jpeg');
+    }
+  };
 
   const handleOpenLink = async () => {
-    try {
-      const supported = await Linking.canOpenURL(funding.url);
-      
-      if (supported) {
-        await Linking.openURL(funding.url);
-      } else {
-        Alert.alert("Erro", `Não foi possível abrir o link: ${funding.url}`);
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Ocorreu um erro ao tentar abrir o link");
+    if (!item.url) {
+      Alert.alert('Info', 'No link available for this funding opportunity.');
+      return;
+    }
+
+    const canOpen = await Linking.canOpenURL(item.url);
+    if (canOpen) {
+      await Linking.openURL(item.url);
+    } else {
+      Alert.alert('Error', 'Cannot open this link.');
     }
   };
 
   return (
-    <View style={styles.card}>
-      <Image
-        source={imageSource}
-        style={styles.cardImage}
-        contentFit="cover"
-        transition={300}
-      />
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{funding.title}</Text>
-        <Text style={styles.cardDescription}>{funding.description}</Text>
-        
-        {funding.features && funding.features.length > 0 && (
+    <TouchableOpacity style={styles.card} onPress={handleOpenLink}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={getImageSource()}
+          style={styles.image}
+          contentFit="cover"
+          transition={1000}
+        />
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.description} numberOfLines={3}>
+          {item.description}
+        </Text>
+        {item.features && item.features.length > 0 && (
           <View style={styles.featuresContainer}>
-            <Text style={styles.featuresTitle}>Recursos:</Text>
-            {funding.features.map((feature, index) => (
-              <TouchableOpacity 
-                key={index}
-                onPress={() => Linking.openURL(feature.featureURL)}
-                style={styles.featureItem}
-              >
-                <Text style={styles.featureText}>• {feature.feature}</Text>
-              </TouchableOpacity>
+            {item.features.map((feature, index) => (
+              <View key={index} style={styles.featureItem}>
+                <Text style={styles.featureText}>{feature}</Text>
+              </View>
             ))}
           </View>
         )}
-        
-        <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
-          <Text style={styles.linkButtonText}>Visitar site</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const FundingScreen = () => {
-  const [fundingOpportunities, setFundingOpportunities] = useState([]);
+  const [funding, setFunding] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load funding data from the imported JSON file
-    try {
-      setFundingOpportunities(fundingData.funding);
-    } catch (error) {
-      console.error('Error loading funding data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Simulate loading data from an API
+    const loadData = async () => {
+      try {
+        // In a real app, this would be an API call
+        setFunding(fundingData);
+      } catch (error) {
+        console.error('Error loading funding data:', error);
+        Alert.alert('Error', 'Failed to load funding opportunities.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#3498db" />
-        <Text style={styles.loadingText}>A carregar oportunidades de financiamento...</Text>
+        <ActivityIndicator size="large" color="#0066CC" />
+        <Text style={styles.loadingText}>Loading funding opportunities...</Text>
       </View>
     );
   }
@@ -105,12 +109,10 @@ const FundingScreen = () => {
       </View>
       
       <FlatList
-        data={fundingOpportunities}
+        data={funding}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <FundingCard funding={item} />
-        )}
-        contentContainerStyle={styles.listContent}
+        renderItem={({ item }) => <FundingCard item={item} />}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -120,17 +122,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
   },
   header: {
     padding: 16,
@@ -147,69 +138,71 @@ const styles = StyleSheet.create({
     color: '#fff',
     opacity: 0.9,
   },
-  listContent: {
+  listContainer: {
     padding: 16,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderRadius: 8,
     marginBottom: 16,
     overflow: 'hidden',
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: 4,
   },
-  cardImage: {
+  imageContainer: {
+    height: 160,
     width: '100%',
-    height: 150,
   },
-  cardContent: {
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  contentContainer: {
     padding: 16,
   },
-  cardTitle: {
+  title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#2c3e50',
+    color: '#333',
   },
-  cardDescription: {
+  description: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 20,
   },
   featuresContainer: {
-    marginBottom: 16,
-  },
-  featuresTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
-  },
-  featureItem: {
-    paddingVertical: 4,
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#3498db',
-    lineHeight: 20,
-  },
-  linkButton: {
-    backgroundColor: '#3498db',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     marginTop: 8,
   },
-  linkButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
-  }
+  featureItem: {
+    backgroundColor: '#e1f5fe',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 16,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  featureText: {
+    fontSize: 12,
+    color: '#0277bd',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
 });
 
 export default FundingScreen;

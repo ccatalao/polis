@@ -39,7 +39,7 @@ const imageMap = {
   '/images/publications/archive.jpeg': require('../../assets/images/publications/archive.jpeg'),
   '/images/publications/buildings.jpeg': require('../../assets/images/publications/buildings.jpeg'),
   '/images/publications/cidades.jpeg': require('../../assets/images/publications/cidades.jpeg'),
-  '/images/publications/citty-environment-interactions.jpeg': require('../../assets/images/publications/citty-environment-interactions.jpeg'),
+  '/images/publications/city-environment-interactions.jpeg': require('../../assets/images/publications/citty-environment-interactions.jpeg'),
   '/images/publications/ciudades.jpeg': require('../../assets/images/publications/ciudades.jpeg'),
   '/images/publications/computational-urban-science.jpeg': require('../../assets/images/publications/computational-urban-science.jpeg'),
   '/images/publications/current-urban-studies.jpeg': require('../../assets/images/publications/current-urban-studies.jpeg'),
@@ -129,8 +129,9 @@ const processImagePath = (path) => {
     
     // For web environment in production (GitHub Pages)
     if (isWeb && window.location.href.includes('github.io')) {
-      // For GitHub Pages, we need to use the path directly
-      return normalizedPath;
+      // For GitHub Pages, we need to use the direct URL to the image in the assets directory
+      // This is a simpler approach that directly uses the assets path
+      return `https://ccatalao.github.io/polis/assets${normalizedPath.replace('/images', '/images')}`;
     }
     
     // For native environment or local web development

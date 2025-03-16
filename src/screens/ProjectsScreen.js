@@ -8,66 +8,64 @@ import projectsData from '../data/projects.json';
 // Import image utilities
 import { getImagePath } from '../utils/imageUtils';
 
-const ProjectCard = ({ project }) => {
-  // Handle image paths using the utility function
-  let imageSource;
-  
-  if (project.imageUrl) {
-    imageSource = getImagePath(project.imageUrl);
-  } else if (project.id) {
-    // If no imageUrl but has an id, construct the path
-    imageSource = getImagePath(`/images/projects/${project.id}.jpeg`);
-  } else {
-    // Fallback to the default image
-    imageSource = getImagePath('/images/home/projects.jpeg');
-  }
+const ProjectCard = ({ item, onPress }) => {
+  // Get the image source using the getImagePath utility
+  const getImageSource = () => {
+    try {
+      // First try to use the imageUrl if it exists
+      if (item.imageUrl) {
+        return getImagePath(item.imageUrl);
+      }
+      
+      // Fallback to constructing the path from the ID
+      return getImagePath(`/images/projects/${item.id}.jpeg`);
+    } catch (error) {
+      console.error('Error loading project image:', error);
+      // Default image if there's an error
+      return getImagePath('/images/home/projects.jpeg');
+    }
+  };
 
   const handleOpenLink = async () => {
-    try {
-      const supported = await Linking.canOpenURL(project.url);
-      
-      if (supported) {
-        await Linking.openURL(project.url);
-      } else {
-        Alert.alert("Erro", `Não foi possível abrir o link: ${project.url}`);
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Ocorreu um erro ao tentar abrir o link");
+    if (!item.url) {
+      Alert.alert('Info', 'No link available for this project.');
+      return;
+    }
+
+    const canOpen = await Linking.canOpenURL(item.url);
+    if (canOpen) {
+      await Linking.openURL(item.url);
+    } else {
+      Alert.alert('Error', 'Cannot open this link.');
     }
   };
 
   return (
-    <View style={styles.card}>
-      <Image
-        source={imageSource}
-        style={styles.cardImage}
-        contentFit="cover"
-        transition={300}
-      />
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{project.title}</Text>
-        <Text style={styles.cardDescription}>{project.description}</Text>
-        
-        {project.features && project.features.length > 0 && (
+    <TouchableOpacity style={styles.card} onPress={handleOpenLink}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={getImageSource()}
+          style={styles.image}
+          contentFit="cover"
+          transition={1000}
+        />
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.description} numberOfLines={3}>
+          {item.description}
+        </Text>
+        {item.features && item.features.length > 0 && (
           <View style={styles.featuresContainer}>
-            <Text style={styles.featuresTitle}>Recursos:</Text>
-            {project.features.map((feature, index) => (
-              <TouchableOpacity 
-                key={index}
-                onPress={() => Linking.openURL(feature.featureURL)}
-                style={styles.featureItem}
-              >
-                <Text style={styles.featureText}>• {feature.feature}</Text>
-              </TouchableOpacity>
+            {item.features.map((feature, index) => (
+              <View key={index} style={styles.featureItem}>
+                <Text style={styles.featureText}>{feature}</Text>
+              </View>
             ))}
           </View>
         )}
-        
-        <TouchableOpacity style={styles.linkButton} onPress={handleOpenLink}>
-          <Text style={styles.linkButtonText}>Visitar site</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -76,41 +74,38 @@ const ProjectsScreen = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load projects data from the imported JSON file
-    try {
-      setProjects(projectsData.projects);
-    } catch (error) {
-      console.error('Error loading projects data:', error);
-    } finally {
-      setLoading(false);
-    }
+    // Simulate loading data from an API
+    const loadData = async () => {
+      try {
+        // In a real app, this would be an API call
+        setProjects(projectsData);
+      } catch (error) {
+        console.error('Error loading projects data:', error);
+        Alert.alert('Error', 'Failed to load projects.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#3498db" />
-        <Text style={styles.loadingText}>A carregar projetos...</Text>
+        <ActivityIndicator size="large" color="#0066CC" />
+        <Text style={styles.loadingText}>Loading projects...</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Projetos Europeus</Text>
-        <Text style={styles.headerSubtitle}>
-          Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.
-        </Text>
-      </View>
-      
       <FlatList
         data={projects}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ProjectCard project={item} />
-        )}
-        contentContainerStyle={styles.listContent}
+        renderItem={({ item }) => <ProjectCard item={item} />}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -121,6 +116,60 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  listContainer: {
+    padding: 16,
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    marginBottom: 16,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  imageContainer: {
+    height: 160,
+    width: '100%',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#333',
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 12,
+    lineHeight: 20,
+  },
+  featuresContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 8,
+  },
+  featureItem: {
+    backgroundColor: '#e1f5fe',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 16,
+    marginRight: 8,
+    marginBottom: 8,
+  },
+  featureText: {
+    fontSize: 12,
+    color: '#0277bd',
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -128,88 +177,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   loadingText: {
-    marginTop: 10,
+    marginTop: 16,
     fontSize: 16,
     color: '#666',
   },
-  header: {
-    padding: 16,
-    backgroundColor: '#3498db',
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#fff',
-    opacity: 0.9,
-  },
-  listContent: {
-    padding: 16,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginBottom: 16,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  cardImage: {
-    width: '100%',
-    height: 150,
-  },
-  cardContent: {
-    padding: 16,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#2c3e50',
-  },
-  cardDescription: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 16,
-    lineHeight: 20,
-  },
-  featuresContainer: {
-    marginBottom: 16,
-  },
-  featuresTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 8,
-  },
-  featureItem: {
-    paddingVertical: 4,
-  },
-  featureText: {
-    fontSize: 14,
-    color: '#3498db',
-    lineHeight: 20,
-  },
-  linkButton: {
-    backgroundColor: '#3498db',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 4,
-    alignSelf: 'flex-start',
-    marginTop: 8,
-  },
-  linkButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
-  }
 });
 
 export default ProjectsScreen;
