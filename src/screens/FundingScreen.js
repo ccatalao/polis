@@ -9,20 +9,38 @@ import fundingData from '../data/funding.json';
 import { getImagePath } from '../utils/imageUtils';
 
 const FundingCard = ({ item, onPress }) => {
-  // Get the image source using the getImagePath utility
+  // Get the image source using hardcoded paths for testing
   const getImageSource = () => {
     try {
-      // First try to use the imageUrl if it exists
-      if (item.imageUrl) {
-        return getImagePath(item.imageUrl);
+      // Use hardcoded paths for testing
+      const imageMap = {
+        'dut': 'https://ccatalao.github.io/polis/assets/images/funding/dut.jpeg',
+        'bauhaus': 'https://ccatalao.github.io/polis/assets/images/funding/bauhaus.jpeg',
+        'feder': 'https://ccatalao.github.io/polis/assets/images/funding/feder.jpeg',
+        'interreg': 'https://ccatalao.github.io/polis/assets/images/funding/interreg.jpeg',
+        'investeu': 'https://ccatalao.github.io/polis/assets/images/funding/investeu.jpeg',
+        'jtf': 'https://ccatalao.github.io/polis/assets/images/funding/jtf.jpeg',
+        'life': 'https://ccatalao.github.io/polis/assets/images/funding/life.jpeg',
+        'rrf': 'https://ccatalao.github.io/polis/assets/images/funding/rrf.jpeg',
+        'uia': 'https://ccatalao.github.io/polis/assets/images/funding/uia.jpeg'
+      };
+      
+      // Log the item ID for debugging
+      console.log('Funding item ID:', item.id);
+      
+      // Return the hardcoded image path if available
+      if (item.id && imageMap[item.id]) {
+        console.log('Using hardcoded image path:', imageMap[item.id]);
+        return imageMap[item.id];
       }
       
-      // Fallback to constructing the path from the ID
-      return getImagePath(`/images/funding/${item.id}.jpeg`);
+      // Fallback to the default image
+      console.log('Using default image path');
+      return 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg';
     } catch (error) {
       console.error('Error loading funding image:', error);
       // Default image if there's an error
-      return getImagePath('/images/funding/default.jpeg');
+      return 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg';
     }
   };
 

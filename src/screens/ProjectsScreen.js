@@ -9,20 +9,35 @@ import projectsData from '../data/projects.json';
 import { getImagePath } from '../utils/imageUtils';
 
 const ProjectCard = ({ item, onPress }) => {
-  // Get the image source using the getImagePath utility
+  // Get the image source using hardcoded paths for testing
   const getImageSource = () => {
     try {
-      // First try to use the imageUrl if it exists
-      if (item.imageUrl) {
-        return getImagePath(item.imageUrl);
+      // Use hardcoded paths for testing
+      const imageMap = {
+        'cordis': 'https://ccatalao.github.io/polis/assets/images/projects/cordis.jpeg',
+        'espon': 'https://ccatalao.github.io/polis/assets/images/projects/espon.jpeg',
+        'jpi-urban': 'https://ccatalao.github.io/polis/assets/images/projects/jpi-urban.jpeg',
+        'keep-eu': 'https://ccatalao.github.io/polis/assets/images/projects/keep-eu.jpeg',
+        'uia': 'https://ccatalao.github.io/polis/assets/images/projects/uia.jpeg',
+        'urbact': 'https://ccatalao.github.io/polis/assets/images/projects/urbact.jpeg'
+      };
+      
+      // Log the item ID for debugging
+      console.log('Project item ID:', item.id);
+      
+      // Return the hardcoded image path if available
+      if (item.id && imageMap[item.id]) {
+        console.log('Using hardcoded image path:', imageMap[item.id]);
+        return imageMap[item.id];
       }
       
-      // Fallback to constructing the path from the ID
-      return getImagePath(`/images/projects/${item.id}.jpeg`);
+      // Fallback to the default image
+      console.log('Using default image path');
+      return 'https://ccatalao.github.io/polis/assets/images/home/projects.jpeg';
     } catch (error) {
       console.error('Error loading project image:', error);
       // Default image if there's an error
-      return getImagePath('/images/home/projects.jpeg');
+      return 'https://ccatalao.github.io/polis/assets/images/home/projects.jpeg';
     }
   };
 
