@@ -5,25 +5,21 @@ import { Image } from 'expo-image';
 // Import the projects data
 import projectsData from '../data/projects.json';
 
+// Import image utilities
+import { getImagePath } from '../utils/imageUtils';
+
 const ProjectCard = ({ project }) => {
-  // Handle image paths similar to FundingScreen
+  // Handle image paths using the utility function
   let imageSource;
   
   if (project.imageUrl) {
-    // Map each image path to its require statement
-    const imageMappings = {
-      'cordis': require('../../assets/images/projects/cordis.jpeg'),
-      'urbact': require('../../assets/images/projects/urbact.jpeg'),
-      'jpi-urban': require('../../assets/images/projects/jpi-urban.jpeg'),
-      'keep-eu': require('../../assets/images/projects/keep-eu.jpeg'),
-      'espon': require('../../assets/images/projects/espon.jpeg'),
-      'uia': require('../../assets/images/projects/uia.jpeg')
-    };
-    
-    // Use the ID to get the correct image
-    imageSource = imageMappings[project.id] || require('../../assets/images/home/projects.jpeg');
+    imageSource = getImagePath(project.imageUrl);
+  } else if (project.id) {
+    // If no imageUrl but has an id, construct the path
+    imageSource = getImagePath(`/images/projects/${project.id}.jpeg`);
   } else {
-    imageSource = require('../../assets/images/home/projects.jpeg');
+    // Fallback to the default image
+    imageSource = getImagePath('/images/home/projects.jpeg');
   }
 
   const handleOpenLink = async () => {

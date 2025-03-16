@@ -1,0 +1,143 @@
+/**
+ * Utility functions for handling image paths in both local and deployed environments
+ */
+
+// Map of image paths to their require statements
+const imageMap = {
+  // Home images
+  '/images/home/municipio.jpeg': require('../../assets/images/home/municipio.jpeg'),
+  '/images/home/projects.jpeg': require('../../assets/images/home/projects.jpeg'),
+  '/images/home/funding.jpeg': require('../../assets/images/home/funding.jpeg'),
+  '/images/home/publicacoes.jpeg': require('../../assets/images/home/publicacoes.jpeg'),
+  
+  // Projects images
+  '/images/projects/cordis.jpeg': require('../../assets/images/projects/cordis.jpeg'),
+  '/images/projects/espon.jpeg': require('../../assets/images/projects/espon.jpeg'),
+  '/images/projects/jpi-urban.jpeg': require('../../assets/images/projects/jpi-urban.jpeg'),
+  '/images/projects/keep-eu.jpeg': require('../../assets/images/projects/keep-eu.jpeg'),
+  '/images/projects/uia.jpeg': require('../../assets/images/projects/uia.jpeg'),
+  '/images/projects/urbact.jpeg': require('../../assets/images/projects/urbact.jpeg'),
+  
+  // Funding images
+  '/images/funding/bauhaus.jpeg': require('../../assets/images/funding/bauhaus.jpeg'),
+  '/images/funding/dut.jpeg': require('../../assets/images/funding/dut.jpeg'),
+  '/images/funding/feder.jpeg': require('../../assets/images/funding/feder.jpeg'),
+  '/images/funding/interreg.jpeg': require('../../assets/images/funding/interreg.jpeg'),
+  '/images/funding/investeu.jpeg': require('../../assets/images/funding/investeu.jpeg'),
+  '/images/funding/jtf.jpeg': require('../../assets/images/funding/jtf.jpeg'),
+  '/images/funding/life.jpeg': require('../../assets/images/funding/life.jpeg'),
+  '/images/funding/rrf.jpeg': require('../../assets/images/funding/rrf.jpeg'),
+  '/images/funding/uia.jpeg': require('../../assets/images/funding/uia.jpeg'),
+  
+  // Publications images - main categories
+  '/images/publications/urbanism.jpeg': require('../../assets/images/publications/urbanism.jpeg'),
+  '/images/publications/planning.jpeg': require('../../assets/images/publications/planning.jpeg'),
+  '/images/publications/architecture.jpeg': require('../../assets/images/publications/architecture.jpeg'),
+  
+  // Publications images - individual journals
+  '/images/publications/articulo.jpeg': require('../../assets/images/publications/articulo.jpeg'),
+  '/images/publications/archive.jpeg': require('../../assets/images/publications/archive.jpeg'),
+  '/images/publications/buildings.jpeg': require('../../assets/images/publications/buildings.jpeg'),
+  '/images/publications/cidades.jpeg': require('../../assets/images/publications/cidades.jpeg'),
+  '/images/publications/citty-environment-interactions.jpeg': require('../../assets/images/publications/citty-environment-interactions.jpeg'),
+  '/images/publications/ciudades.jpeg': require('../../assets/images/publications/ciudades.jpeg'),
+  '/images/publications/computational-urban-science.jpeg': require('../../assets/images/publications/computational-urban-science.jpeg'),
+  '/images/publications/current-urban-studies.jpeg': require('../../assets/images/publications/current-urban-studies.jpeg'),
+  '/images/publications/frontiers-built-environment.jpeg': require('../../assets/images/publications/frontiers-built-environment.jpeg'),
+  '/images/publications/future-cities-environment.jpeg': require('../../assets/images/publications/future-cities-environment.jpeg'),
+  '/images/publications/smart-cities.jpeg': require('../../assets/images/publications/smart-cities.jpeg'),
+  '/images/publications/urban-sustainable.jpeg': require('../../assets/images/publications/urban-sustainable.jpeg'),
+  '/images/publications/irspsd.jpeg': require('../../assets/images/publications/irspsd.jpeg'),
+  '/images/publications/urban-ecology.jpeg': require('../../assets/images/publications/urban-ecology.jpeg'),
+  '/images/publications/urban-management.jpeg': require('../../assets/images/publications/urban-management.jpeg'),
+  '/images/publications/urban-mobility.jpeg': require('../../assets/images/publications/urban-mobility.jpeg'),
+  '/images/publications/research-urbanism.jpeg': require('../../assets/images/publications/research-urbanism.jpeg'),
+  '/images/publications/resilient-cities.jpeg': require('../../assets/images/publications/resilient-cities.jpeg'),
+  '/images/publications/smart-construction.jpeg': require('../../assets/images/publications/smart-construction.jpeg'),
+  '/images/publications/urban-agriculture.jpeg': require('../../assets/images/publications/urban-agriculture.jpeg'),
+  '/images/publications/urban-governance.jpeg': require('../../assets/images/publications/urban-governance.jpeg'),
+  '/images/publications/urban-lifeline.jpeg': require('../../assets/images/publications/urban-lifeline.jpeg'),
+  '/images/publications/urban-planning.jpeg': require('../../assets/images/publications/urban-planning.jpeg'),
+  '/images/publications/urban-planning-transport.jpeg': require('../../assets/images/publications/urban-planning-transport.jpeg'),
+  '/images/publications/urban-science.jpeg': require('../../assets/images/publications/urban-science.jpeg'),
+  '/images/publications/urban-transcripts.jpeg': require('../../assets/images/publications/urban-transcripts.jpeg'),
+  '/images/publications/urban-transformations.jpeg': require('../../assets/images/publications/urban-transformations.jpeg'),
+  '/images/publications/urbana.jpeg': require('../../assets/images/publications/urbana.jpeg'),
+  '/images/publications/urbe.jpeg': require('../../assets/images/publications/urbe.jpeg'),
+  '/images/publications/blue-green-systems.jpeg': require('../../assets/images/publications/blue-green-systems.jpeg'),
+  '/images/publications/creative-practices.jpeg': require('../../assets/images/publications/creative-practices.jpeg'),
+  '/images/publications/spatial-development.jpeg': require('../../assets/images/publications/spatial-development.jpeg'),
+  '/images/publications/finisterra.jpeg': require('../../assets/images/publications/finisterra.jpeg'),
+  '/images/publications/urban-rural-planning.jpeg': require('../../assets/images/publications/urban-rural-planning.jpeg'),
+  '/images/publications/regional-development.jpeg': require('../../assets/images/publications/regional-development.jpeg'),
+  '/images/publications/public-space.jpeg': require('../../assets/images/publications/public-space.jpeg'),
+  '/images/publications/public-transportation.jpeg': require('../../assets/images/publications/public-transportation.jpeg'),
+  '/images/publications/spatial-information.jpeg': require('../../assets/images/publications/spatial-information.jpeg'),
+  '/images/publications/planext.jpeg': require('../../assets/images/publications/planext.jpeg'),
+  '/images/publications/regional-practice.jpeg': require('../../assets/images/publications/regional-practice.jpeg'),
+  '/images/publications/regional-studies.jpeg': require('../../assets/images/publications/regional-studies.jpeg'),
+  '/images/publications/scienze-territorio.jpeg': require('../../assets/images/publications/scienze-territorio.jpeg'),
+  '/images/publications/tema.jpeg': require('../../assets/images/publications/tema.jpeg'),
+  '/images/publications/territorial-identity.jpeg': require('../../assets/images/publications/territorial-identity.jpeg'),
+  '/images/publications/architecture-mps.jpeg': require('../../assets/images/publications/architecture-mps.jpeg'),
+  '/images/publications/agathon.jpeg': require('../../assets/images/publications/agathon.jpeg'),
+  '/images/publications/arte-publica.jpeg': require('../../assets/images/publications/arte-publica.jpeg'),
+  '/images/publications/docomomo.jpeg': require('../../assets/images/publications/docomomo.jpeg'),
+  '/images/publications/enq.jpeg': require('../../assets/images/publications/enq.jpeg'),
+  '/images/publications/estudo-previo.jpeg': require('../../assets/images/publications/estudo-previo.jpeg'),
+  '/images/publications/field.jpeg': require('../../assets/images/publications/field.jpeg'),
+  '/images/publications/architecture-urbanism.jpeg': require('../../assets/images/publications/architecture-urbanism.jpeg'),
+  '/images/publications/revista-arquitectura.jpeg': require('../../assets/images/publications/revista-arquitectura.jpeg')
+};
+
+/**
+ * Gets the correct image path based on the environment (local or deployed)
+ * @param {string|object} imagePath - The image path or object with image paths
+ * @returns {any} - The required image module
+ */
+export const getImagePath = (imagePath) => {
+  if (!imagePath) return null;
+  
+  // If imagePath is an object with webp and fallback properties
+  if (typeof imagePath === 'object') {
+    const path = imagePath.fallback || imagePath.webp;
+    // Convert ./images to /images for consistency
+    const normalizedPath = path.replace(/^\.\/(images\/.*)$/, '/$1');
+    return imageMap[normalizedPath] || null;
+  }
+  
+  // For string paths
+  try {
+    // Convert ./images to /images for consistency
+    const normalizedPath = imagePath.replace(/^\.\/(images\/.*)$/, '/$1');
+    
+    // Check if we have this image in our map
+    if (imageMap[normalizedPath]) {
+      return imageMap[normalizedPath];
+    }
+    
+    // For paths not in our map, return as is (might be a URL)
+    return imagePath;
+  } catch (error) {
+    console.error(`Error loading image: ${imagePath}`, error);
+    return null;
+  }
+};
+
+/**
+ * Creates a mapping of image IDs to their paths
+ * @param {string} category - The category of images (e.g., 'funding', 'projects')
+ * @param {Array} items - The array of items with IDs
+ * @returns {Object} - A mapping of IDs to image paths
+ */
+export const createImageMapping = (category, items) => {
+  const mapping = {};
+  
+  items.forEach(item => {
+    if (item.id) {
+      mapping[item.id] = getImagePath(`/images/${category}/${item.id}.jpeg`);
+    }
+  });
+  
+  return mapping;
+}; 

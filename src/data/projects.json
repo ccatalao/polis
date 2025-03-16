@@ -19,14 +19,7 @@
           "featureURL": "https://cordis.europa.eu/partners"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/cordis.jpeg",
-        "fallback": "./assets/images/projects/cordis.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/cordis.jpeg"
     },
     {
       "id": "urbact",
@@ -47,14 +40,7 @@
           "featureURL": "https://urbact.eu/toolbox-home"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/urbact.jpeg",
-        "fallback": "./assets/images/projects/urbact.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/urbact.jpeg"
     },
     {
       "id": "jpi-urban",
@@ -67,14 +53,7 @@
           "featureURL": "https://jpi-urbaneurope.eu/projects/#"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/jpi-urban.jpeg",
-        "fallback": "./assets/images/projects/jpi-urban.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/jpi-urban.jpeg"
     },
     {
       "id": "keep-eu",
@@ -95,14 +74,7 @@
           "featureURL": "https://keep.eu/partners/"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/keep-eu.jpeg",
-        "fallback": "./assets/images/projects/keep-eu.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/keep-eu.jpeg"
     },
     {
       "id": "espon",
@@ -123,14 +95,7 @@
           "featureURL": "https://archive.espon.eu/topics-policy/case-studies"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/espon.jpeg",
-        "fallback": "./assets/images/projects/espon.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/espon.jpeg"
     },
     {
       "id": "uia",
@@ -151,14 +116,7 @@
           "featureURL": "https://uia-initiative.eu/en/theme/housing"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/projects/uia.jpeg",
-        "fallback": "./assets/images/projects/uia.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/projects/uia.jpeg"
     }
   ]
 } 

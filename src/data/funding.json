@@ -15,14 +15,7 @@
           "featureURL": "https://dutpartnership.eu/media-library/"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/dut.jpeg",
-        "fallback": "./assets/images/funding/dut.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/dut.jpeg"
     },
     {
       "id": "life",
@@ -43,14 +36,7 @@
           "featureURL": "https://cinea.ec.europa.eu/publications_en"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/life.jpeg",
-        "fallback": "./assets/images/funding/life.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/life.jpeg"
     },
     {
       "id": "erdf",
@@ -67,14 +53,7 @@
           "featureURL": "https://ec.europa.eu/regional_policy/information-sources/maps_en"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/feder.jpeg",
-        "fallback": "./assets/images/funding/feder.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/feder.jpeg"
     },
     {
       "id": "new-european-bauhaus",
@@ -91,14 +70,7 @@
           "featureURL": "https://new-european-bauhaus.europa.eu/tools-and-resources_en"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/bauhaus.jpeg",
-        "fallback": "./assets/images/funding/bauhaus.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/bauhaus.jpeg"
     },
     {
       "id": "interreg",
@@ -111,14 +83,7 @@
           "featureURL": "https://interreg.eu/calls-for-projects/"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/interreg.jpeg",
-        "fallback": "./assets/images/funding/interreg.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/interreg.jpeg"
     },
     {
       "id": "investeu",
@@ -135,14 +100,7 @@
           "featureURL": "https://investeu.europa.eu/investeu-operations/investeu-operations-map_en"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/investeu.jpeg",
-        "fallback": "./assets/images/funding/investeu.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/investeu.jpeg"
     },
     {
       "id": "jtf",
@@ -159,14 +117,7 @@
           "featureURL": "https://ec.europa.eu/regional_policy/funding/just-transition-fund/just-transition-platform/supportground_en"
         }
       ],
-      "imageUrl": {
-        "webp": "./assets/images/funding/jtf.jpeg",
-        "fallback": "./assets/images/funding/jtf.jpeg",
-        "thumbnail": {
-          "width": 400,
-          "height": 300
-        }
-      }
+      "imageUrl": "./images/funding/jtf.jpeg"
     }
   ]
 }

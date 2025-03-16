@@ -5,30 +5,21 @@ import { Image } from 'expo-image';
 // Import the funding data
 import fundingData from '../data/funding.json';
 
+// Import image utilities
+import { getImagePath } from '../utils/imageUtils';
+
 const FundingCard = ({ funding }) => {
   // Update image handling to properly resolve paths
   let imageSource;
   
   if (funding.imageUrl) {
-    // For relative paths in the JSON, we need to use require dynamically
-    // Since we can't use require with variables directly, we'll map the image paths
-    const imageMappings = {
-      // Map each image path to its require statement
-      'dut': require('../../assets/images/funding/dut.jpeg'),
-      'life': require('../../assets/images/funding/life.jpeg'),
-      'feder': require('../../assets/images/funding/feder.jpeg'),
-      'bauhaus': require('../../assets/images/funding/bauhaus.jpeg'),
-      'interreg': require('../../assets/images/funding/interreg.jpeg'),
-      'investeu': require('../../assets/images/funding/investeu.jpeg'),
-      'jtf': require('../../assets/images/funding/jtf.jpeg'),
-      'rrf': require('../../assets/images/funding/rrf.jpeg'),
-      'uia': require('../../assets/images/funding/uia.jpeg')
-    };
-    
-    // Use the ID to get the correct image
-    imageSource = imageMappings[funding.id] || require('../../assets/images/home/funding.jpeg');
+    imageSource = getImagePath(funding.imageUrl);
+  } else if (funding.id) {
+    // If no imageUrl but has an id, construct the path
+    imageSource = getImagePath(`/images/funding/${funding.id}.jpeg`);
   } else {
-    imageSource = require('../../assets/images/home/funding.jpeg');
+    // Fallback to the default image
+    imageSource = getImagePath('/images/home/funding.jpeg');
   }
 
   const handleOpenLink = async () => {
@@ -109,7 +100,7 @@ const FundingScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Oportunidades de Financiamento</Text>
         <Text style={styles.headerSubtitle}>
-          Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável.
+          Explore oportunidades de financiamento para projetos de desenvolvimento urbano e sustentável.
         </Text>
       </View>
       
