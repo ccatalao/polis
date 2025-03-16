@@ -14,8 +14,8 @@
     "build:preview:android": "npx eas build --profile preview --platform android",
     "build:preview:ios": "npx eas build --profile preview --platform ios",
     "copy:publications": "mkdir -p web-build/assets/images/publications && cp -r assets/images/publications/* web-build/assets/images/publications/",
-    "clean:web-build": "rm -rf web-build/images/municipio web-build/images/projetos",
-    "predeploy": "rm -rf dist && mkdir -p dist && cp -r web-build/* dist/ && rm -rf dist/images/municipio dist/images/projetos && touch dist/.nojekyll",
+    "clean:web-build": "rm -rf web-build/images/municipio web-build/images/projetos web-build/images/revistas",
+    "predeploy": "rm -rf dist && mkdir -p dist && cp -r web-build/* dist/ && rm -rf dist/images/municipio dist/images/projetos dist/images/revistas && touch dist/.nojekyll",
     "deploy": "npm run copy:publications && npm run clean:web-build && gh-pages -d dist"
   },
   "dependencies": {
