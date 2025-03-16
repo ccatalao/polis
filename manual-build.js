@@ -151,36 +151,48 @@ try {
     copyDir('src/data', 'dist/data');
   }
   
-  // Create images directory structure in dist
-  console.log('Setting up image directories...');
+  // Create a debug.js file to help with debugging
+  const debugJs = `
+  // Debug script to help with image path issues
+  console.log('Debug script loaded');
   
-  // Create main images directory
-  if (!fs.existsSync('dist/images')) {
-    fs.mkdirSync('dist/images', { recursive: true });
-  }
+  // Log the current URL
+  console.log('Current URL:', window.location.href);
   
-  // Create subdirectories for different image categories
-  const imageCategories = ['municipio', 'funding', 'projects', 'publications', 'home'];
-  imageCategories.forEach(category => {
-    const categoryDir = path.join('dist/images', category);
-    if (!fs.existsSync(categoryDir)) {
-      fs.mkdirSync(categoryDir, { recursive: true });
-    }
+  // Check if we're on GitHub Pages
+  if (window.location.href.includes('github.io')) {
+    console.log('Running on GitHub Pages');
     
-    // Copy images from assets to the corresponding directory in dist/images
-    const srcDir = path.join('assets/images', category);
-    if (fs.existsSync(srcDir)) {
-      console.log(`Copying ${category} images...`);
-      const files = fs.readdirSync(srcDir);
-      files.forEach(file => {
-        if (!file.toLowerCase().endsWith('.webp')) {
-          const srcPath = path.join(srcDir, file);
-          const destPath = path.join(categoryDir, file);
-          fs.copyFileSync(srcPath, destPath);
-        }
-      });
-    }
-  });
+    // Log the structure of the assets directory
+    fetch('/polis/assets/images/funding/dut.jpeg')
+      .then(response => {
+        console.log('Funding image fetch response:', response.status);
+        return response;
+      })
+      .catch(error => console.error('Error fetching funding image:', error));
+      
+    fetch('/polis/assets/images/projects/cordis.jpeg')
+      .then(response => {
+        console.log('Projects image fetch response:', response.status);
+        return response;
+      })
+      .catch(error => console.error('Error fetching projects image:', error));
+      
+    fetch('/polis/assets/images/publications/urbanism.jpeg')
+      .then(response => {
+        console.log('Publications image fetch response:', response.status);
+        return response;
+      })
+      .catch(error => console.error('Error fetching publications image:', error));
+  }
+  `;
+  
+  fs.writeFileSync('dist/debug.js', debugJs);
+  
+  // Add the debug script to the index.html file
+  const indexHtmlWithDebug = fs.readFileSync('dist/index.html', 'utf8')
+    .replace('</body>', '<script src="debug.js"></script></body>');
+  fs.writeFileSync('dist/index.html', indexHtmlWithDebug);
   
   // Create .nojekyll file for GitHub Pages
   fs.writeFileSync('dist/.nojekyll', '');
