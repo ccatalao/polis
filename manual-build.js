@@ -35,7 +35,9 @@ try {
   const jsonFiles = [
     'src/data/funding.json',
     'src/data/projects.json',
-    'src/data/publications.json'
+    'src/data/publications.json',
+    'src/data/municipio.json',
+    'src/data/chapters.json'
   ];
   
   jsonFiles.forEach(jsonFile => {
@@ -141,6 +143,27 @@ try {
   // Copy assets directory
   if (fs.existsSync('assets')) {
     copyDir('assets', 'dist/assets');
+  }
+  
+  // Copy data files to dist directory
+  console.log('Copying data files to dist directory...');
+  if (fs.existsSync('src/data')) {
+    copyDir('src/data', 'dist/data');
+  }
+  
+  // Create images directory structure in dist
+  if (!fs.existsSync('dist/images')) {
+    fs.mkdirSync('dist/images', { recursive: true });
+  }
+  
+  // Create municipio directory in images
+  if (!fs.existsSync('dist/images/municipio')) {
+    fs.mkdirSync('dist/images/municipio', { recursive: true });
+  }
+  
+  // Copy municipio images to the correct location
+  if (fs.existsSync('assets/images/municipio')) {
+    copyDir('assets/images/municipio', 'dist/images/municipio');
   }
   
   // Create .nojekyll file for GitHub Pages

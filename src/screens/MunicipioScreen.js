@@ -11,11 +11,65 @@ const getMunicipioImage = (imageUrl) => {
   
   // For the deployed site, we need to adjust the path
   const imagePath = imageUrl.fallback || imageUrl.webp;
-  if (imagePath.startsWith('/')) {
-    return '.' + imagePath; // Add a dot to make it relative to the current directory
+  
+  // Check if we're running in a web environment
+  if (typeof window !== 'undefined' && window.location && window.location.href.includes('github.io')) {
+    // We're on GitHub Pages, adjust the path
+    if (imagePath.startsWith('/')) {
+      return '.' + imagePath;
+    }
   }
+  
   return imagePath;
 };
+
+// Fallback data in case the import fails
+const fallbackData = [
+  {
+    "id": "reabilitacao-urbana",
+    "title": "Reabilitação Urbana",
+    "description": "Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional.",
+    "url": "https://www.cm-palmela.pt/viver/reabilitacao-urbana",
+    "features": [
+      {
+        "feature": "Reabilitação do Centro Histórico de Palmela",
+        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela"
+      },
+      {
+        "feature": "Reabilitação Urbana do Pinhal Novo",
+        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo"
+      },
+      {
+        "feature": "Incentivos à reabilitação urbana",
+        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
+      }
+    ],
+    "imageUrl": {
+      "webp": "/images/municipio/reabilitacao-urbana.jpeg",
+      "fallback": "/images/municipio/reabilitacao-urbana.jpeg"
+    }
+  },
+  {
+    "id": "planos-municipais",
+    "title": "Planos Municipais de Ordenamento do Território",
+    "description": "Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas.",
+    "url": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio",
+    "features": [
+      {
+        "feature": "Plano Diretor Municipal",
+        "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal"
+      },
+      {
+        "feature": "Estudos de ordenamento do território",
+        "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
+      }
+    ],
+    "imageUrl": {
+      "webp": "/images/municipio/planos-municipais.jpeg",
+      "fallback": "/images/municipio/planos-municipais.jpeg"
+    }
+  }
+];
 
 const ServiceCard = ({ service }) => {
   const handleOpenLink = async (url) => {
@@ -85,12 +139,16 @@ const MunicipioScreen = () => {
         setServices(municipioData.municipio);
         setLoading(false);
       } else {
-        setError('Dados não encontrados');
+        // Use fallback data if the import fails
+        console.warn('Using fallback data for municipio');
+        setServices(fallbackData);
         setLoading(false);
       }
     } catch (err) {
       console.error('Erro ao carregar dados:', err);
-      setError('Erro ao carregar dados');
+      // Use fallback data if there's an error
+      console.warn('Using fallback data for municipio due to error');
+      setServices(fallbackData);
       setLoading(false);
     }
   }, []);
