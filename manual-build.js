@@ -151,6 +151,18 @@ try {
     copyDir('src/data', 'dist/data');
   }
   
+  // Copy screens files to dist directory
+  console.log('Copying screens files to dist directory...');
+  if (fs.existsSync('src/screens')) {
+    copyDir('src/screens', 'dist/screens');
+  }
+  
+  // Copy utils files to dist directory
+  console.log('Copying utils files to dist directory...');
+  if (fs.existsSync('src/utils')) {
+    copyDir('src/utils', 'dist/utils');
+  }
+  
   // Create a debug.js file to help with debugging
   const debugJs = `
   // Debug script to help with image path issues
@@ -193,6 +205,153 @@ try {
   const indexHtmlWithDebug = fs.readFileSync('dist/index.html', 'utf8')
     .replace('</body>', '<script src="debug.js"></script></body>');
   fs.writeFileSync('dist/index.html', indexHtmlWithDebug);
+  
+  // Create a test-images.html file to directly test image loading
+  const testImagesHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polis - Image Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .image-item {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .image-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .image-item p {
+      margin: 10px 0 0;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Polis - Image Test Page</h1>
+  <p>This page tests direct image loading from GitHub Pages.</p>
+  
+  <h2>Funding Images</h2>
+  <div class="image-grid">
+    <div class="image-item">
+      <img src="/polis/assets/images/funding/dut.jpeg" alt="DUT">
+      <p>dut.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/funding/bauhaus.jpeg" alt="Bauhaus">
+      <p>bauhaus.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/funding/feder.jpeg" alt="Feder">
+      <p>feder.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/funding/interreg.jpeg" alt="Interreg">
+      <p>interreg.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/funding/life.jpeg" alt="Life">
+      <p>life.jpeg</p>
+    </div>
+  </div>
+  
+  <h2>Project Images</h2>
+  <div class="image-grid">
+    <div class="image-item">
+      <img src="/polis/assets/images/projects/cordis.jpeg" alt="Cordis">
+      <p>cordis.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/projects/espon.jpeg" alt="Espon">
+      <p>espon.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/projects/jpi-urban.jpeg" alt="JPI Urban">
+      <p>jpi-urban.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/projects/keep-eu.jpeg" alt="Keep EU">
+      <p>keep-eu.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/projects/urbact.jpeg" alt="Urbact">
+      <p>urbact.jpeg</p>
+    </div>
+  </div>
+  
+  <h2>Publication Images</h2>
+  <div class="image-grid">
+    <div class="image-item">
+      <img src="/polis/assets/images/publications/urbanism.jpeg" alt="Urbanism">
+      <p>urbanism.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/publications/urban-science.jpeg" alt="Urban Science">
+      <p>urban-science.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/publications/urban-planning.jpeg" alt="Urban Planning">
+      <p>urban-planning.jpeg</p>
+    </div>
+  </div>
+  
+  <h2>Home Images</h2>
+  <div class="image-grid">
+    <div class="image-item">
+      <img src="/polis/assets/images/home/funding.jpeg" alt="Funding">
+      <p>funding.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/home/projects.jpeg" alt="Projects">
+      <p>projects.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/home/publicacoes.jpeg" alt="Publicacoes">
+      <p>publicacoes.jpeg</p>
+    </div>
+    <div class="image-item">
+      <img src="/polis/assets/images/home/municipio.jpeg" alt="Municipio">
+      <p>municipio.jpeg</p>
+    </div>
+  </div>
+  
+  <script>
+    // Log any image loading errors
+    document.querySelectorAll('img').forEach(img => {
+      img.onerror = function() {
+        console.error('Failed to load image:', this.src);
+        this.style.border = '2px solid red';
+        this.style.padding = '10px';
+        this.style.backgroundColor = '#ffeeee';
+      };
+      
+      img.onload = function() {
+        console.log('Successfully loaded image:', this.src);
+      };
+    });
+  </script>
+</body>
+</html>`;
+
+  fs.writeFileSync('dist/test-images.html', testImagesHtml);
   
   // Create .nojekyll file for GitHub Pages
   fs.writeFileSync('dist/.nojekyll', '');
