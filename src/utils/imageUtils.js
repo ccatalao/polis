@@ -94,6 +94,14 @@ const imageMap = {
 // Check if we're running in a web environment
 const isWeb = typeof window !== 'undefined' && window.navigator && window.navigator.product === 'Gecko';
 
+// Add debugging information
+if (isWeb) {
+  console.log('Running in web environment');
+  if (window.location.href.includes('github.io')) {
+    console.log('GitHub Pages detected:', window.location.href);
+  }
+}
+
 /**
  * Gets the correct image path based on the environment (local or deployed)
  * @param {string|object} imagePath - The image path or object with image paths
@@ -129,9 +137,15 @@ const processImagePath = (path) => {
     
     // For web environment in production (GitHub Pages)
     if (isWeb && window.location.href.includes('github.io')) {
-      // For GitHub Pages, we need to use the direct URL to the image in the assets directory
-      // This is a simpler approach that directly uses the assets path
-      return `https://ccatalao.github.io/polis/assets${normalizedPath.replace('/images', '/images')}`;
+      // For GitHub Pages, we need to use the direct URL to the image
+      // The images in GitHub Pages are in the dist/assets/images directory
+      const category = normalizedPath.split('/')[2]; // Extract category (funding, projects, etc.)
+      const filename = normalizedPath.split('/')[3]; // Extract filename
+      
+      // Construct the correct path for GitHub Pages
+      const githubPagesUrl = `https://ccatalao.github.io/polis/assets/images/${category}/${filename}`;
+      console.log('GitHub Pages image path:', githubPagesUrl);
+      return githubPagesUrl;
     }
     
     // For native environment or local web development
@@ -140,6 +154,7 @@ const processImagePath = (path) => {
     }
     
     // For paths not in our map, return as is (might be a URL)
+    console.log('Using path as is:', path);
     return path;
   } catch (error) {
     console.error(`Error loading image: ${path}`, error);
