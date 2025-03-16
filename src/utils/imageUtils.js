@@ -137,15 +137,27 @@ const processImagePath = (path) => {
     
     // For web environment in production (GitHub Pages)
     if (isWeb && window.location.href.includes('github.io')) {
-      // For GitHub Pages, we need to use the direct URL to the image
-      // The images in GitHub Pages are in the dist/assets/images directory
-      const category = normalizedPath.split('/')[2]; // Extract category (funding, projects, etc.)
-      const filename = normalizedPath.split('/')[3]; // Extract filename
+      // Extract the parts of the path
+      const pathParts = normalizedPath.split('/');
+      if (pathParts.length >= 4) {
+        const category = pathParts[2]; // e.g., 'funding', 'projects', 'publications'
+        const filename = pathParts[3]; // e.g., 'dut.jpeg', 'cordis.jpeg'
+        
+        // Hardcoded paths for each category to ensure they work
+        if (category === 'funding') {
+          return `https://ccatalao.github.io/polis/assets/images/funding/${filename}`;
+        } else if (category === 'projects') {
+          return `https://ccatalao.github.io/polis/assets/images/projects/${filename}`;
+        } else if (category === 'publications') {
+          return `https://ccatalao.github.io/polis/assets/images/publications/${filename}`;
+        } else if (category === 'home') {
+          return `https://ccatalao.github.io/polis/assets/images/home/${filename}`;
+        }
+      }
       
-      // Construct the correct path for GitHub Pages
-      const githubPagesUrl = `https://ccatalao.github.io/polis/assets/images/${category}/${filename}`;
-      console.log('GitHub Pages image path:', githubPagesUrl);
-      return githubPagesUrl;
+      // Fallback to a direct path
+      console.log('Using direct GitHub Pages path:', normalizedPath);
+      return `https://ccatalao.github.io/polis/assets${normalizedPath}`;
     }
     
     // For native environment or local web development
