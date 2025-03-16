@@ -44,11 +44,14 @@ try {
     if (fs.existsSync(jsonFile)) {
       console.log(`Updating references in ${jsonFile}`);
       let content = fs.readFileSync(jsonFile, 'utf8');
-      webpImages.forEach(webpPath => {
-        const normalizedWebpPath = webpPath.replace(/\\/g, '/');
-        const normalizedJpegPath = normalizedWebpPath.replace(/\.webp$/i, '.jpeg');
-        content = content.replace(new RegExp(normalizedWebpPath, 'g'), normalizedJpegPath);
-      });
+      
+      // Replace .webp with .jpeg in all image paths
+      content = content.replace(/\.webp/g, '.jpeg');
+      
+      // Fix image paths for GitHub Pages deployment
+      // Replace paths like "/images/..." with "./images/..."
+      content = content.replace(/"\/images\//g, '"./images/');
+      
       fs.writeFileSync(jsonFile, content);
     }
   });
@@ -56,8 +59,8 @@ try {
   console.error('Error converting images:', error);
 }
 
-// Now start a development server and use a headless browser to generate static files
-console.log('Starting development server...');
+// Now create the static site
+console.log('Creating static site...');
 try {
   // Create dist directory if it doesn't exist
   if (!fs.existsSync('dist')) {
@@ -116,9 +119,6 @@ try {
 
   fs.writeFileSync('dist/index.html', indexHtml);
   
-  // Copy assets to dist directory
-  console.log('Copying assets to dist directory...');
-  
   // Function to recursively copy directory
   function copyDir(src, dest) {
     if (!fs.existsSync(dest)) {
@@ -141,6 +141,7 @@ try {
   }
   
   // Copy assets directory
+  console.log('Copying assets to dist directory...');
   if (fs.existsSync('assets')) {
     copyDir('assets', 'dist/assets');
   }
@@ -152,19 +153,35 @@ try {
   }
   
   // Create images directory structure in dist
+  console.log('Setting up image directories...');
+  
+  // Create main images directory
   if (!fs.existsSync('dist/images')) {
     fs.mkdirSync('dist/images', { recursive: true });
   }
   
-  // Create municipio directory in images
-  if (!fs.existsSync('dist/images/municipio')) {
-    fs.mkdirSync('dist/images/municipio', { recursive: true });
-  }
-  
-  // Copy municipio images to the correct location
-  if (fs.existsSync('assets/images/municipio')) {
-    copyDir('assets/images/municipio', 'dist/images/municipio');
-  }
+  // Create subdirectories for different image categories
+  const imageCategories = ['municipio', 'funding', 'projects', 'publications', 'home'];
+  imageCategories.forEach(category => {
+    const categoryDir = path.join('dist/images', category);
+    if (!fs.existsSync(categoryDir)) {
+      fs.mkdirSync(categoryDir, { recursive: true });
+    }
+    
+    // Copy images from assets to the corresponding directory in dist/images
+    const srcDir = path.join('assets/images', category);
+    if (fs.existsSync(srcDir)) {
+      console.log(`Copying ${category} images...`);
+      const files = fs.readdirSync(srcDir);
+      files.forEach(file => {
+        if (!file.toLowerCase().endsWith('.webp')) {
+          const srcPath = path.join(srcDir, file);
+          const destPath = path.join(categoryDir, file);
+          fs.copyFileSync(srcPath, destPath);
+        }
+      });
+    }
+  });
   
   // Create .nojekyll file for GitHub Pages
   fs.writeFileSync('dist/.nojekyll', '');

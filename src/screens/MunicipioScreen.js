@@ -13,10 +13,10 @@ const getMunicipioImage = (imageUrl) => {
   const imagePath = imageUrl.fallback || imageUrl.webp;
   
   // Check if we're running in a web environment
-  if (typeof window !== 'undefined' && window.location && window.location.href.includes('github.io')) {
-    // We're on GitHub Pages, adjust the path
+  if (typeof window !== 'undefined') {
+    // We're in a web environment
     if (imagePath.startsWith('/')) {
-      return '.' + imagePath;
+      return '.' + imagePath; // Add a dot to make it relative to the current directory
     }
   }
   
@@ -45,8 +45,8 @@ const fallbackData = [
       }
     ],
     "imageUrl": {
-      "webp": "/images/municipio/reabilitacao-urbana.jpeg",
-      "fallback": "/images/municipio/reabilitacao-urbana.jpeg"
+      "webp": "./images/municipio/reabilitacao-urbana.jpeg",
+      "fallback": "./images/municipio/reabilitacao-urbana.jpeg"
     }
   },
   {
@@ -65,8 +65,8 @@ const fallbackData = [
       }
     ],
     "imageUrl": {
-      "webp": "/images/municipio/planos-municipais.jpeg",
-      "fallback": "/images/municipio/planos-municipais.jpeg"
+      "webp": "./images/municipio/planos-municipais.jpeg",
+      "fallback": "./images/municipio/planos-municipais.jpeg"
     }
   }
 ];
@@ -88,6 +88,9 @@ const ServiceCard = ({ service }) => {
 
   // Get the image source
   const imageSource = service.imageUrl ? getMunicipioImage(service.imageUrl) : null;
+  
+  // For debugging
+  console.log('Image source:', imageSource);
 
   return (
     <View style={styles.card}>
@@ -136,6 +139,7 @@ const MunicipioScreen = () => {
     try {
       // Load data from the imported JSON file
       if (municipioData && municipioData.municipio) {
+        console.log('Loaded municipio data:', municipioData.municipio);
         setServices(municipioData.municipio);
         setLoading(false);
       } else {
