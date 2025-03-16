@@ -16,7 +16,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/dut.webp",
+        "webp": "./assets/images/funding/dut.jpeg",
         "fallback": "./assets/images/funding/dut.jpeg",
         "thumbnail": {
           "width": 400,
@@ -44,7 +44,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/life.webp",
+        "webp": "./assets/images/funding/life.jpeg",
         "fallback": "./assets/images/funding/life.jpeg",
         "thumbnail": {
           "width": 400,
@@ -68,7 +68,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/feder.webp",
+        "webp": "./assets/images/funding/feder.jpeg",
         "fallback": "./assets/images/funding/feder.jpeg",
         "thumbnail": {
           "width": 400,
@@ -92,7 +92,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/bauhaus.webp",
+        "webp": "./assets/images/funding/bauhaus.jpeg",
         "fallback": "./assets/images/funding/bauhaus.jpeg",
         "thumbnail": {
           "width": 400,
@@ -112,7 +112,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/interreg.webp",
+        "webp": "./assets/images/funding/interreg.jpeg",
         "fallback": "./assets/images/funding/interreg.jpeg",
         "thumbnail": {
           "width": 400,
@@ -136,7 +136,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/investeu.webp",
+        "webp": "./assets/images/funding/investeu.jpeg",
         "fallback": "./assets/images/funding/investeu.jpeg",
         "thumbnail": {
           "width": 400,
@@ -160,7 +160,7 @@
         }
       ],
       "imageUrl": {
-        "webp": "./assets/images/funding/jtf.webp",
+        "webp": "./assets/images/funding/jtf.jpeg",
         "fallback": "./assets/images/funding/jtf.jpeg",
         "thumbnail": {
           "width": 400,

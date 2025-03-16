@@ -12,18 +12,18 @@ const ProjectCard = ({ project }) => {
   if (project.imageUrl) {
     // Map each image path to its require statement
     const imageMappings = {
-      'cordis': require('../../assets/images/projects/cordis.webp'),
-      'urbact': require('../../assets/images/projects/urbact.webp'),
-      'jpi-urban': require('../../assets/images/projects/jpi-urban.webp'),
-      'keep-eu': require('../../assets/images/projects/keep-eu.webp'),
-      'espon': require('../../assets/images/projects/espon.webp'),
-      'uia': require('../../assets/images/projects/uia.webp')
+      'cordis': require('../../assets/images/projects/cordis.jpeg'),
+      'urbact': require('../../assets/images/projects/urbact.jpeg'),
+      'jpi-urban': require('../../assets/images/projects/jpi-urban.jpeg'),
+      'keep-eu': require('../../assets/images/projects/keep-eu.jpeg'),
+      'espon': require('../../assets/images/projects/espon.jpeg'),
+      'uia': require('../../assets/images/projects/uia.jpeg')
     };
     
     // Use the ID to get the correct image
-    imageSource = imageMappings[project.id] || require('../../assets/images/home/projects.webp');
+    imageSource = imageMappings[project.id] || require('../../assets/images/home/projects.jpeg');
   } else {
-    imageSource = require('../../assets/images/home/projects.webp');
+    imageSource = require('../../assets/images/home/projects.jpeg');
   }
 
   const handleOpenLink = async () => {

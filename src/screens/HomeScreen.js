@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { Image } from 'expo-image';
 
 // Import images
-const municipioImage = require('../../assets/images/home/municipio.webp');
-const projectsImage = require('../../assets/images/home/projects.webp');
-const fundingImage = require('../../assets/images/home/funding.webp');
-const publicacoesImage = require('../../assets/images/home/publicacoes.webp');
+const municipioImage = require('../../assets/images/home/municipio.jpeg');
+const projectsImage = require('../../assets/images/home/projects.jpeg');
+const fundingImage = require('../../assets/images/home/funding.jpeg');
+const publicacoesImage = require('../../assets/images/home/publicacoes.jpeg');
 
 const FeatureCard = ({ title, description, imageSource, onPress }) => {
   return (

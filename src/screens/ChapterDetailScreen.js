@@ -4,69 +4,74 @@ import { Image } from 'expo-image';
 
 // Image mapping for publications based on their ID
 const getPublicationImage = (publicationId, categoryId) => {
+  // Use the passed getPublicationImage function if available
+  if (typeof getPublicationImageFromProps === 'function') {
+    return getPublicationImageFromProps(publicationId);
+  }
+  
   // Urbanism publications
   if (categoryId === 'urbanism') {
     switch (publicationId) {
       case 'articulo':
-        return require('../../assets/images/publications/articulo.webp');
+        return require('../../assets/images/publications/articulo.jpeg');
       case 'archive':
-        return require('../../assets/images/publications/archive.webp');
+        return require('../../assets/images/publications/archive.jpeg');
       case 'buildings-cities':
-        return require('../../assets/images/publications/buildings.webp');
+        return require('../../assets/images/publications/buildings.jpeg');
       case 'cidades':
-        return require('../../assets/images/publications/cidades.webp');
+        return require('../../assets/images/publications/cidades.jpeg');
       case 'city-environment-interactions':
-        return require('../../assets/images/publications/citty-environment-interactions.webp');
+        return require('../../assets/images/publications/citty-environment-interactions.jpeg');
       case 'ciudades':
-        return require('../../assets/images/publications/ciudades.webp');
+        return require('../../assets/images/publications/ciudades.jpeg');
       case 'computational-urban-science':
-        return require('../../assets/images/publications/computational-urban-science.webp');
+        return require('../../assets/images/publications/computational-urban-science.jpeg');
       case 'current-urban-studies':
-        return require('../../assets/images/publications/current-urban-studies.webp');
+        return require('../../assets/images/publications/current-urban-studies.jpeg');
       case 'frontiers-built-environment':
-        return require('../../assets/images/publications/frontiers-built-environment.webp');
+        return require('../../assets/images/publications/frontiers-built-environment.jpeg');
       case 'future-cities-environment':
-        return require('../../assets/images/publications/future-cities-environment.webp');
+        return require('../../assets/images/publications/future-cities-environment.jpeg');
       case 'iet-smart-cities':
-        return require('../../assets/images/publications/smart-cities.webp');
+        return require('../../assets/images/publications/smart-cities.jpeg');
       case 'international-urban-sustainable':
-        return require('../../assets/images/publications/urban-sustainable.webp');
+        return require('../../assets/images/publications/urban-sustainable.jpeg');
       case 'irspsd':
-        return require('../../assets/images/publications/irspsd.webp');
+        return require('../../assets/images/publications/irspsd.jpeg');
       case 'urban-ecology':
-        return require('../../assets/images/publications/urban-ecology.webp');
+        return require('../../assets/images/publications/urban-ecology.jpeg');
       case 'urban-management':
-        return require('../../assets/images/publications/urban-management.webp');
+        return require('../../assets/images/publications/urban-management.jpeg');
       case 'urban-mobility':
-        return require('../../assets/images/publications/urban-mobility.webp');
+        return require('../../assets/images/publications/urban-mobility.jpeg');
       case 'research-urbanism':
-        return require('../../assets/images/publications/research-urbanism.webp');
+        return require('../../assets/images/publications/research-urbanism.jpeg');
       case 'resilient-cities':
-        return require('../../assets/images/publications/resilient-cities.webp');
+        return require('../../assets/images/publications/resilient-cities.jpeg');
       case 'smart-construction':
-        return require('../../assets/images/publications/smart-construction.webp');
+        return require('../../assets/images/publications/smart-construction.jpeg');
       case 'urban-agriculture':
-        return require('../../assets/images/publications/urban-agriculture.webp');
+        return require('../../assets/images/publications/urban-agriculture.jpeg');
       case 'urban-governance':
-        return require('../../assets/images/publications/urban-governance.webp');
+        return require('../../assets/images/publications/urban-governance.jpeg');
       case 'urban-lifeline':
-        return require('../../assets/images/publications/urban-lifeline.webp');
+        return require('../../assets/images/publications/urban-lifeline.jpeg');
       case 'urban-planning':
-        return require('../../assets/images/publications/urban-planning.webp');
+        return require('../../assets/images/publications/urban-planning.jpeg');
       case 'urban-planning-transport':
-        return require('../../assets/images/publications/urban-planning-transport.webp');
+        return require('../../assets/images/publications/urban-planning-transport.jpeg');
       case 'urban-science':
-        return require('../../assets/images/publications/urban-science.webp');
+        return require('../../assets/images/publications/urban-science.jpeg');
       case 'urban-transcripts':
-        return require('../../assets/images/publications/urban-transcripts.webp');
+        return require('../../assets/images/publications/urban-transcripts.jpeg');
       case 'urban-transformations':
-        return require('../../assets/images/publications/urban-transformations.webp');
+        return require('../../assets/images/publications/urban-transformations.jpeg');
       case 'urbana':
-        return require('../../assets/images/publications/urbana.webp');
+        return require('../../assets/images/publications/urbana.jpeg');
       case 'urbe':
-        return require('../../assets/images/publications/urbe.webp');
+        return require('../../assets/images/publications/urbe.jpeg');
       default:
-        return require('../../assets/images/publications/urbanism.webp');
+        return require('../../assets/images/publications/urbanism.jpeg');
     }
   }
   
@@ -74,37 +79,37 @@ const getPublicationImage = (publicationId, categoryId) => {
   else if (categoryId === 'planning') {
     switch (publicationId) {
       case 'blue-green-systems':
-        return require('../../assets/images/publications/blue-green-systems.webp');
+        return require('../../assets/images/publications/blue-green-systems.jpeg');
       case 'creative-practices':
-        return require('../../assets/images/publications/creative-practices.webp');
+        return require('../../assets/images/publications/creative-practices.jpeg');
       case 'spatial-development':
-        return require('../../assets/images/publications/spatial-development.webp');
+        return require('../../assets/images/publications/spatial-development.jpeg');
       case 'finisterra':
-        return require('../../assets/images/publications/finisterra.webp');
+        return require('../../assets/images/publications/finisterra.jpeg');
       case 'urban-rural-planning':
-        return require('../../assets/images/publications/urban-rural-planning.webp');
+        return require('../../assets/images/publications/urban-rural-planning.jpeg');
       case 'regional-development':
-        return require('../../assets/images/publications/regional-development.webp');
+        return require('../../assets/images/publications/regional-development.jpeg');
       case 'public-space':
-        return require('../../assets/images/publications/public-space.webp');
+        return require('../../assets/images/publications/public-space.jpeg');
       case 'public-transportation':
-        return require('../../assets/images/publications/public-transportation.webp');
+        return require('../../assets/images/publications/public-transportation.jpeg');
       case 'spatial-information':
-        return require('../../assets/images/publications/spatial-information.webp');
+        return require('../../assets/images/publications/spatial-information.jpeg');
       case 'planext':
-        return require('../../assets/images/publications/planext.webp');
+        return require('../../assets/images/publications/planext.jpeg');
       case 'regional-science-policy':
-        return require('../../assets/images/publications/regional-practice.webp');
+        return require('../../assets/images/publications/regional-practice.jpeg');
       case 'regional-studies':
-        return require('../../assets/images/publications/regional-studies.webp');
+        return require('../../assets/images/publications/regional-studies.jpeg');
       case 'scienze-territorio':
-        return require('../../assets/images/publications/scienze-territorio.webp');
+        return require('../../assets/images/publications/scienze-territorio.jpeg');
       case 'tema':
-        return require('../../assets/images/publications/tema.webp');
+        return require('../../assets/images/publications/tema.jpeg');
       case 'territorial-identity':
-        return require('../../assets/images/publications/territorial-identity.webp');
+        return require('../../assets/images/publications/territorial-identity.jpeg');
       default:
-        return require('../../assets/images/publications/planning.webp');
+        return require('../../assets/images/publications/planning.jpeg');
     }
   }
   
@@ -112,30 +117,30 @@ const getPublicationImage = (publicationId, categoryId) => {
   else if (categoryId === 'architecture') {
     switch (publicationId) {
       case 'architecture-mps':
-        return require('../../assets/images/publications/archicteture-mps.webp');
+        return require('../../assets/images/publications/archicteture-mps.jpeg');
       case 'agathon':
-        return require('../../assets/images/publications/agathon.webp');
+        return require('../../assets/images/publications/agathon.jpeg');
       case 'cadernos-arte-publica':
-        return require('../../assets/images/publications/arte-publlca.webp');
+        return require('../../assets/images/publications/arte-publlca.jpeg');
       case 'docomomo-journal':
-        return require('../../assets/images/publications/docomomo.webp');
+        return require('../../assets/images/publications/docomomo.jpeg');
       case 'enq-enquiry':
-        return require('../../assets/images/publications/enq.webp');
+        return require('../../assets/images/publications/enq.jpeg');
       case 'estudo-previo':
-        return require('../../assets/images/publications/estudo-previo.webp');
+        return require('../../assets/images/publications/estudo-previo.jpeg');
       case 'field':
-        return require('../../assets/images/publications/field.webp');
+        return require('../../assets/images/publications/field.jpeg');
       case 'architecture-urbanism':
-        return require('../../assets/images/publications/architecture-urbanism.webp');
+        return require('../../assets/images/publications/architecture-urbanism.jpeg');
       case 'revista-arquitectura':
-        return require('../../assets/images/publications/revista-arquitectura.webp');
+        return require('../../assets/images/publications/revista-arquitectura.jpeg');
       default:
-        return require('../../assets/images/publications/architecture.webp');
+        return require('../../assets/images/publications/architecture.jpeg');
     }
   }
   
   // Default fallback
-  return require('../../assets/images/home/publicacoes.webp');
+  return require('../../assets/images/home/publicacoes.jpeg');
 };
 
 const PublicationCard = ({ title, description, url, publicationId, getPublicationImage }) => {

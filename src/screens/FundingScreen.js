@@ -14,21 +14,21 @@ const FundingCard = ({ funding }) => {
     // Since we can't use require with variables directly, we'll map the image paths
     const imageMappings = {
       // Map each image path to its require statement
-      'dut': require('../../assets/images/funding/dut.webp'),
-      'life': require('../../assets/images/funding/life.webp'),
-      'feder': require('../../assets/images/funding/feder.webp'),
-      'bauhaus': require('../../assets/images/funding/bauhaus.webp'),
-      'interreg': require('../../assets/images/funding/interreg.webp'),
-      'investeu': require('../../assets/images/funding/investeu.webp'),
-      'jtf': require('../../assets/images/funding/jtf.webp'),
-      'rrf': require('../../assets/images/funding/rrf.webp'),
-      'uia': require('../../assets/images/funding/uia.webp')
+      'dut': require('../../assets/images/funding/dut.jpeg'),
+      'life': require('../../assets/images/funding/life.jpeg'),
+      'feder': require('../../assets/images/funding/feder.jpeg'),
+      'bauhaus': require('../../assets/images/funding/bauhaus.jpeg'),
+      'interreg': require('../../assets/images/funding/interreg.jpeg'),
+      'investeu': require('../../assets/images/funding/investeu.jpeg'),
+      'jtf': require('../../assets/images/funding/jtf.jpeg'),
+      'rrf': require('../../assets/images/funding/rrf.jpeg'),
+      'uia': require('../../assets/images/funding/uia.jpeg')
     };
     
     // Use the ID to get the correct image
-    imageSource = imageMappings[funding.id] || require('../../assets/images/home/funding.webp');
+    imageSource = imageMappings[funding.id] || require('../../assets/images/home/funding.jpeg');
   } else {
-    imageSource = require('../../assets/images/home/funding.webp');
+    imageSource = require('../../assets/images/home/funding.jpeg');
   }
 
   const handleOpenLink = async () => {
