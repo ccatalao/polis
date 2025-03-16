@@ -13,9 +13,10 @@
     "build:dev:ios": "npx eas build --profile development --platform ios",
     "build:preview:android": "npx eas build --profile preview --platform android",
     "build:preview:ios": "npx eas build --profile preview --platform ios",
-    "clean:web-build": "rm -rf web-build/images",
-    "predeploy": "rm -rf dist && mkdir -p dist && cp -r web-build/* dist/ && rm -rf dist/images && touch dist/.nojekyll",
-    "deploy": "npm run clean:web-build && gh-pages -d dist"
+    "copy:publications": "mkdir -p web-build/assets/images/publications && cp -r assets/images/publications/* web-build/assets/images/publications/",
+    "clean:web-build": "rm -rf web-build/images/municipio web-build/images/projetos",
+    "predeploy": "rm -rf dist && mkdir -p dist && cp -r web-build/* dist/ && rm -rf dist/images/municipio dist/images/projetos && touch dist/.nojekyll",
+    "deploy": "npm run copy:publications && npm run clean:web-build && gh-pages -d dist"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
