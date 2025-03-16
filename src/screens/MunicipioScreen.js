@@ -2,45 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 
-// Mock data for municipal services
-const mockMunicipioData = [
-  {
-    "id": "reabilitacao-urbana",
-    "title": "Reabilitação Urbana",
-    "description": "Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional.",
-    "url": "https://www.cm-palmela.pt/viver/reabilitacao-urbana",
-    "features": [
-      {
-        "feature": "Reabilitação do Centro Histórico de Palmela",
-        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela"
-      },
-      {
-        "feature": "Reabilitação Urbana do Pinhal Novo",
-        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo"
-      },
-      {
-        "feature": "Incentivos à reabilitação urbana",
-        "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
-      }
-    ]
-  },
-  {
-    "id": "planos-municipais",
-    "title": "Planos Municipais de Ordenamento do Território",
-    "description": "Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas.",
-    "url": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio",
-    "features": [
-      {
-        "feature": "Plano Diretor Municipal",
-        "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal"
-      },
-      {
-        "feature": "Estudos de ordenamento do território",
-        "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
-      }
-    ]
+// Import the municipio data
+import municipioData from '../data/municipio.json';
+
+// Function to get the correct image path
+const getMunicipioImage = (imageUrl) => {
+  if (!imageUrl) return null;
+  
+  // For the deployed site, we need to adjust the path
+  const imagePath = imageUrl.fallback || imageUrl.webp;
+  if (imagePath.startsWith('/')) {
+    return '.' + imagePath; // Add a dot to make it relative to the current directory
   }
-];
+  return imagePath;
+};
 
 const ServiceCard = ({ service }) => {
   const handleOpenLink = async (url) => {
@@ -57,8 +32,19 @@ const ServiceCard = ({ service }) => {
     }
   };
 
+  // Get the image source
+  const imageSource = service.imageUrl ? getMunicipioImage(service.imageUrl) : null;
+
   return (
     <View style={styles.card}>
+      {imageSource && (
+        <Image
+          source={imageSource}
+          style={styles.cardImage}
+          contentFit="cover"
+          transition={200}
+        />
+      )}
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{service.title}</Text>
         <Text style={styles.cardDescription}>{service.description}</Text>
@@ -90,15 +76,23 @@ const ServiceCard = ({ service }) => {
 const MunicipioScreen = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Simulate loading data from a file
-    setTimeout(() => {
-      setServices(mockMunicipioData);
+    try {
+      // Load data from the imported JSON file
+      if (municipioData && municipioData.municipio) {
+        setServices(municipioData.municipio);
+        setLoading(false);
+      } else {
+        setError('Dados não encontrados');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Erro ao carregar dados:', err);
+      setError('Erro ao carregar dados');
       setLoading(false);
-    }, 1000);
-    
-    // In a real app, we would load the data from a JSON file
+    }
   }, []);
 
   if (loading) {
@@ -106,6 +100,15 @@ const MunicipioScreen = () => {
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3498db" />
         <Text style={styles.loadingText}>A carregar serviços municipais...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorSubtext}>Por favor, tente novamente mais tarde.</Text>
       </View>
     );
   }
@@ -147,6 +150,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e74c3c',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  errorSubtext: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
   header: {
     padding: 16,
     backgroundColor: '#3498db',
@@ -175,6 +197,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+  },
+  cardImage: {
+    width: '100%',
+    height: 180,
   },
   cardContent: {
     padding: 16,
