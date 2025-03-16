@@ -113,11 +113,8 @@ polis/
 ├── src/                     # Source code
 │   ├── components/          # Reusable UI components
 │   ├── data/                # JSON data files
-│   ├── hooks/               # Custom React hooks
-│   ├── navigation/          # Navigation configuration
 │   ├── screens/             # Screen components
-│   ├── styles/              # Shared styles
-│   └── utils/               # Utility functions
+│   └── styles/              # Shared styles
 ├── web/                     # Web-specific files
 │   └── pwa/                 # Progressive Web App assets
 ├── web-build/               # Built web version

@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>Polis</title>
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#3498db">
@@ -15,8 +12,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Custom CSS for Municipio section -->
-  <link rel="stylesheet" href="./css/municipio.css">
   <style>
     html, body {
       height: 100%;
@@ -191,45 +186,6 @@
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
     }
-    
-    /* Special styling for municipio cards without images */
-    #municipio-content .feature-card {
-      border-radius: 8px;
-      background-color: white !important;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-      overflow: hidden;
-      display: block !important; /* Force block display */
-      min-height: 0 !important; /* Force no min-height */
-      height: auto !important; /* Force auto height */
-      background-image: none !important; /* Remove any background image */
-    }
-    
-    #municipio-content .feature-content {
-      padding: 20px;
-      background-color: white !important;
-    }
-    
-    /* Remove any height constraints that might be causing the empty space */
-    #municipio-content .feature-card:before,
-    #municipio-content .feature-card:after {
-      display: none !important;
-      content: none !important;
-    }
-    
-    /* Remove any background colors that might be causing the grey box */
-    #municipio-content .feature-card *,
-    #municipio-content .feature-content * {
-      background-color: transparent !important;
-    }
-    
-    /* Ensure mobile compatibility */
-    @media (max-width: 768px) {
-      #municipio-content .feature-card {
-        margin-bottom: 15px;
-        background-color: white !important;
-      }
-    }
   </style>
   <script src="./static/js/bundle.js" defer></script>
 </head>
@@ -248,7 +204,7 @@
           <div class="feature-content">
             <div class="feature-title">Serviços Municipais</div>
             <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
-            <a href="municipio-v2.html" class="feature-button">Ver mais</a>
+            <a href="#municipio" class="feature-button" data-page="municipio">Ver mais</a>
           </div>
         </div>
         
@@ -288,62 +244,7 @@
       </header>
       
       <main id="municipio-content">
-        <!-- Completely rewritten with new CSS classes -->
-        <div class="municipio-card">
-          <h3 class="municipio-card-title">Reabilitação Urbana</h3>
-          <p class="municipio-card-description">Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional. O Município oferece medidas de apoio que, em articulação com atores locais, promovem a recuperação do edificado, estimulando a fixação populacional em diversas ocupações.</p>
-          <ul class="municipio-feature-list">
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela" class="municipio-feature-link" target="_blank">Reabilitação do Centro Histórico de Palmela</a>
-            </li>
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo" class="municipio-feature-link" target="_blank">Reabilitação Urbana do Pinhal Novo</a>
-            </li>
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana" class="municipio-feature-link" target="_blank">Incentivos à reabilitação urbana</a>
-            </li>
-          </ul>
-          <a href="https://www.cm-palmela.pt/viver/reabilitacao-urbana" class="municipio-button" target="_blank">Ver mais</a>
-        </div>
-        
-        <div class="municipio-card">
-          <h3 class="municipio-card-title">Planos Municipais de Ordenamento do Território</h3>
-          <p class="municipio-card-description">Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas. Esta transparência clarifica as regras de utilização do território. A partilha digital desta informação visa aproximar cidadãos e administração pública.</p>
-          <ul class="municipio-feature-list">
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal" class="municipio-feature-link" target="_blank">Plano Diretor Municipal</a>
-            </li>
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos" class="municipio-feature-link" target="_blank">Estudos de ordenamento do território</a>
-            </li>
-          </ul>
-          <a href="https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio" class="municipio-button" target="_blank">Ver mais</a>
-        </div>
-        
-        <div class="municipio-card">
-          <h3 class="municipio-card-title">Habitação</h3>
-          <p class="municipio-card-description">A Constituição estabelece o direito à habitação para todos, cabendo ao Estado e autarquias implementar políticas adequadas. A Câmara de Palmela, reconhecendo o acesso à habitação como fundamental para integração social, dispõe de 32 fogos municipais sujeitos à Lei nº 81/2014, que define regras de atribuição e regime de arrendamento apoiado, complementados com acompanhamento social.</p>
-          <ul class="municipio-feature-list">
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/habitacao/estrategia-local-de-habitacao-elh" class="municipio-feature-link" target="_blank">Estratégia local de habitação</a>
-            </li>
-            <li class="municipio-feature-item">
-              <a href="https://www.cm-palmela.pt/viver/habitacao/habitacao-municipal-arrendamento-apoiado" class="municipio-feature-link" target="_blank">Habitação Municipal</a>
-            </li>
-          </ul>
-          <a href="https://www.cm-palmela.pt/viver/habitacao" class="municipio-button" target="_blank">Ver mais</a>
-        </div>
-        
-        <div class="municipio-card">
-          <h3 class="municipio-card-title">Centro Histórico</h3>
-          <p class="municipio-card-description">Património, habitação, comércio, serviços, movimento associativo juvenil, cultural e desportivo, tradição, produtos locais, espaços de conhecimento, oportunidades de negócio, propostas de lazer, refúgios de tranquilidade.</p>
-          <ul class="municipio-feature-list">
-            <li class="municipio-feature-item">
-              <a href="http://centrohistorico.cm-palmela.pt/" class="municipio-feature-link" target="_blank">Portal do Centro Histórico de Palmela</a>
-            </li>
-          </ul>
-          <a href="https://www.cm-palmela.pt/viver/centro-historico" class="municipio-button" target="_blank">Ver mais</a>
-        </div>
+        <div class="loading">Carregando dados...</div>
       </main>
     </div>
     
@@ -407,7 +308,7 @@
       <i class="fas fa-home"></i>
       <span>Home</span>
     </a>
-    <a href="municipio-v2.html" class="tab">
+    <a href="#municipio" class="tab" data-page="municipio">
       <i class="fas fa-building"></i>
       <span>Município</span>
     </a>
@@ -439,12 +340,6 @@
       
       // Function to show a page
       function showPage(pageId) {
-        // Special case for municipio - redirect to standalone page
-        if (pageId === 'municipio') {
-          window.location.href = 'municipio-v2.html';
-          return;
-        }
-        
         // Hide all pages
         pages.forEach(page => {
           page.classList.remove('active');
@@ -454,6 +349,12 @@
         const selectedPage = document.getElementById(pageId + '-page');
         if (selectedPage) {
           selectedPage.classList.add('active');
+          
+          // Load data for municipio page if needed
+          if (pageId === 'municipio' && !selectedPage.dataset.loaded) {
+            loadMunicipioData();
+            selectedPage.dataset.loaded = 'true';
+          }
           
           // Load data for projects page if needed
           if (pageId === 'projects' && !selectedPage.dataset.loaded) {
@@ -491,183 +392,100 @@
       
       // Function to load municipio data from JSON
       function loadMunicipioData() {
-        console.log("Starting to load municipio data");
         const municipioContent = document.getElementById('municipio-content');
-        console.log("municipio-content element:", municipioContent);
         
-        // Clear any existing content and show loading message
-        municipioContent.innerHTML = '<div class="loading">Carregando dados...</div>';
-        console.log("Set loading message");
-        
-        // Use setTimeout to ensure the loading message is displayed before processing data
-        setTimeout(() => {
-          console.log("Inside setTimeout callback");
-          
-          // Hardcoded municipio data to avoid JSON loading issues
-          const municipioData = {
-            "municipio": [
-              {
-                "id": "reabilitacao-urbana",
-                "title": "Reabilitação Urbana",
-                "description": "Palmela incentiva a reabilitação urbana para revitalizar centros urbanos e áreas degradadas, visando renovar e reabitar espaços com maior concentração populacional. O Município oferece medidas de apoio que, em articulação com atores locais, promovem a recuperação do edificado, estimulando a fixação populacional em diversas ocupações.",
-                "url": "https://www.cm-palmela.pt/viver/reabilitacao-urbana",
-                "features": [
-                  {
-                    "feature": "Reabilitação do Centro Histórico de Palmela",
-                    "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-centro-historico-de-palmela"
-                  },
-                  {
-                    "feature": "Reabilitação Urbana do Pinhal Novo",
-                    "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/aru-pinhal-novo"
-                  },
-                  {
-                    "feature": "Incentivos à reabilitação urbana",
-                    "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
-                  }
-                ]
-              },
-              {
-                "id": "planos-municipais",
-                "title": "Planos Municipais de Ordenamento do Território",
-                "description": "Acesso público a documentos e legislação territorial, incluindo o Plano Diretor Municipal, Planos de Urbanização e Pormenor, e Medidas Preventivas. Esta transparência clarifica as regras de utilização do território. A partilha digital desta informação visa aproximar cidadãos e administração pública.",
-                "url": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio",
-                "features": [
-                  {
-                    "feature": "Plano Diretor Municipal",
-                    "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/plano-diretor-municipal"
-                  },
-                  {
-                    "feature": "Estudos de ordenamento do território",
-                    "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
-                  }
-                ]
-              },
-              {
-                "id": "habitacao",
-                "title": "Habitação",
-                "description": "A Constituição estabelece o direito à habitação para todos, cabendo ao Estado e autarquias implementar políticas adequadas. A Câmara de Palmela, reconhecendo o acesso à habitação como fundamental para integração social, dispõe de 32 fogos municipais sujeitos à Lei nº 81/2014, que define regras de atribuição e regime de arrendamento apoiado, complementados com acompanhamento social.",
-                "url": "https://www.cm-palmela.pt/viver/habitacao",
-                "features": [
-                  {
-                    "feature": "Estratégia local de habitação",
-                    "featureURL": "https://www.cm-palmela.pt/viver/habitacao/estrategia-local-de-habitacao-elh"
-                  },
-                  {
-                    "feature": "Habitação Municipal",
-                    "featureURL": "https://www.cm-palmela.pt/viver/habitacao/habitacao-municipal-arrendamento-apoiado"
-                  }
-                ]
-              },
-              {
-                "id": "centro-historico",
-                "title": "Centro Histórico",
-                "description": "Património, habitação, comércio, serviços, movimento associativo juvenil, cultural e desportivo, tradição, produtos locais, espaços de conhecimento, oportunidades de negócio, propostas de lazer, refúgios de tranquilidade.",
-                "url": "https://www.cm-palmela.pt/viver/centro-historico",
-                "features": [
-                  {
-                    "feature": "Portal do Centro Histórico de Palmela",
-                    "featureURL": "http://centrohistorico.cm-palmela.pt/"
-                  }
-                ]
-              }
-            ]
-          };
-          
-          console.log("Data prepared, about to clear loading message");
-          
-          // Clear loading message
-          municipioContent.innerHTML = '';
-          
-          console.log("Loading message cleared, about to render items");
-          
-          // Render municipio items
-          if (municipioData.municipio && municipioData.municipio.length > 0) {
-            console.log(`Found ${municipioData.municipio.length} municipio items to render`);
+        fetch('./data/municipio.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Clear loading message
+            municipioContent.innerHTML = '';
             
-            // Create a container div for all cards
-            const cardsContainer = document.createElement('div');
-            cardsContainer.className = 'municipio-cards-container';
-            cardsContainer.style.display = 'block';
-            
-            municipioData.municipio.forEach((item, index) => {
-              console.log(`Rendering item ${index + 1}: ${item.title}`);
-              
-              const card = document.createElement('div');
-              card.className = 'feature-card';
-              card.id = `municipio-card-${item.id}`;
-              card.style.backgroundColor = 'white';
-              card.style.display = 'block';
-              card.style.minHeight = '0';
-              card.style.height = 'auto';
-              
-              // Create content container
-              const content = document.createElement('div');
-              content.className = 'feature-content';
-              content.style.backgroundColor = 'white';
-              content.style.padding = '20px';
-              
-              // Add title
-              const title = document.createElement('div');
-              title.className = 'feature-title';
-              title.textContent = item.title;
-              
-              // Add description
-              const description = document.createElement('div');
-              description.className = 'feature-description';
-              description.textContent = item.description;
-              
-              // Add features list if available
-              let featuresList = null;
-              if (item.features && item.features.length > 0) {
-                featuresList = document.createElement('ul');
-                featuresList.className = 'feature-list';
+            // Render municipio items
+            if (data.municipio && data.municipio.length > 0) {
+              data.municipio.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
                 
-                item.features.forEach(feature => {
-                  const listItem = document.createElement('li');
-                  listItem.className = 'feature-list-item';
+                // Create image element with fallback
+                let imageContainer;
+                if (item.imageUrl) {
+                  imageContainer = document.createElement('img');
+                  imageContainer.src = item.imageUrl.webp || item.imageUrl.fallback;
+                  imageContainer.alt = item.title;
+                  imageContainer.className = 'feature-image';
+                } else {
+                  imageContainer = document.createElement('div');
+                  imageContainer.className = 'feature-image';
+                }
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.className = 'feature-content';
+                
+                // Add title
+                const title = document.createElement('div');
+                title.className = 'feature-title';
+                title.textContent = item.title;
+                
+                // Add description
+                const description = document.createElement('div');
+                description.className = 'feature-description';
+                description.textContent = item.description;
+                
+                // Add features list if available
+                let featuresList = null;
+                if (item.features && item.features.length > 0) {
+                  featuresList = document.createElement('ul');
+                  featuresList.className = 'feature-list';
                   
-                  const link = document.createElement('a');
-                  link.href = feature.featureURL;
-                  link.className = 'feature-list-link';
-                  link.textContent = feature.feature;
-                  link.target = '_blank';
-                  
-                  listItem.appendChild(link);
-                  featuresList.appendChild(listItem);
-                });
-              }
-              
-              // Add button
-              const button = document.createElement('a');
-              button.href = item.url;
-              button.className = 'feature-button';
-              button.textContent = 'Ver mais';
-              button.target = '_blank';
-              
-              // Assemble the card - directly append to content, no image container
-              content.appendChild(title);
-              content.appendChild(description);
-              if (featuresList) {
-                content.appendChild(featuresList);
-              }
-              content.appendChild(button);
-              
-              // Append content to card
-              card.appendChild(content);
-              
-              // Add the complete card to the container
-              cardsContainer.appendChild(card);
-              console.log(`Added card ${index + 1} to container`);
-            });
-            
-            // Add the container to the municipio content
-            municipioContent.appendChild(cardsContainer);
-            console.log("All cards added to the page");
-          } else {
-            municipioContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
-            console.log("No municipio data found");
-          }
-        }, 100); // Short delay to ensure loading message is displayed
+                  item.features.forEach(feature => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'feature-list-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = feature.featureURL;
+                    link.className = 'feature-list-link';
+                    link.textContent = feature.feature;
+                    link.target = '_blank';
+                    
+                    listItem.appendChild(link);
+                    featuresList.appendChild(listItem);
+                  });
+                }
+                
+                // Add button
+                const button = document.createElement('a');
+                button.href = item.url;
+                button.className = 'feature-button';
+                button.textContent = 'Ver mais';
+                button.target = '_blank';
+                
+                // Assemble the card
+                content.appendChild(title);
+                content.appendChild(description);
+                if (featuresList) {
+                  content.appendChild(featuresList);
+                }
+                content.appendChild(button);
+                
+                card.appendChild(imageContainer);
+                card.appendChild(content);
+                
+                municipioContent.appendChild(card);
+              });
+            } else {
+              municipioContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading municipio data:', error);
+            municipioContent.innerHTML = '<div class="loading">Erro ao carregar dados. Por favor, tente novamente mais tarde.</div>';
+          });
       }
       
       // Function to load projects data from JSON

@@ -18,7 +18,15 @@
           "feature": "Incentivos à reabilitação urbana",
           "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
         }
-      ]
+      ],
+      "imageUrl": {
+        "webp": "/images/municipio/reabilitacao-urbana.webp",
+        "fallback": "/images/municipio/reabilitacao-urbana.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
     },
     {
       "id": "planos-municipais",
@@ -34,7 +42,15 @@
           "feature": "Estudos de ordenamento do território",
           "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
         }
-      ]
+      ],
+      "imageUrl": {
+        "webp": "/images/municipio/planos-municipais.webp",
+        "fallback": "/images/municipio/planos-municipais.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
     },
     {
       "id": "habitacao",
@@ -50,7 +66,15 @@
           "feature": "Habitação Municipal",
           "featureURL": "https://www.cm-palmela.pt/viver/habitacao/habitacao-municipal-arrendamento-apoiado"
         }
-      ]
+      ],
+      "imageUrl": {
+        "webp": "/images/municipio/habitacao.webp",
+        "fallback": "/images/municipio/habitacao.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
     },
     {
       "id": "centro-historico",
@@ -62,7 +86,15 @@
           "feature": "Portal do Centro Histórico de Palmela",
           "featureURL": "http://centrohistorico.cm-palmela.pt/"
         }
-      ]
+      ],
+      "imageUrl": {
+        "webp": "/images/municipio/centro-historico.webp",
+        "fallback": "/images/municipio/centro-historico.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
     }
   ]
 }
