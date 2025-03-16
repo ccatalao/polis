@@ -80,6 +80,7 @@ const imageMap = {
   '/images/publications/tema.jpeg': require('../../assets/images/publications/tema.jpeg'),
   '/images/publications/territorial-identity.jpeg': require('../../assets/images/publications/territorial-identity.jpeg'),
   '/images/publications/architecture-mps.jpeg': require('../../assets/images/publications/architecture-mps.jpeg'),
+  '/images/publications/mps.jpeg': require('../../assets/images/publications/mps.jpeg'),
   '/images/publications/agathon.jpeg': require('../../assets/images/publications/agathon.jpeg'),
   '/images/publications/arte-publica.jpeg': require('../../assets/images/publications/arte-publica.jpeg'),
   '/images/publications/docomomo.jpeg': require('../../assets/images/publications/docomomo.jpeg'),
@@ -90,10 +91,13 @@ const imageMap = {
   '/images/publications/revista-arquitectura.jpeg': require('../../assets/images/publications/revista-arquitectura.jpeg')
 };
 
+// Check if we're running in a web environment
+const isWeb = typeof window !== 'undefined' && window.navigator && window.navigator.product === 'Gecko';
+
 /**
  * Gets the correct image path based on the environment (local or deployed)
  * @param {string|object} imagePath - The image path or object with image paths
- * @returns {any} - The required image module
+ * @returns {any} - The required image module or path
  */
 export const getImagePath = (imagePath) => {
   if (!imagePath) return null;
@@ -101,25 +105,43 @@ export const getImagePath = (imagePath) => {
   // If imagePath is an object with webp and fallback properties
   if (typeof imagePath === 'object') {
     const path = imagePath.fallback || imagePath.webp;
-    // Convert ./images to /images for consistency
-    const normalizedPath = path.replace(/^\.\/(images\/.*)$/, '/$1');
-    return imageMap[normalizedPath] || null;
+    return processImagePath(path);
   }
   
   // For string paths
+  return processImagePath(imagePath);
+};
+
+/**
+ * Process an image path to return the correct format based on environment
+ * @param {string} path - The image path
+ * @returns {any} - The processed image path
+ */
+const processImagePath = (path) => {
   try {
-    // Convert ./images to /images for consistency
-    const normalizedPath = imagePath.replace(/^\.\/(images\/.*)$/, '/$1');
+    // Normalize the path to start with /images/
+    let normalizedPath = path;
     
-    // Check if we have this image in our map
+    // Convert ./images to /images for consistency
+    if (normalizedPath.startsWith('./images/')) {
+      normalizedPath = normalizedPath.replace(/^\.\//, '/');
+    }
+    
+    // For web environment in production (GitHub Pages)
+    if (isWeb && window.location.href.includes('github.io')) {
+      // For GitHub Pages, we need to use the path directly
+      return normalizedPath;
+    }
+    
+    // For native environment or local web development
     if (imageMap[normalizedPath]) {
       return imageMap[normalizedPath];
     }
     
     // For paths not in our map, return as is (might be a URL)
-    return imagePath;
+    return path;
   } catch (error) {
-    console.error(`Error loading image: ${imagePath}`, error);
+    console.error(`Error loading image: ${path}`, error);
     return null;
   }
 };

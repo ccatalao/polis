@@ -35,7 +35,6 @@ try {
   const jsonFiles = [
     'src/data/funding.json',
     'src/data/projects.json',
-    'src/data/publications.json',
     'src/data/municipio.json',
     'src/data/chapters.json'
   ];
@@ -49,8 +48,8 @@ try {
       content = content.replace(/\.webp/g, '.jpeg');
       
       // Fix image paths for GitHub Pages deployment
-      // Replace paths like "/images/..." with "./images/..."
-      content = content.replace(/"\/images\//g, '"./images/');
+      // For web deployment, we need to use absolute paths starting with /
+      content = content.replace(/"\.\/images\//g, '"/images/');
       
       fs.writeFileSync(jsonFile, content);
     }
