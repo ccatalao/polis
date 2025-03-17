@@ -5,54 +5,40 @@ import { Image } from 'expo-image';
 // Import the chapters data
 import chaptersData from '../data/chapters.json';
 
-// Import image utility
-import { getImagePath } from '../utils/imageUtils';
+// Hardcoded image paths for the main categories
+const getCategoryImage = (categoryId) => {
+  switch (categoryId) {
+    case 'urbanism':
+      return require('../../assets/images/publications/urbanism.webp');
+    case 'planning':
+      return require('../../assets/images/publications/planning.webp');
+    case 'architecture':
+      return require('../../assets/images/publications/architecture.webp');
+    default:
+      return require('../../assets/images/home/publicacoes.webp');
+  }
+};
 
-const ChapterCard = ({ item, onPress }) => {
-  // Get the image source using the getImagePath utility
-  const getCategoryImage = () => {
-    try {
-      // Use hardcoded paths for testing
-      const imageMap = {
-        'urbanism': 'https://ccatalao.github.io/polis/assets/images/publications/urbanism.jpeg',
-        'urban-science': 'https://ccatalao.github.io/polis/assets/images/publications/urban-science.jpeg',
-        'urban-planning': 'https://ccatalao.github.io/polis/assets/images/publications/urban-planning.jpeg'
-      };
-      
-      // Log the item ID for debugging
-      console.log('Chapter item ID:', item.id);
-      
-      // Return the hardcoded image path if available
-      if (item.id && imageMap[item.id]) {
-        console.log('Using hardcoded image path:', imageMap[item.id]);
-        return { uri: imageMap[item.id] };
-      }
-      
-      // Fallback to the default image
-      console.log('Using default image path');
-      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
-    } catch (error) {
-      console.error('Error loading category image:', error);
-      // Default image if there's an error
-      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
-    }
-  };
+const ChapterCard = ({ title, description, categoryId, imageUrl, onPress }) => {
+  // Use the imageUrl if provided, otherwise fall back to the hardcoded image
+  const imageSource = imageUrl 
+    ? { uri: imageUrl.webp || imageUrl.fallback }
+    : getCategoryImage(categoryId);
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={getCategoryImage()}
-          style={styles.image}
-          contentFit="cover"
-          transition={1000}
-        />
-      </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description} numberOfLines={3}>
-          {item.description}
+      <Image
+        source={imageSource}
+        style={styles.cardImage}
+        contentFit="cover"
+        transition={300}
+      />
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{title}</Text>
+        <Text style={styles.cardDescription} numberOfLines={2}>
+          {description}
         </Text>
+        <Text style={styles.readMore}>Ver publicações</Text>
       </View>
     </TouchableOpacity>
   );
@@ -63,33 +49,29 @@ const ChaptersScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading data from an API
-    const loadData = async () => {
-      try {
-        // In a real app, this would be an API call
-        setChapters(chaptersData);
-      } catch (error) {
-        console.error('Error loading chapters data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
+    // Load chapters from the imported JSON file
+    try {
+      const formattedChapters = Object.keys(chaptersData.chapters).map(key => ({
+        id: key,
+        ...chaptersData.chapters[key]
+      }));
+      setChapters(formattedChapters);
+    } catch (error) {
+      console.error('Error loading chapters data:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const handleChapterPress = (chapter) => {
-    navigation.navigate('ChapterDetail', {
-      chapter: chapter,
-      publications: chapter.content
-    });
+    navigation.navigate('ChapterDetail', { chapter });
   };
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0066CC" />
-        <Text style={styles.loadingText}>Loading publications...</Text>
+        <ActivityIndicator size="large" color="#3498db" />
+        <Text style={styles.loadingText}>A carregar publicações...</Text>
       </View>
     );
   }
@@ -100,12 +82,15 @@ const ChaptersScreen = ({ navigation }) => {
         data={chapters}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ChapterCard 
-            item={item} 
+          <ChapterCard
+            title={item.title}
+            description={item.description}
+            categoryId={item.id}
+            imageUrl={item.imageUrl}
             onPress={() => handleChapterPress(item)}
           />
         )}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -116,43 +101,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
-  listContainer: {
-    padding: 16,
-  },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    marginBottom: 16,
-    overflow: 'hidden',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  imageContainer: {
-    height: 160,
-    width: '100%',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  contentContainer: {
-    padding: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#333',
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-    lineHeight: 20,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -160,9 +108,46 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   loadingText: {
-    marginTop: 16,
+    marginTop: 10,
     fontSize: 16,
     color: '#666',
+  },
+  listContent: {
+    padding: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: 16,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  cardImage: {
+    width: '100%',
+    height: 150,
+  },
+  cardContent: {
+    padding: 16,
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#2c3e50',
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 12,
+  },
+  readMore: {
+    color: '#3498db',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
 

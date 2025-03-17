@@ -117,6 +117,11 @@ polis/
 │   └── styles/              # Shared styles
 ├── web/                     # Web-specific files
 │   └── pwa/                 # Progressive Web App assets
+├── web-build/               # Built web version
+│   ├── assets/              # Compiled assets
+│   ├── data/                # JSON data for web
+│   ├── images/              # Images for web
+│   └── static/              # Static files
 ├── dist/                    # Distribution folder for GitHub Pages
 ├── App.js                   # Main application component
 ├── app.json                 # Expo configuration
@@ -131,6 +136,7 @@ polis/
 - **src/components/**: Reusable UI components
 - **src/data/**: JSON data files that power the application
 - **assets/images/**: Image assets organized by category
+- **web-build/**: The built web version ready for deployment
 - **dist/**: The distribution folder for GitHub Pages deployment
 
 ## 6. Most Used Commands
@@ -145,26 +151,26 @@ cd ~/Dev/polis
 # Install dependencies (if not already installed)
 npm install
 
-# Start the Expo development server
-npm start
+# Start the Expo development server (not used in our current approach)
+# npm start
 
 # Start the web development server with Expo
 npm run web
 
-# Build the web version for deployment
+# Build the web version for local testing
 npm run build:web
 
 # Serve the built web version locally using serve
-npx serve dist
+npx serve web-build
 
 # Serve the built web version locally on a specific port (e.g., 3000)
-npx serve -p 3000 dist
+npx serve -p 3000 web-build
 
 # Serve the built web version locally with a specific host (for testing on other devices)
-npx serve -l tcp://0.0.0.0:3000 dist
+npx serve -l tcp://0.0.0.0:3000 web-build
 ```
 
-The `npx serve dist` command is particularly useful for testing the production build locally before deployment. It serves the static files from the `dist` directory, simulating how they will behave when deployed to GitHub Pages.
+The `npx serve web-build` command is particularly useful for testing the production build locally before deployment. It serves the static files from the `web-build` directory, simulating how they will behave when deployed to GitHub Pages.
 
 ### Build Commands
 
@@ -174,11 +180,17 @@ The `npx serve dist` command is particularly useful for testing the production b
 cd ~/Dev/polis
 
 # Build the web version using Expo's web builder
+expo build:web
+
+# Alternative command for building the web version
 npm run build:web
 
+# Clean and prepare the dist directory for GitHub Pages deployment
 # This command:
-# 1. Builds the web version using Expo's web export
-# 2. Creates a .nojekyll file to prevent GitHub Pages from using Jekyll
+# 1. Removes the existing dist directory
+# 2. Creates a new dist directory
+# 3. Copies all files from web-build to dist
+# 4. Creates a .nojekyll file to prevent GitHub Pages from using Jekyll
 npm run predeploy
 
 # Examine the contents of the dist directory
@@ -188,7 +200,7 @@ ls -la dist/
 du -sh dist/
 ```
 
-The build process creates optimized static files directly in the `dist` directory, ready for GitHub Pages deployment.
+The build process creates optimized static files in the `web-build` directory. The `predeploy` script then prepares these files for GitHub Pages deployment by copying them to the `dist` directory and adding a `.nojekyll` file to ensure proper handling by GitHub Pages.
 
 ### Deployment Commands
 
@@ -387,6 +399,10 @@ Various Commands:
 
 git add . && git commit -m "Commit all changes" && git push origin main
 
-npx serve dist
+npx serve web-build
+
+cd ~/Dev/polis && npm run deploygit add . && git commit -m "Commit all changes" && git push origin main
+
+npx serve web-build
 
 cd ~/Dev/polis && npm run deploy

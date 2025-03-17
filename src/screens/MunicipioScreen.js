@@ -2,29 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 
-// Import the municipio data
-import municipioData from '../data/municipio.json';
-
-// Function to get the correct image path
-const getMunicipioImage = (imageUrl) => {
-  if (!imageUrl) return null;
-  
-  // For the deployed site, we need to adjust the path
-  const imagePath = imageUrl.fallback || imageUrl.webp;
-  
-  // Check if we're running in a web environment
-  if (typeof window !== 'undefined') {
-    // We're in a web environment
-    if (imagePath.startsWith('/')) {
-      return '.' + imagePath; // Add a dot to make it relative to the current directory
-    }
-  }
-  
-  return imagePath;
-};
-
-// Fallback data in case the import fails
-const fallbackData = [
+// Mock data for municipal services
+const mockMunicipioData = [
   {
     "id": "reabilitacao-urbana",
     "title": "Reabilitação Urbana",
@@ -43,11 +22,7 @@ const fallbackData = [
         "feature": "Incentivos à reabilitação urbana",
         "featureURL": "https://www.cm-palmela.pt/viver/reabilitacao-urbana/programa-de-incentivo-a-reabilitacao-urbana"
       }
-    ],
-    "imageUrl": {
-      "webp": "./images/municipio/reabilitacao-urbana.jpeg",
-      "fallback": "./images/municipio/reabilitacao-urbana.jpeg"
-    }
+    ]
   },
   {
     "id": "planos-municipais",
@@ -63,15 +38,23 @@ const fallbackData = [
         "feature": "Estudos de ordenamento do território",
         "featureURL": "https://www.cm-palmela.pt/viver/planeamento-e-gestao-urbanistica/planos-municipais-de-ordenamento-do-territorio/estudos"
       }
-    ],
-    "imageUrl": {
-      "webp": "./images/municipio/planos-municipais.jpeg",
-      "fallback": "./images/municipio/planos-municipais.jpeg"
-    }
+    ]
   }
 ];
 
-const ServiceCard = ({ service }) => {
+const ServiceCard = ({ service, onPress }) => {
+  return (
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{service.title}</Text>
+        <Text style={styles.cardDescription} numberOfLines={3}>{service.description}</Text>
+        <Text style={styles.viewDetails}>Ver detalhes</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const ServiceDetailModal = ({ service, visible, onClose }) => {
   const handleOpenLink = async (url) => {
     try {
       const supported = await Linking.canOpenURL(url);
@@ -86,45 +69,37 @@ const ServiceCard = ({ service }) => {
     }
   };
 
-  // Get the image source
-  const imageSource = service.imageUrl ? getMunicipioImage(service.imageUrl) : null;
-  
-  // For debugging
-  console.log('Image source:', imageSource);
+  if (!visible) return null;
 
   return (
-    <View style={styles.card}>
-      {imageSource && (
-        <Image
-          source={imageSource}
-          style={styles.cardImage}
-          contentFit="cover"
-          transition={200}
-        />
-      )}
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{service.title}</Text>
-        <Text style={styles.cardDescription}>{service.description}</Text>
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+        <Text style={styles.modalTitle}>{service.title}</Text>
+        <Text style={styles.modalDescription}>{service.description}</Text>
         
-        <View style={styles.featuresContainer}>
-          <Text style={styles.featuresTitle}>Serviços disponíveis:</Text>
-          {service.features.map((feature, index) => (
-            <TouchableOpacity 
-              key={index} 
-              style={styles.featureItem}
-              onPress={() => handleOpenLink(feature.featureURL)}
-            >
-              <Text style={styles.featureText}>• {feature.feature}</Text>
-            </TouchableOpacity>
-          ))}
+        <Text style={styles.featuresTitle}>Serviços disponíveis:</Text>
+        {service.features.map((feature, index) => (
+          <TouchableOpacity 
+            key={index} 
+            style={styles.featureItem}
+            onPress={() => handleOpenLink(feature.featureURL)}
+          >
+            <Text style={styles.featureText}>• {feature.feature}</Text>
+          </TouchableOpacity>
+        ))}
+        
+        <View style={styles.modalActions}>
+          <TouchableOpacity 
+            style={styles.linkButton} 
+            onPress={() => handleOpenLink(service.url)}
+          >
+            <Text style={styles.linkButtonText}>Visitar site</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>Fechar</Text>
+          </TouchableOpacity>
         </View>
-        
-        <TouchableOpacity 
-          style={styles.linkButton} 
-          onPress={() => handleOpenLink(service.url)}
-        >
-          <Text style={styles.linkButtonText}>Visitar site</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -133,44 +108,33 @@ const ServiceCard = ({ service }) => {
 const MunicipioScreen = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    try {
-      // Load data from the imported JSON file
-      if (municipioData && municipioData.municipio) {
-        console.log('Loaded municipio data:', municipioData.municipio);
-        setServices(municipioData.municipio);
-        setLoading(false);
-      } else {
-        // Use fallback data if the import fails
-        console.warn('Using fallback data for municipio');
-        setServices(fallbackData);
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error('Erro ao carregar dados:', err);
-      // Use fallback data if there's an error
-      console.warn('Using fallback data for municipio due to error');
-      setServices(fallbackData);
+    // Simulate loading data from a file
+    setTimeout(() => {
+      setServices(mockMunicipioData);
       setLoading(false);
-    }
+    }, 1000);
+    
+    // In a real app, we would load the data from a JSON file
   }, []);
+
+  const handleServicePress = (service) => {
+    setSelectedService(service);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3498db" />
         <Text style={styles.loadingText}>A carregar serviços municipais...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{error}</Text>
-        <Text style={styles.errorSubtext}>Por favor, tente novamente mais tarde.</Text>
       </View>
     );
   }
@@ -188,10 +152,21 @@ const MunicipioScreen = () => {
         data={services}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ServiceCard service={item} />
+          <ServiceCard
+            service={item}
+            onPress={() => handleServicePress(item)}
+          />
         )}
         contentContainerStyle={styles.listContent}
       />
+      
+      {selectedService && (
+        <ServiceDetailModal
+          service={selectedService}
+          visible={modalVisible}
+          onClose={closeModal}
+        />
+      )}
     </View>
   );
 };
@@ -211,25 +186,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: '#666',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  errorSubtext: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
   },
   header: {
     padding: 16,
@@ -260,10 +216,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  cardImage: {
-    width: '100%',
-    height: 180,
-  },
   cardContent: {
     padding: 16,
   },
@@ -276,39 +228,85 @@ const styles = StyleSheet.create({
   cardDescription: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 20,
   },
-  featuresContainer: {
-    marginBottom: 16,
+  viewDetails: {
+    color: '#3498db',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  modalContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 20,
+    width: '100%',
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#2c3e50',
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 15,
+    lineHeight: 22,
   },
   featuresTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 10,
     color: '#2c3e50',
-    marginBottom: 8,
   },
   featureItem: {
-    paddingVertical: 4,
+    marginBottom: 8,
   },
   featureText: {
     fontSize: 14,
     color: '#3498db',
     lineHeight: 20,
   },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
   linkButton: {
     backgroundColor: '#3498db',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 4,
-    alignSelf: 'flex-start',
-    marginTop: 8,
   },
   linkButtonText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 14,
-  }
+  },
+  closeButton: {
+    backgroundColor: '#e0e0e0',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 4,
+  },
+  closeButtonText: {
+    color: '#333',
+    fontWeight: '600',
+    fontSize: 14,
+  },
 });
 
 export default MunicipioScreen;

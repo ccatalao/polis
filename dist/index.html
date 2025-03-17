@@ -4,45 +4,1027 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polis</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#3498db">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="shortcut icon" href="./favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #f5f5f5;
     }
     .container {
       max-width: 600px;
+      margin: 0 auto;
       padding: 20px;
+      padding-bottom: 70px; /* Space for tab bar */
+    }
+    header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px 8px 0 0;
+    }
+    main {
+      background-color: white;
+      padding: 20px;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+    .feature-card {
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .feature-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background-color: #f0f0f0;
+    }
+    .feature-content {
+      padding: 15px;
+    }
+    .feature-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .feature-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+    .feature-button {
+      display: inline-block;
+      background-color: #3498db;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .tab-bar {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      color: #666;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+    .tab i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    .tab.active {
+      color: #3498db;
+      font-weight: bold;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+    .about-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .about-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #3498db;
+    }
+    .about-text {
+      font-size: 14px;
+      line-height: 1.5;
       color: #333;
     }
-    p {
-      color: #666;
-      line-height: 1.6;
+    .feature-list {
+      margin-top: 10px;
+      padding-left: 20px;
     }
-    .button {
-      display: inline-block;
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
+    .feature-list-item {
+      margin-bottom: 5px;
+    }
+    .feature-list-link {
+      color: #3498db;
       text-decoration: none;
-      border-radius: 4px;
-      margin-top: 20px;
+    }
+    .feature-list-link:hover {
+      text-decoration: underline;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+    
+    /* Publications styles */
+    .publications-container {
+      margin-top: 10px;
+      margin-bottom: 30px;
+      border-left: 3px solid #3498db;
+      padding-left: 15px;
+    }
+    
+    .publications-container .feature-card {
+      margin-bottom: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .publications-container .feature-content {
+      padding: 12px;
+    }
+    
+    .publications-container .feature-title {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    
+    .publications-container .feature-description {
+      font-size: 13px;
+      max-height: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
   </style>
+  <script src="./static/js/bundle.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>Polis</h1>
-    <p>This is a static placeholder page. The full web app is currently being built.</p>
-    <p>Please use the mobile app for the complete experience.</p>
-    <a href="https://github.com/ccatalao/polis" class="button">View on GitHub</a>
+    <!-- Home Page -->
+    <div id="home-page" class="page active">
+      <header>
+        <h1>Planeamento Urbano Informado</h1>
+        <p>Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis</p>
+      </header>
+      
+      <main>
+        <div class="feature-card">
+          <img src="./assets/images/home/municipio.webp" alt="Serviços Municipais" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Serviços Municipais</div>
+            <div class="feature-description">Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação.</div>
+            <a href="#municipio" class="feature-button" data-page="municipio">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/projects.webp" alt="Projetos europeus" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Projetos europeus</div>
+            <div class="feature-description">Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.</div>
+            <a href="#projects" class="feature-button" data-page="projects">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/funding.webp" alt="Financiamento" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Financiamento</div>
+            <div class="feature-description">Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável.</div>
+            <a href="#funding" class="feature-button" data-page="funding">Ver mais</a>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <img src="./assets/images/home/publicacoes.webp" alt="Publicações de acesso aberto" class="feature-image">
+          <div class="feature-content">
+            <div class="feature-title">Publicações de acesso aberto</div>
+            <div class="feature-description">Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.</div>
+            <a href="#chapters" class="feature-button" data-page="chapters">Ver mais</a>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- Municipio Page -->
+    <div id="municipio-page" class="page">
+      <header>
+        <h1>Serviços Municipais</h1>
+      </header>
+      
+      <main id="municipio-content">
+        <div class="loading">Carregando dados...</div>
+      </main>
+    </div>
+    
+    <!-- Projects Page -->
+    <div id="projects-page" class="page">
+      <header>
+        <h1>Projetos Europeus</h1>
+      </header>
+      
+      <main id="projects-content">
+        <div class="loading">Carregando dados...</div>
+      </main>
+    </div>
+    
+    <!-- Funding Page -->
+    <div id="funding-page" class="page">
+      <header>
+        <h1>Financiamento</h1>
+      </header>
+      
+      <main id="funding-content">
+        <div class="loading">Carregando dados...</div>
+      </main>
+    </div>
+    
+    <!-- Chapters Page -->
+    <div id="chapters-page" class="page">
+      <header>
+        <h1>Publicações</h1>
+      </header>
+      
+      <main id="chapters-content">
+        <div class="loading">Carregando dados...</div>
+      </main>
+    </div>
+    
+    <!-- About Page -->
+    <div id="about-page" class="page">
+      <header>
+        <h1>Sobre o Polis</h1>
+      </header>
+      
+      <main>
+        <div class="about-section">
+          <div class="about-title">A nossa missão</div>
+          <div class="about-text">O Polis é uma aplicação dedicada ao planeamento urbano informado, fornecendo recursos e ferramentas para profissionais, estudantes e entusiastas do urbanismo e ordenamento do território.</div>
+          <div class="about-text">A nossa missão é facilitar o acesso a informação relevante e atualizada sobre políticas de desenvolvimento local, projetos europeus, financiamento e publicações académicas na área do urbanismo.</div>
+        </div>
+        
+        <div class="about-section">
+          <div class="about-title">Contactos</div>
+          <div class="about-text">Email: info@polis-app.com</div>
+          <div class="about-text">Telefone: +351 123 456 789</div>
+        </div>
+      </main>
+    </div>
   </div>
+  
+  <div class="tab-bar">
+    <a href="#home" class="tab active" data-page="home">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#municipio" class="tab" data-page="municipio">
+      <i class="fas fa-building"></i>
+      <span>Município</span>
+    </a>
+    <a href="#projects" class="tab" data-page="projects">
+      <i class="fas fa-project-diagram"></i>
+      <span>Projetos</span>
+    </a>
+    <a href="#funding" class="tab" data-page="funding">
+      <i class="fas fa-euro-sign"></i>
+      <span>Financiamento</span>
+    </a>
+    <a href="#chapters" class="tab" data-page="chapters">
+      <i class="fas fa-book"></i>
+      <span>Publicações</span>
+    </a>
+    <a href="#about" class="tab" data-page="about">
+      <i class="fas fa-info-circle"></i>
+      <span>Sobre</span>
+    </a>
+  </div>
+
+  <script>
+    // Navigation system
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all tabs and pages
+      const tabs = document.querySelectorAll('.tab');
+      const pages = document.querySelectorAll('.page');
+      const featureButtons = document.querySelectorAll('.feature-button[data-page]');
+      
+      // Function to show a page
+      function showPage(pageId) {
+        // Hide all pages
+        pages.forEach(page => {
+          page.classList.remove('active');
+        });
+        
+        // Show the selected page
+        const selectedPage = document.getElementById(pageId + '-page');
+        if (selectedPage) {
+          selectedPage.classList.add('active');
+          
+          // Load data for municipio page if needed
+          if (pageId === 'municipio' && !selectedPage.dataset.loaded) {
+            loadMunicipioData();
+            selectedPage.dataset.loaded = 'true';
+          }
+          
+          // Load data for projects page if needed
+          if (pageId === 'projects' && !selectedPage.dataset.loaded) {
+            loadProjectsData();
+            selectedPage.dataset.loaded = 'true';
+          }
+          
+          // Load data for funding page if needed
+          if (pageId === 'funding' && !selectedPage.dataset.loaded) {
+            loadFundingData();
+            selectedPage.dataset.loaded = 'true';
+          }
+          
+          // Load data for chapters page if needed
+          if (pageId === 'chapters' && !selectedPage.dataset.loaded) {
+            loadChaptersData();
+            selectedPage.dataset.loaded = 'true';
+          }
+        }
+        
+        // Update active tab
+        tabs.forEach(tab => {
+          tab.classList.remove('active');
+          if (tab.getAttribute('data-page') === pageId) {
+            tab.classList.add('active');
+          }
+        });
+        
+        // Update URL hash
+        window.location.hash = pageId;
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+      }
+      
+      // Function to load municipio data from JSON
+      function loadMunicipioData() {
+        const municipioContent = document.getElementById('municipio-content');
+        
+        fetch('./data/municipio.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Clear loading message
+            municipioContent.innerHTML = '';
+            
+            // Render municipio items
+            if (data.municipio && data.municipio.length > 0) {
+              data.municipio.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                
+                // Create image element with fallback
+                let imageContainer;
+                if (item.imageUrl) {
+                  imageContainer = document.createElement('img');
+                  imageContainer.src = item.imageUrl.webp || item.imageUrl.fallback;
+                  imageContainer.alt = item.title;
+                  imageContainer.className = 'feature-image';
+                } else {
+                  imageContainer = document.createElement('div');
+                  imageContainer.className = 'feature-image';
+                }
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.className = 'feature-content';
+                
+                // Add title
+                const title = document.createElement('div');
+                title.className = 'feature-title';
+                title.textContent = item.title;
+                
+                // Add description
+                const description = document.createElement('div');
+                description.className = 'feature-description';
+                description.textContent = item.description;
+                
+                // Add features list if available
+                let featuresList = null;
+                if (item.features && item.features.length > 0) {
+                  featuresList = document.createElement('ul');
+                  featuresList.className = 'feature-list';
+                  
+                  item.features.forEach(feature => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'feature-list-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = feature.featureURL;
+                    link.className = 'feature-list-link';
+                    link.textContent = feature.feature;
+                    link.target = '_blank';
+                    
+                    listItem.appendChild(link);
+                    featuresList.appendChild(listItem);
+                  });
+                }
+                
+                // Add button
+                const button = document.createElement('a');
+                button.href = item.url;
+                button.className = 'feature-button';
+                button.textContent = 'Ver mais';
+                button.target = '_blank';
+                
+                // Assemble the card
+                content.appendChild(title);
+                content.appendChild(description);
+                if (featuresList) {
+                  content.appendChild(featuresList);
+                }
+                content.appendChild(button);
+                
+                card.appendChild(imageContainer);
+                card.appendChild(content);
+                
+                municipioContent.appendChild(card);
+              });
+            } else {
+              municipioContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading municipio data:', error);
+            municipioContent.innerHTML = '<div class="loading">Erro ao carregar dados. Por favor, tente novamente mais tarde.</div>';
+          });
+      }
+      
+      // Function to load projects data from JSON
+      function loadProjectsData() {
+        const projectsContent = document.getElementById('projects-content');
+        projectsContent.innerHTML = '<div class="loading">Carregando dados...</div>';
+        
+        // Hardcoded project data to avoid JSON loading issues
+        const projectsData = {
+          "projects": [
+            {
+              "id": "cordis",
+              "title": "CORDIS",
+              "description": "Repositório de projetos de investigação financiados pela União Europeia.",
+              "url": "https://cordis.europa.eu/",
+              "features": [
+                {
+                  "feature": "Pesquisa avançada de projetos",
+                  "featureURL": "https://cordis.europa.eu/search"
+                },
+                {
+                  "feature": "Resultados dos projetos",
+                  "featureURL": "https://cordis.europa.eu/projects/en"
+                },
+                {
+                  "feature": "Contactos dos coordenadores",
+                  "featureURL": "https://cordis.europa.eu/partners"
+                }
+              ]
+            },
+            {
+              "id": "urbact",
+              "title": "URBACT Knowledge Hub",
+              "description": "Plataforma especializada em projetos de desenvolvimento urbano, com recuros e partilha de boas práticas.",
+              "url": "https://urbact.eu",
+              "features": [
+                {
+                  "feature": "Exemplos de boas práticas",
+                  "featureURL": "https://urbact.eu/good-practices/home"
+                },
+                {
+                  "feature": "Base de dados de conhecimento",
+                  "featureURL": "https://urbact.eu/knowledge-hub"
+                },
+                {
+                  "feature": "Ferramentas e metodologias",
+                  "featureURL": "https://urbact.eu/toolbox-home"
+                }
+              ]
+            },
+            {
+              "id": "jpi-urban-europe",
+              "title": "JPI Urban Europe Project Database",
+              "description": "Base de dados focada em desenvolvimento urbano sustentável, com soluções inovadoras e resultados de implementação.",
+              "url": "https://jpi-urbaneurope.eu/projects/",
+              "features": [
+                {
+                  "feature": "Descrições dos projetos",
+                  "featureURL": "https://jpi-urbaneurope.eu/projects/#"
+                }
+              ]
+            },
+            {
+              "id": "keep-eu",
+              "title": "KEEP.eu",
+              "description": "Base de dados de projetos de cooperação territorial.",
+              "url": "https://keep.eu/",
+              "features": [
+                {
+                  "feature": "Mapa interativo de projetos",
+                  "featureURL": "https://keep.eu/countries-and-regions/"
+                },
+                {
+                  "feature": "Pesquisa de projetos",
+                  "featureURL": "https://keep.eu/projects/"
+                },
+                {
+                  "feature": "Informação de parcerias",
+                  "featureURL": "https://keep.eu/partners/"
+                }
+              ]
+            },
+            {
+              "id": "espon",
+              "title": "ESPON Database",
+              "description": "Base de dados especializada em ordenamento do território.",
+              "url": "https://www.espon.eu/tools-maps/espon-tools",
+              "features": [
+                {
+                  "feature": "Mapas e Bases de Dados",
+                  "featureURL": "https://www.espon.eu/tools-maps"
+                },
+                {
+                  "feature": "Relatórios e indicadores",
+                  "featureURL": "https://www.espon.eu/tools-maps/indicators"
+                },
+                {
+                  "feature": "Exemplos e casos de estudo",
+                  "featureURL": "https://archive.espon.eu/topics-policy/case-studies"
+                }
+              ]
+            },
+            {
+              "id": "uia",
+              "title": "Urban Innovative Actions",
+              "description": "Projetos de inovação urbana.",
+              "url": "https://uia-initiative.eu/en",
+              "features": [
+                {
+                  "feature": "Adaptasção climática",
+                  "featureURL": "https://uia-initiative.eu/en/theme/climate-adaptation"
+                },
+                {
+                  "feature": "Mobilidade urbana",
+                  "featureURL": "https://uia-initiative.eu/en/theme/urban-mobility"
+                },
+                {
+                  "feature": "Habitação",
+                  "featureURL": "https://uia-initiative.eu/en/theme/housing"
+                }
+              ]
+            }
+          ]
+        };
+        
+        // Clear loading message
+        projectsContent.innerHTML = '';
+        
+        // Render projects items
+        if (projectsData.projects && projectsData.projects.length > 0) {
+          projectsData.projects.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'feature-card';
+            
+            // Create image element with fallback
+            const imageContainer = document.createElement('img');
+            // Use project-specific images
+            let imageSrc;
+            switch(item.id) {
+              case 'cordis':
+                imageSrc = './assets/images/projects/cordis.webp';
+                break;
+              case 'urbact':
+                imageSrc = './assets/images/projects/urbact.webp';
+                break;
+              case 'jpi-urban-europe':
+                imageSrc = './assets/images/projects/jpi-urban.webp';
+                break;
+              case 'keep-eu':
+                imageSrc = './assets/images/projects/keep-eu.webp';
+                break;
+              case 'espon':
+                imageSrc = './assets/images/projects/espon.webp';
+                break;
+              case 'uia':
+                imageSrc = './assets/images/projects/uia.webp';
+                break;
+              default:
+                imageSrc = './assets/images/home/projects.webp';
+            }
+            imageContainer.src = imageSrc;
+            // Add error handling to fall back to a known good image if the specific one fails to load
+            imageContainer.onerror = function() {
+              console.log('Error loading image:', imageSrc);
+              this.src = './assets/images/home/projects.webp';
+            };
+            imageContainer.alt = item.title;
+            imageContainer.className = 'feature-image';
+            
+            // Create content container
+            const content = document.createElement('div');
+            content.className = 'feature-content';
+            
+            // Add title
+            const title = document.createElement('div');
+            title.className = 'feature-title';
+            title.textContent = item.title;
+            
+            // Add description
+            const description = document.createElement('div');
+            description.className = 'feature-description';
+            description.textContent = item.description;
+            
+            // Add features list if available
+            let featuresList = null;
+            if (item.features && item.features.length > 0) {
+              featuresList = document.createElement('ul');
+              featuresList.className = 'feature-list';
+              
+              item.features.forEach(feature => {
+                const listItem = document.createElement('li');
+                listItem.className = 'feature-list-item';
+                
+                const link = document.createElement('a');
+                link.href = feature.featureURL;
+                link.className = 'feature-list-link';
+                link.textContent = feature.feature;
+                link.target = '_blank';
+                
+                listItem.appendChild(link);
+                featuresList.appendChild(listItem);
+              });
+            }
+            
+            // Add button
+            const button = document.createElement('a');
+            button.href = item.url;
+            button.className = 'feature-button';
+            button.textContent = 'Explorar';
+            button.target = '_blank';
+            
+            // Assemble the card
+            content.appendChild(title);
+            content.appendChild(description);
+            if (featuresList) {
+              content.appendChild(featuresList);
+            }
+            content.appendChild(button);
+            
+            card.appendChild(imageContainer);
+            card.appendChild(content);
+            
+            projectsContent.appendChild(card);
+          });
+        } else {
+          projectsContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+        }
+      }
+      
+      // Function to load funding data from JSON
+      function loadFundingData() {
+        const fundingContent = document.getElementById('funding-content');
+        fundingContent.innerHTML = '<div class="loading">Carregando dados...</div>';
+        
+        fetch('./data/funding.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Clear loading message
+            fundingContent.innerHTML = '';
+            
+            // Render funding items
+            if (data.funding && data.funding.length > 0) {
+              data.funding.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                
+                // Create image element with fallback
+                const imageContainer = document.createElement('img');
+                // Use funding-specific images
+                let imageSrc;
+                switch(item.id) {
+                  case 'dut':
+                    imageSrc = './assets/images/funding/dut.webp';
+                    break;
+                  case 'life':
+                    imageSrc = './assets/images/funding/life.webp';
+                    break;
+                  case 'erdf':
+                    imageSrc = './assets/images/funding/feder.webp';
+                    break;
+                  case 'new-european-bauhaus':
+                    imageSrc = './assets/images/funding/bauhaus.webp';
+                    break;
+                  case 'interreg':
+                    imageSrc = './assets/images/funding/interreg.webp';
+                    break;
+                  case 'investeu':
+                    imageSrc = './assets/images/funding/investeu.webp';
+                    break;
+                  case 'jtf':
+                    imageSrc = './assets/images/funding/jtf.webp';
+                    break;
+                  default:
+                    imageSrc = './assets/images/home/funding.webp';
+                }
+                imageContainer.src = imageSrc;
+                // Add error handling to fall back to a known good image if the specific one fails to load
+                imageContainer.onerror = function() {
+                  console.log('Error loading image:', imageSrc);
+                  this.src = './assets/images/home/funding.webp';
+                };
+                imageContainer.alt = item.title;
+                imageContainer.className = 'feature-image';
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.className = 'feature-content';
+                
+                // Add title
+                const title = document.createElement('div');
+                title.className = 'feature-title';
+                title.textContent = item.title;
+                
+                // Add description
+                const description = document.createElement('div');
+                description.className = 'feature-description';
+                description.textContent = item.description;
+                
+                // Add features list if available
+                let featuresList = null;
+                if (item.features && item.features.length > 0) {
+                  featuresList = document.createElement('ul');
+                  featuresList.className = 'feature-list';
+                  
+                  item.features.forEach(feature => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'feature-list-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = feature.featureURL;
+                    link.className = 'feature-list-link';
+                    link.textContent = feature.feature;
+                    link.target = '_blank';
+                    
+                    listItem.appendChild(link);
+                    featuresList.appendChild(listItem);
+                  });
+                }
+                
+                // Add button
+                const button = document.createElement('a');
+                button.href = item.url;
+                button.className = 'feature-button';
+                button.textContent = 'Ver detalhes';
+                button.target = '_blank';
+                
+                // Assemble the card
+                content.appendChild(title);
+                content.appendChild(description);
+                if (featuresList) {
+                  content.appendChild(featuresList);
+                }
+                content.appendChild(button);
+                
+                card.appendChild(imageContainer);
+                card.appendChild(content);
+                
+                fundingContent.appendChild(card);
+              });
+            } else {
+              fundingContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading funding data:', error);
+            fundingContent.innerHTML = '<div class="loading">Erro ao carregar dados. Por favor, tente novamente mais tarde.</div>';
+          });
+      }
+      
+      // Function to load chapters data from JSON
+      function loadChaptersData() {
+        const chaptersContent = document.getElementById('chapters-content');
+        chaptersContent.innerHTML = '<div class="loading">Carregando dados...</div>';
+        
+        fetch('./data/chapters.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Clear loading message
+            chaptersContent.innerHTML = '';
+            
+            // Render chapter categories
+            if (data.chapters) {
+              // Create sections for each category (urbanismo, planning, architecture)
+              const categories = ['urbanism', 'planning', 'architecture'];
+              
+              categories.forEach(categoryKey => {
+                const category = data.chapters[categoryKey];
+                if (!category) return;
+                
+                // Create category section
+                const categorySection = document.createElement('div');
+                categorySection.className = 'feature-card';
+                
+                // Create image element with fallback
+                const imageContainer = document.createElement('img');
+                if (category.imageUrl) {
+                  imageContainer.src = category.imageUrl.webp || category.imageUrl.fallback;
+                  imageContainer.alt = category.title;
+                  imageContainer.className = 'feature-image';
+                  // Add error handling
+                  imageContainer.onerror = function() {
+                    this.src = './assets/images/home/publicacoes.webp';
+                  };
+                } else {
+                  imageContainer.src = './assets/images/home/publicacoes.webp';
+                  imageContainer.alt = category.title;
+                  imageContainer.className = 'feature-image';
+                }
+                
+                // Create content container
+                const content = document.createElement('div');
+                content.className = 'feature-content';
+                
+                // Add title
+                const title = document.createElement('div');
+                title.className = 'feature-title';
+                title.textContent = category.title;
+                
+                // Add description
+                const description = document.createElement('div');
+                description.className = 'feature-description';
+                description.textContent = category.description;
+                
+                // Add toggle button to show/hide publications
+                const toggleButton = document.createElement('button');
+                toggleButton.className = 'feature-button';
+                toggleButton.textContent = 'Ver publicações';
+                toggleButton.dataset.category = categoryKey;
+                
+                // Create publications container (initially hidden)
+                const publicationsContainer = document.createElement('div');
+                publicationsContainer.id = `${categoryKey}-publications`;
+                publicationsContainer.style.display = 'none';
+                publicationsContainer.className = 'publications-container';
+                
+                // Add publications to container
+                if (category.content && category.content.length > 0) {
+                  category.content.forEach(publication => {
+                    const pubCard = document.createElement('div');
+                    pubCard.className = 'feature-card';
+                    
+                    // Create image element if available
+                    if (publication.imageUrl) {
+                      const pubImage = document.createElement('img');
+                      pubImage.src = publication.imageUrl.webp || publication.imageUrl.fallback;
+                      pubImage.alt = publication.title;
+                      pubImage.className = 'feature-image';
+                      // Add error handling
+                      pubImage.onerror = function() {
+                        this.src = './assets/images/home/publicacoes.webp';
+                      };
+                      pubCard.appendChild(pubImage);
+                    }
+                    
+                    // Create content container
+                    const pubContent = document.createElement('div');
+                    pubContent.className = 'feature-content';
+                    
+                    // Add title
+                    const pubTitle = document.createElement('div');
+                    pubTitle.className = 'feature-title';
+                    pubTitle.textContent = publication.title;
+                    
+                    // Add description
+                    const pubDescription = document.createElement('div');
+                    pubDescription.className = 'feature-description';
+                    pubDescription.textContent = publication.description;
+                    
+                    // Add button
+                    const pubButton = document.createElement('a');
+                    pubButton.href = publication.url;
+                    pubButton.className = 'feature-button';
+                    pubButton.textContent = 'Visitar';
+                    pubButton.target = '_blank';
+                    
+                    // Assemble the publication card
+                    pubContent.appendChild(pubTitle);
+                    pubContent.appendChild(pubDescription);
+                    pubContent.appendChild(pubButton);
+                    
+                    pubCard.appendChild(pubContent);
+                    publicationsContainer.appendChild(pubCard);
+                  });
+                } else {
+                  publicationsContainer.innerHTML = '<div class="loading">Nenhuma publicação encontrada.</div>';
+                }
+                
+                // Add event listener to toggle button
+                toggleButton.addEventListener('click', function() {
+                  const pubContainer = document.getElementById(`${this.dataset.category}-publications`);
+                  if (pubContainer.style.display === 'none') {
+                    pubContainer.style.display = 'block';
+                    this.textContent = 'Ocultar publicações';
+                  } else {
+                    pubContainer.style.display = 'none';
+                    this.textContent = 'Ver publicações';
+                  }
+                });
+                
+                // Assemble the category section
+                content.appendChild(title);
+                content.appendChild(description);
+                content.appendChild(toggleButton);
+                
+                categorySection.appendChild(imageContainer);
+                categorySection.appendChild(content);
+                
+                chaptersContent.appendChild(categorySection);
+                chaptersContent.appendChild(publicationsContainer);
+              });
+            } else {
+              chaptersContent.innerHTML = '<div class="loading">Nenhum dado encontrado.</div>';
+            }
+          })
+          .catch(error => {
+            console.error('Error loading chapters data:', error);
+            chaptersContent.innerHTML = '<div class="loading">Erro ao carregar dados. Por favor, tente novamente mais tarde.</div>';
+          });
+      }
+      
+      // Handle tab clicks
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
+          const pageId = this.getAttribute('data-page');
+          showPage(pageId);
+        });
+      });
+      
+      // Handle feature button clicks
+      featureButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const pageId = this.getAttribute('data-page');
+          showPage(pageId);
+        });
+      });
+      
+      // Handle URL hash changes
+      function handleHashChange() {
+        const hash = window.location.hash.substring(1) || 'home';
+        showPage(hash);
+      }
+      
+      window.addEventListener('hashchange', handleHashChange);
+      
+      // Initial page load
+      handleHashChange();
+    });
+  </script>
 </body>
-</html>
+</html> 

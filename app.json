@@ -26,7 +26,7 @@
       "package": "com.ccatalao.polis"
     },
     "web": {
-      "favicon": "./web/pwa/favicon.png",
+      "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "static",
       "publicPath": "./",
@@ -34,39 +34,7 @@
         "babel": {
           "include": ["@expo/vector-icons"]
         }
-      },
-      "themeColor": "#3498db",
-      "backgroundColor": "#ffffff",
-      "shortName": "Polis",
-      "description": "Planeamento Urbano Informado",
-      "lang": "pt",
-      "scope": "/polis/",
-      "startUrl": "/polis/",
-      "display": "standalone",
-      "orientation": "portrait",
-      "icons": [
-        {
-          "src": "./web/pwa/favicon.png",
-          "sizes": "64x64",
-          "type": "image/png"
-        },
-        {
-          "src": "./web/pwa/icon-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        },
-        {
-          "src": "./web/pwa/icon-512.png",
-          "sizes": "512x512",
-          "type": "image/png"
-        },
-        {
-          "src": "./web/pwa/apple-touch-icon.png",
-          "sizes": "180x180",
-          "type": "image/png",
-          "purpose": "apple-touch-icon"
-        }
-      ]
+      }
     },
     "plugins": [
       "expo-dev-client"
@@ -78,12 +46,6 @@
       "router": {
         "disableStaticRendering": true
       }
-    },
-    "experiments": {
-      "tsconfigPaths": true
-    },
-    "packagerOpts": {
-      "config": "metro.config.js"
     }
   }
 } 
