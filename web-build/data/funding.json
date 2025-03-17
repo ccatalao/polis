@@ -16,8 +16,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/dut.webp",
-        "fallback": "/images/financiamento/dut.jpeg",
+        "webp": "/images/funding/dut.webp",
+        "fallback": "/images/funding/dut.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -44,8 +44,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/life.webp",
-        "fallback": "/images/financiamento/life.jpeg",
+        "webp": "/images/funding/life.webp",
+        "fallback": "/images/funding/life.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -68,8 +68,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/feder.webp",
-        "fallback": "/images/financiamento/feder.jpeg",
+        "webp": "/images/funding/feder.webp",
+        "fallback": "/images/funding/feder.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -92,8 +92,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/bauhaus.webp",
-        "fallback": "/images/financiamento/bauhaus.jpeg",
+        "webp": "/images/funding/bauhaus.webp",
+        "fallback": "/images/funding/bauhaus.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -112,8 +112,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/interreg.webp",
-        "fallback": "/images/financiamento/interreg.jpeg",
+        "webp": "/images/funding/interreg.webp",
+        "fallback": "/images/funding/interreg.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -136,8 +136,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/investeu.webp",
-        "fallback": "/images/financiamento/investeu.jpeg",
+        "webp": "/images/funding/investeu.webp",
+        "fallback": "/images/funding/investeu.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -160,8 +160,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/financiamento/jtf.webp",
-        "fallback": "/images/financiamento/jtf.jpeg",
+        "webp": "/images/funding/jtf.webp",
+        "fallback": "/images/funding/jtf.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300

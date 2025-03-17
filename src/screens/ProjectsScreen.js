@@ -1,6 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Linking, Alert, ActivityIndicator, Platform } from 'react-native';
 import { Image } from 'expo-image';
+
+// Import projects data
+import projectsData from '../data/projects.json';
+
+// Get image source based on project data with enhanced path handling
+const getImageSource = (project) => {
+  try {
+    // For web environment
+    if (Platform.OS === 'web' && project.imageUrl) {
+      const imagePath = project.imageUrl.fallback;
+      
+      if (imagePath) {
+        // Get current URL details
+        const origin = window.location.origin;
+        
+        // Check if we're in development mode (localhost)
+        const isDevelopment = origin.includes('localhost');
+        
+        // Special handling for Expo development server
+        if (isDevelopment) {
+          // Extract the path to the asset, removing any leading slash
+          const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
+          
+          // Make sure the path includes the "assets/" directory which is required by Expo
+          const assetPath = cleanPath.startsWith('assets/') ? cleanPath : `assets/${cleanPath}`;
+          
+          // Format for Expo development asset server
+          // Example: http://localhost:8084/assets/?unstable_path=.%2Fassets%2Fimages%2Fprojetos%2Furbact.webp
+          const assetServerPath = `${origin}/assets/?unstable_path=.%2F${encodeURIComponent(assetPath)}`;
+          
+          console.log(`Development mode detected, using asset server: ${assetServerPath}`);
+          
+          return { 
+            uri: assetServerPath,
+            headers: { Pragma: 'no-cache', 'Cache-Control': 'no-cache' }
+          };
+        }
+        
+        // For production/GitHub Pages
+        // Determine if we're on GitHub Pages or other deployment
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        
+        // Get repository name from pathname if on GitHub Pages
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        let repoName = pathSegments.length > 0 ? pathSegments[0] : '';
+        
+        // Try multiple base URL formations for production
+        const possibleBaseUrls = [
+          // Original base URL construction
+          pathSegments.length > 0 ? `${origin}/${pathSegments[0]}` : origin,
+          
+          // GitHub Pages with full path
+          isGitHubPages ? `${origin}/${repoName}` : null,
+          
+          // Try with just the origin
+          origin,
+          
+          // Try with explicit "polis" repo name for GitHub Pages
+          isGitHubPages ? `${origin}/polis` : null
+        ].filter(Boolean); // Remove null entries
+        
+        // Log our detection for debugging
+        console.log(`Environment: Web (Production), GitHub Pages: ${isGitHubPages}, Repo Name: ${repoName}`);
+        
+        // Try to construct image URLs in different ways
+        const possibleImageUrls = [];
+        
+        possibleBaseUrls.forEach(baseUrl => {
+          // With the found base URL, try different path formations
+          if (imagePath.startsWith('/')) {
+            // For paths starting with "/", join them directly
+            possibleImageUrls.push(`${baseUrl}${imagePath}`);
+            
+            // Also try without double slashes
+            if (baseUrl.endsWith('/')) {
+              possibleImageUrls.push(`${baseUrl}${imagePath.substring(1)}`);
+            }
+          } else {
+            // For relative paths, ensure a slash between base and path
+            possibleImageUrls.push(`${baseUrl}/${imagePath}`);
+          }
+          
+          // Add variations with and without "assets" directory
+          if (!imagePath.includes('assets/')) {
+            possibleImageUrls.push(`${baseUrl}/assets/${imagePath}`);
+          }
+        });
+        
+        // Log all the URLs we're going to try
+        console.log(`Trying image URLs for ${project.id}:`, possibleImageUrls);
+        
+        // Try to load the image with fallbacks
+        return { 
+          uri: possibleImageUrls[0],
+          headers: { Pragma: 'no-cache', 'Cache-Control': 'no-cache' },
+        };
+      }
+    } 
+    // For native platforms
+    else if (project.imageUrl?.webp) {
+      return { uri: project.imageUrl.webp };
+    }
+    
+    // Fallback to a placeholder with the title
+    return { 
+      uri: `https://via.placeholder.com/400x300?text=${encodeURIComponent(project.title)}`
+    };
+  } catch (error) {
+    console.error(`Error loading image for project ${project.id}:`, error);
+    return { 
+      uri: `https://via.placeholder.com/400x300?text=Error`
+    };
+  }
+};
 
 // Mock data for projects
 const mockProjectsData = [
@@ -31,6 +145,15 @@ const mockProjectsData = [
 const ProjectCard = ({ project, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
+      <Image
+        source={getImageSource(project)}
+        style={styles.cardImage}
+        contentFit="cover"
+        transition={300}
+        onError={(error) => {
+          console.error(`Image error for ${project.id}:`, error);
+        }}
+      />
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{project.title}</Text>
         <Text style={styles.cardDescription}>{project.description}</Text>
@@ -65,7 +188,9 @@ const ProjectDetailModal = ({ project, visible, onClose }) => {
         
         <Text style={styles.featuresTitle}>Características:</Text>
         {project.features.map((feature, index) => (
-          <Text key={index} style={styles.featureItem}>• {feature}</Text>
+          <Text key={index} style={styles.featureItem}>
+            • {typeof feature === 'string' ? feature : feature.feature}
+          </Text>
         ))}
         
         <View style={styles.modalActions}>
@@ -89,13 +214,25 @@ const ProjectsScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    // Simulate loading data from a file
-    setTimeout(() => {
-      setProjects(mockProjectsData);
-      setLoading(false);
-    }, 1000);
-    
-    // In a real app, we would load the data from a JSON file
+    // Load data from the imported JSON file
+    const loadProjectsData = () => {
+      try {
+        if (projectsData && projectsData.projects) {
+          console.log(`Loaded ${projectsData.projects.length} projects`);
+          setProjects(projectsData.projects);
+        } else {
+          console.warn("No projects data available or invalid format");
+          setProjects([]);
+        }
+      } catch (error) {
+        console.error("Error loading projects data:", error);
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProjectsData();
   }, []);
 
   const handleProjectPress = (project) => {
@@ -118,13 +255,6 @@ const ProjectsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Projetos Europeus</Text>
-        <Text style={styles.headerSubtitle}>
-          Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.
-        </Text>
-      </View>
-      
       <FlatList
         data={projects}
         keyExtractor={(item) => item.id}
@@ -281,6 +411,12 @@ const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '600',
     fontSize: 14,
+  },
+  cardImage: {
+    width: '100%',
+    height: 200,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
 });
 
