@@ -7,21 +7,29 @@ const PublicationCard = ({ publication, onPress }) => {
   // Get the image source using the getImagePath utility
   const getPublicationImage = () => {
     try {
-      // First try to use the imageUrl if it exists
-      if (publication.imageUrl) {
-        return getImagePath(publication.imageUrl);
+      // Use hardcoded paths for testing
+      const imageMap = {
+        'urbanism': 'https://ccatalao.github.io/polis/assets/images/publications/urbanism.jpeg',
+        'urban-science': 'https://ccatalao.github.io/polis/assets/images/publications/urban-science.jpeg',
+        'urban-planning': 'https://ccatalao.github.io/polis/assets/images/publications/urban-planning.jpeg'
+      };
+      
+      // Log the publication ID for debugging
+      console.log('Publication ID:', publication.id);
+      
+      // Return the hardcoded image path if available
+      if (publication.id && imageMap[publication.id]) {
+        console.log('Using hardcoded image path:', imageMap[publication.id]);
+        return { uri: imageMap[publication.id] };
       }
       
-      // Fallback to constructing the path from the ID
-      if (publication.id) {
-        return getImagePath(`/images/publications/${publication.id}.jpeg`);
-      }
-      
-      // Default image if no ID or imageUrl
-      return getImagePath('/images/home/publicacoes.jpeg');
+      // Fallback to the default image
+      console.log('Using default image path');
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
     } catch (error) {
       console.error('Error loading publication image:', error);
-      return getImagePath('/images/home/publicacoes.jpeg');
+      // Default image if there's an error
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
     }
   };
 

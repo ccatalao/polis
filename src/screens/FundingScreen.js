@@ -31,16 +31,16 @@ const FundingCard = ({ item, onPress }) => {
       // Return the hardcoded image path if available
       if (item.id && imageMap[item.id]) {
         console.log('Using hardcoded image path:', imageMap[item.id]);
-        return imageMap[item.id];
+        return { uri: imageMap[item.id] };
       }
       
       // Fallback to the default image
       console.log('Using default image path');
-      return 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg';
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg' };
     } catch (error) {
       console.error('Error loading funding image:', error);
       // Default image if there's an error
-      return 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg';
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/funding.jpeg' };
     }
   };
 

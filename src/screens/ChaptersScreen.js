@@ -12,17 +12,29 @@ const ChapterCard = ({ item, onPress }) => {
   // Get the image source using the getImagePath utility
   const getCategoryImage = () => {
     try {
-      // First try to use the imageUrl if it exists
-      if (item.imageUrl) {
-        return getImagePath(item.imageUrl);
+      // Use hardcoded paths for testing
+      const imageMap = {
+        'urbanism': 'https://ccatalao.github.io/polis/assets/images/publications/urbanism.jpeg',
+        'urban-science': 'https://ccatalao.github.io/polis/assets/images/publications/urban-science.jpeg',
+        'urban-planning': 'https://ccatalao.github.io/polis/assets/images/publications/urban-planning.jpeg'
+      };
+      
+      // Log the item ID for debugging
+      console.log('Chapter item ID:', item.id);
+      
+      // Return the hardcoded image path if available
+      if (item.id && imageMap[item.id]) {
+        console.log('Using hardcoded image path:', imageMap[item.id]);
+        return { uri: imageMap[item.id] };
       }
       
-      // Fallback to constructing the path from the ID
-      return getImagePath(`/images/publications/${item.id}.jpeg`);
+      // Fallback to the default image
+      console.log('Using default image path');
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
     } catch (error) {
       console.error('Error loading category image:', error);
       // Default image if there's an error
-      return getImagePath('/images/home/publicacoes.jpeg');
+      return { uri: 'https://ccatalao.github.io/polis/assets/images/home/publicacoes.jpeg' };
     }
   };
 
