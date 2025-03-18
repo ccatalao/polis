@@ -87,33 +87,239 @@ if (fs.existsSync('dist') && fs.existsSync('dist/index.html')) {
             execSync('cp -r web/* web-build/', { stdio: 'inherit' });
             console.log('✅ Copied web/* to web-build/');
           } else {
-            // If we have no web directory, use index.html from last good build or create a basic one
-            console.log('⚠️ No web directory found, will use a basic index.html...');
-            if (!fs.existsSync('web-build/index.html')) {
-              // Create a simple index.html
-              fs.writeFileSync('web-build/index.html', `
+            // If we have no web directory, create a completely new index.html that loads directly
+            console.log('⚠️ No web directory found, creating a direct-loading index.html...');
+            
+            // Create a more robust index.html with direct navigation links
+            fs.writeFileSync('web-build/index.html', `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Polis</title>
+  <base href="/${repoName}/">
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; }
-    .app { max-width: 800px; margin: 0 auto; }
-    h1 { color: #0066cc; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background-color: #f8f9fa;
+      color: #212529;
+    }
+    .app { 
+      max-width: 800px; 
+      margin: 0 auto; 
+      padding: 2rem;
+      text-align: center;
+    }
+    h1 { 
+      color: #0066cc; 
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .loading {
+      margin: 2rem 0;
+      font-size: 1.1rem;
+    }
+    .progress {
+      width: 100%;
+      height: 10px;
+      background-color: #e9ecef;
+      border-radius: 5px;
+      margin: 1rem 0 2rem 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background-color: #0066cc;
+      width: 0%;
+      border-radius: 5px;
+      transition: width 0.5s ease;
+    }
+    .reload-btn {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 1rem 0;
+      font-weight: 500;
+    }
+    .reload-btn:hover {
+      background-color: #0056b3;
+    }
+    .nav-links {
+      margin: 2rem 0;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .nav-links h2 {
+      margin-top: 0;
+    }
+    .nav-links a {
+      display: block;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background-color: #f1f8ff;
+      color: #0366d6;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      background-color: #dbeeff;
+    }
+    .debug-info {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: left;
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .error-notification {
+      margin-top: 1rem;
+      color: #721c24;
+      background-color: #f8d7da;
+      padding: 1rem;
+      border-radius: 4px;
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <h1>Polis</h1>
-    <p>Loading application...</p>
+    <div class="loading" id="loading-message">Carregando Polis...</div>
+    <div class="progress">
+      <div class="progress-bar" id="loading-bar"></div>
+    </div>
+    
+    <button class="reload-btn" id="reload-btn">Force Refresh</button>
+    
+    <div id="error-notification" class="error-notification">
+      Application failed to load automatically. Please try the direct links below.
+    </div>
+    
+    <div class="nav-links">
+      <h2>Direct Navigation Links</h2>
+      <a href="/${repoName}/" id="home-link">Home</a>
+      <a href="/${repoName}/funding" id="funding-link">Funding</a>
+      <a href="/${repoName}/projects" id="projects-link">Projects</a>
+      <a href="/${repoName}/publications" id="publications-link">Publications</a>
+    </div>
+    
+    <div class="debug-info" id="debug-info">
+      <p>Debug Information:</p>
+      <div id="debug-content"></div>
+    </div>
   </div>
+  <script>
+    // GitHub Pages cache-busting and routing fix
+    (function() {
+      // Add timestamp to log messages for debugging
+      function log(message) {
+        const timestamp = new Date().toISOString();
+        const logMessage = \`[\${timestamp}] \${message}\`;
+        console.log(logMessage);
+        
+        const debugContent = document.getElementById('debug-content');
+        if (debugContent) {
+          const logElement = document.createElement('p');
+          logElement.textContent = logMessage;
+          debugContent.appendChild(logElement);
+        }
+      }
+      
+      // Force reload function
+      function forceReload() {
+        log('Force reloading page...');
+        const timestamp = new Date().getTime();
+        window.location.href = '/${repoName}/?t=' + timestamp + '&force=true';
+      }
+      
+      // Handle reload button click
+      const reloadBtn = document.getElementById('reload-btn');
+      if (reloadBtn) {
+        reloadBtn.addEventListener('click', forceReload);
+      }
+      
+      // Update loading progress
+      let progress = 0;
+      const loadingBar = document.getElementById('loading-bar');
+      const progressInterval = setInterval(() => {
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+          log('Loading progress reached 100%');
+          
+          // Show error after full progress if still on loading page
+          setTimeout(() => {
+            const errorNotification = document.getElementById('error-notification');
+            if (errorNotification && document.title === 'Polis') {
+              errorNotification.style.display = 'block';
+              log('Application failed to load, showing error message');
+            }
+          }, 2000);
+        } else {
+          progress += 5;
+          if (loadingBar) {
+            loadingBar.style.width = progress + '%';
+          }
+        }
+      }, 500);
+      
+      // Log environment information
+      const repoName = '${repoName}';
+      log('Application startup - Repository: ' + repoName);
+      log('Current path: ' + window.location.pathname);
+      log('Host: ' + window.location.hostname);
+      
+      // Redirect to repository root if needed
+      if (window.location.hostname.includes('github.io')) {
+        if (window.location.pathname === '/') {
+          log('Redirecting from root to repo path');
+          const timestamp = new Date().getTime();
+          window.location.replace('/' + repoName + '/?t=' + timestamp);
+        }
+      }
+      
+      // Update direct navigation links to include timestamps
+      function updateLinks() {
+        const timestamp = new Date().getTime();
+        const links = document.querySelectorAll('.nav-links a');
+        
+        links.forEach(link => {
+          const currentHref = link.getAttribute('href');
+          if (currentHref.indexOf('?') === -1) {
+            link.setAttribute('href', currentHref + '?t=' + timestamp);
+          }
+        });
+        
+        log('Updated navigation links with timestamps');
+      }
+      
+      // Initialize
+      updateLinks();
+      
+      // Attempt to auto-redirect after a timeout
+      setTimeout(forceReload, 10000);
+    })();
+  </script>
 </body>
 </html>
               `);
-              console.log('✅ Created basic index.html file');
-            }
+            console.log('✅ Created enhanced index.html file with direct navigation and debugging');
           }
         } catch (webCopyError) {
           console.warn('⚠️ Warning: Could not copy from web directory:', webCopyError);
@@ -285,33 +491,175 @@ const notFoundHtml = `
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Redirecting...</title>
+  <title>Page Not Found - Polis</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <script>
-    // Single Page App 404 fix for GitHub Pages
-    // Redirects all requests to the main index.html
-    const repo = '${repoName || 'polis'}';
-    const timestamp = new Date().getTime(); // For cache busting
-    const path = window.location.pathname;
-    const search = window.location.search;
-    
-    // Store the current URL information for the app to use after redirect
-    sessionStorage.setItem('redirectPath', path.replace('/' + repo, '') || '/');
-    
-    // For GitHub Pages, redirect to the repo root with cache busting
-    if (window.location.hostname.includes('github.io')) {
-      console.log('404 page - redirecting to app root with timestamp:', timestamp);
-      window.location.href = '/' + repo + '/?t=' + timestamp;
-    } else {
-      // Local development or other hosting
-      window.location.href = '/?t=' + timestamp;
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      margin: 0; 
+      padding: 0; 
+      background-color: #f8f9fa;
+      color: #212529;
+      text-align: center;
     }
-  </script>
+    .container { 
+      max-width: 800px; 
+      margin: 0 auto; 
+      padding: 2rem;
+    }
+    h1 { 
+      color: #0066cc; 
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .message {
+      margin: 2rem 0;
+      font-size: 1.1rem;
+    }
+    .btn {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 1rem 0;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .debug-info {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: #6c757d;
+      text-align: left;
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .nav-links {
+      margin: 2rem 0;
+      padding: 1rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .nav-links h2 {
+      margin-top: 0;
+    }
+    .nav-links a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      background-color: #f1f8ff;
+      color: #0366d6;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      background-color: #dbeeff;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to the main page...</p>
+  <div class="container">
+    <h1>Page Not Found</h1>
+    <div class="message">
+      <p>The page you are looking for might have been removed or is temporarily unavailable.</p>
+      <p>You will be redirected to the homepage in <span id="countdown">5</span> seconds...</p>
+    </div>
+    
+    <a href="/${repoName}/?t=${new Date().getTime()}" class="btn" id="home-btn">Go to Homepage</a>
+    
+    <div class="nav-links">
+      <h2>Direct Navigation Links</h2>
+      <a href="/${repoName}/?t=${new Date().getTime()}" id="home-link">Home</a>
+      <a href="/${repoName}/funding?t=${new Date().getTime()}" id="funding-link">Funding</a>
+      <a href="/${repoName}/projects?t=${new Date().getTime()}" id="projects-link">Projects</a>
+      <a href="/${repoName}/publications?t=${new Date().getTime()}" id="publications-link">Publications</a>
+    </div>
+    
+    <div class="debug-info" id="debug-info">
+      <p>Debug Information:</p>
+      <div id="debug-content"></div>
+    </div>
+  </div>
+
+  <script>
+    // Single Page App 404 fix for GitHub Pages with debugging
+    (function() {
+      // Add timestamp to log messages for debugging
+      function log(message) {
+        const timestamp = new Date().toISOString();
+        const logMessage = \`[\${timestamp}] \${message}\`;
+        console.log(logMessage);
+        
+        const debugContent = document.getElementById('debug-content');
+        if (debugContent) {
+          const logElement = document.createElement('p');
+          logElement.textContent = logMessage;
+          debugContent.appendChild(logElement);
+        }
+      }
+      
+      const repo = '${repoName || 'polis'}';
+      const timestamp = new Date().getTime();
+      const path = window.location.pathname;
+      const search = window.location.search || '';
+      
+      log('404 Page - Current URL: ' + window.location.href);
+      log('Repository name: ' + repo);
+      
+      // Store the intended path for apps that support it
+      try {
+        sessionStorage.setItem('redirectPath', path.replace('/' + repo, '') || '/');
+        log('Stored redirectPath in sessionStorage: ' + path.replace('/' + repo, ''));
+      } catch (e) {
+        log('Error storing redirectPath: ' + e);
+      }
+      
+      // Countdown and redirect
+      let countdown = 5;
+      const countdownElement = document.getElementById('countdown');
+      
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        if (countdownElement) {
+          countdownElement.textContent = countdown;
+        }
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          log('Countdown finished, redirecting to home');
+          window.location.href = '/' + repo + '/?t=' + timestamp + '&from=404';
+        }
+      }, 1000);
+      
+      // Update links with current timestamp
+      function updateLinks() {
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && href.indexOf(repo) > -1 && href.indexOf('?t=') === -1) {
+            link.setAttribute('href', href + '?t=' + timestamp);
+            log('Updated link: ' + href + ' → ' + link.getAttribute('href'));
+          }
+        });
+      }
+      
+      updateLinks();
+    })();
+  </script>
 </body>
 </html>
 `;
