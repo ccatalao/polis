@@ -190,23 +190,77 @@ try {
   if (fs.existsSync(indexPath)) {
     let indexContent = fs.readFileSync(indexPath, 'utf8');
     
-    // Fix 1: Ensure assets are loaded from the correct base path
-    // For GitHub Pages at username.github.io/repo-name, we need to account for the /repo-name prefix
+    // Add timestamp to the HTML file for cache busting
+    const timestamp = new Date().getTime();
     
-    // Optional: Add a small script to handle GitHub Pages routing
-    // This helps with direct URL access and refreshes
+    // Fix 1: Add base URL tag for GitHub Pages
+    // This ensures all relative paths work correctly
+    const baseTag = `
+    <!-- Dynamic base URL for GitHub Pages -->
+    <base href="${repoName ? `/${repoName}/` : '/'}">
+    <!-- Build timestamp: ${timestamp} -->
+    `;
+    
+    // Insert the base tag after the head opening tag
+    indexContent = indexContent.replace('<head>', '<head>' + baseTag);
+    
+    // Add cache-busting meta tags and improved routing script
     const routingScript = `
+    <!-- Cache-busting meta tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <script>
-      // GitHub Pages routing fix
+      // GitHub Pages routing fix with timestamp for cache busting
       (function() {
         const repo = '${repoName}';
-        if (repo && window.location.pathname.indexOf('/' + repo) === 0) {
-          // Already has the repo prefix, we're good
-          console.log('GitHub Pages path is correct');
-        } else if (repo && window.location.pathname === '/' && window.location.hostname.includes('github.io')) {
-          // We're at the root and need to add the repo name for GitHub Pages
-          console.log('Redirecting to include repository name in path');
-          window.location.replace('/' + repo + '/');
+        const timestamp = new Date().getTime(); // For cache busting
+        console.log('Loading app with cache bust timestamp:', timestamp);
+        
+        // Function to force reload and clear cache
+        function forceReload() {
+          console.log('Force reloading app...');
+          sessionStorage.setItem('lastReload', timestamp);
+          window.location.reload(true); // true forces reload from server, not cache
+        }
+        
+        // Check if we need a force reload (app version mismatch or other issue)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('force-reload')) {
+          forceReload();
+          return;
+        }
+        
+        // Check if we've been showing loading for too long (possible stale cache)
+        setTimeout(() => {
+          // If page hasn't fully loaded in 5 seconds, force reload
+          const appElement = document.getElementById('root') || document.getElementById('app');
+          if (!appElement || appElement.innerHTML.includes('Loading') || appElement.innerHTML.includes('Carregando')) {
+            console.log('App appears stuck in loading state, force reloading...');
+            forceReload();
+          }
+        }, 5000);
+        
+        // Check if we need to handle a redirect from 404.html
+        const redirectPath = sessionStorage.getItem('redirectPath');
+        if (redirectPath) {
+          console.log('Handling redirect to:', redirectPath);
+          sessionStorage.removeItem('redirectPath');
+          // history.replaceState(null, null, redirectPath);
+        }
+        
+        // Fix GitHub Pages base path
+        if (window.location.hostname.includes('github.io')) {
+          // We're on GitHub Pages
+          if (repo && window.location.pathname === '/') {
+            // At root, need to redirect to include repo name
+            console.log('Redirecting to include repository name in path');
+            window.location.replace('/' + repo + '/?t=' + timestamp);
+          } else if (repo && window.location.pathname === '/' + repo) {
+            // Missing trailing slash, add it for consistency
+            console.log('Adding trailing slash for consistency');
+            window.location.replace('/' + repo + '/?t=' + timestamp);
+          }
         }
       })();
     </script>`;
@@ -232,20 +286,27 @@ const notFoundHtml = `
 <head>
   <meta charset="utf-8">
   <title>Redirecting...</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <script>
     // Single Page App 404 fix for GitHub Pages
     // Redirects all requests to the main index.html
     const repo = '${repoName || 'polis'}';
+    const timestamp = new Date().getTime(); // For cache busting
     const path = window.location.pathname;
+    const search = window.location.search;
     
-    if (path.indexOf('/' + repo) === 0) {
-      // If path already contains the repo, redirect to the app's root
-      sessionStorage.setItem('redirectPath', path.substring(('/' + repo).length) || '/');
-      window.location.href = '/' + repo + '/';
+    // Store the current URL information for the app to use after redirect
+    sessionStorage.setItem('redirectPath', path.replace('/' + repo, '') || '/');
+    
+    // For GitHub Pages, redirect to the repo root with cache busting
+    if (window.location.hostname.includes('github.io')) {
+      console.log('404 page - redirecting to app root with timestamp:', timestamp);
+      window.location.href = '/' + repo + '/?t=' + timestamp;
     } else {
-      // Otherwise, just redirect to index preserving the path
-      sessionStorage.setItem('redirectPath', path);
-      window.location.href = '/';
+      // Local development or other hosting
+      window.location.href = '/?t=' + timestamp;
     }
   </script>
 </head>
