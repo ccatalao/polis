@@ -1,17 +1,26 @@
 {
-  "name": "Polis - Planeamento Urbano Informado",
   "short_name": "Polis",
-  "description": "Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#3498db",
-  "theme_color": "#3498db",
-  "orientation": "portrait",
+  "name": "Polis - Planeamento Urbano Informado",
   "icons": [
     {
-      "src": "./apple-touch-icon.png",
-      "sizes": "192x192",
+      "src": "pwa/favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/png"
+    },
+    {
+      "src": "pwa/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "pwa/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
-  ]
-} 
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#3498db",
+  "background_color": "#ffffff",
+  "orientation": "portrait"
+}

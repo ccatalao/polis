@@ -1,0 +1,52 @@
+Based on the information gathered from your project files, I can now explain the workflow of the npm run deploy command in your app:
+The npm run deploy Workflow
+The deployment workflow in your app uses GitHub Pages to host your React Native web build. Here's a detailed explanation of what happens when you run npm run deploy:
+1. Predeploy Script Execution
+First, npm automatically executes the predeploy script defined in your package.json:
+"
+This runs the build:web script before proceeding with deployment.
+2. Web Build Process (npm run build:web)
+The build:web script executes the build-web.js file, which:
+Creates the web-build directory structure:
+Creates web-build/ and various subdirectories for assets
+Sets up directories for images, funding, projects, publications, etc.
+Copies assets:
+Copies all image files from their source locations to the appropriate directories in web-build/
+Copies essential app assets like icons and splash images
+Creates HTML file:
+Generates a simple index.html file with loading animation
+Includes a redirect to your GitHub Pages URL (https://ccatalao.github.io/polis)
+GitHub Pages Configuration:
+Creates a .nojekyll file to prevent GitHub Pages from processing the site with Jekyll
+This ensures your app's file structure is preserved as-is
+Copies data files:
+Copies all data from src/data/* to web-build/data/
+This ensures your JSON data files are available in the deployed app
+3. Deployment (gh-pages -d web-build)
+After the build process completes, the actual deploy command runs:
+"
+This uses the gh-pages npm package to:
+Create or update a gh-pages branch:
+Takes the contents of the web-build/ directory
+Commits these files to the gh-pages branch of your repository
+Push to GitHub:
+Pushes the gh-pages branch to your remote repository
+GitHub automatically deploys the content to https://ccatalao.github.io/polis
+Handling Configuration:
+Uses the homepage field in your package.json (https://ccatalao.github.io/polis) to set the correct base URL for your deployed app
+4. GitHub Pages Deployment
+Once the gh-pages tool completes pushing your files:
+GitHub Pages service detects the updates to your gh-pages branch
+It builds and publishes your site to the URL specified in your homepage field
+Your app becomes accessible at https://ccatalao.github.io/polis
+Special Considerations in Your App
+Image Asset Handling:
+Your app requires special handling for images in web mode
+The deployment process ensures all image assets are properly copied to be accessible from your GitHub Pages URL
+Expo Web Compatibility:
+The build process is tailored for React Native web deployment
+Assets are organized in a way that matches the paths expected by your app's image loading logic
+No Jekyll Processing:
+The .nojekyll file ensures GitHub doesn't process your site with Jekyll
+This is crucial for properly serving your assets and application files
+This deployment workflow provides a streamlined way to build and deploy your React Native Expo app to GitHub Pages, making it accessible as a web application.
