@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Polis",
+    "name": "polis",
     "slug": "polis",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#3498db"
+      "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,20 +21,15 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#3498db"
+        "backgroundColor": "#ffffff"
       },
       "package": "com.ccatalao.polis"
     },
     "web": {
-      "favicon": "./assets/favicon.png",
       "bundler": "metro",
-      "output": "static",
-      "publicPath": "./",
-      "build": {
-        "babel": {
-          "include": ["@expo/vector-icons"]
-        }
-      }
+      "favicon": "./assets/favicon.png",
+      "publicPath": "/polis/",
+      "output": "static"
     },
     "plugins": [
       "expo-dev-client"
@@ -48,4 +43,4 @@
       }
     }
   }
-} 
+}
