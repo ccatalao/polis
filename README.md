@@ -205,33 +205,65 @@ The build process creates optimized static files in the `web-build` directory. T
 ### Deployment Commands
 
 #### Deploying to GitHub Pages
+
+### Building and Deploying the Web App
+
+To deploy the application to GitHub Pages, use the following commands:
+
 ```bash
-# Navigate to project directory
-cd ~/Dev/polis
+# Clean build and deploy (recommended)
+npm run deploy:clean
 
-# Build and prepare for deployment (if not already done)
-npm run predeploy
-
-# Deploy to GitHub Pages
-# This command uses the gh-pages package to publish the contents of the dist directory
-# to the gh-pages branch of your GitHub repository
+# OR, if you already have a built version
 npm run deploy
-
-# Check the status of the deployment
-# You can visit https://username.github.io/polis to see the deployed site
-# Replace 'username' with your GitHub username
-
-# If you need to force a deployment (useful for troubleshooting)
-npx gh-pages -d dist -f
-
-# Deploy with a custom commit message
-npx gh-pages -d dist -m "Deploy: Custom message here"
-
-# Check which branch is being used for GitHub Pages in your repository settings
-# Go to: https://github.com/username/polis/settings/pages
 ```
 
-The deployment process uses the `gh-pages` package to publish your built application to GitHub Pages. It creates or updates the `gh-pages` branch in your repository with the contents of the `dist` directory. GitHub Pages then serves these files as a static website at `https://username.github.io/polis`.
+The deployment process:
+1. Builds the web app using Vite
+2. Initializes a git repository in the `web-build` directory
+3. Adds all files to the repository
+4. Commits the changes
+5. Forces a push to the `gh-pages` branch of the GitHub repository
+
+### Troubleshooting Deployment Issues
+
+If you encounter issues with the deployment, you can try:
+
+1. **Manual Deployment**:
+   ```bash
+   cd ~/Dev/polis
+   npm run build:web
+   cd web-build
+   git init
+   git add .
+   git commit -m "Deploy to GitHub Pages"
+   git remote add origin https://github.com/ccatalao/polis.git
+   git push -f origin HEAD:gh-pages
+   ```
+
+2. **Check your GitHub repository settings**:
+   - Go to your repository's "Settings" > "Pages"
+   - Make sure the "Source" is set to the `gh-pages` branch
+   - Verify the site is published at: https://ccatalao.github.io/polis/
+
+3. **Common Issues**:
+   - Missing files in the deployed version: Check the `web-build` directory contents before deploying
+   - Styling differences: Ensure all CSS files are correctly linked and loaded
+   - White screen: Check the browser console for errors related to JavaScript loading or path issues
+
+### Local Testing
+
+Before deploying, you can test the production build locally with:
+
+```bash
+# Build the web app
+npm run build:web
+
+# Serve the built app locally
+npx serve web-build
+```
+
+This will serve the app on http://localhost:3000, allowing you to verify everything works correctly before deploying to GitHub Pages.
 
 ### Git Commands
 

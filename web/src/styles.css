@@ -107,7 +107,7 @@ body {
   text-decoration: none;
   color: #666;
   padding: 6px;
-  width: 20%;
+  width: 16.66%; /* Updated width for 6 items */
   transition: all 0.2s ease;
 }
 
@@ -698,5 +698,25 @@ body {
     top: auto;
     right: auto;
     margin-top: 10px;
+  }
+}
+
+/* Responsive adjustments for navigation on small screens */
+@media (max-width: 480px) {
+  .nav-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .nav-label {
+    font-size: 10px;
+  }
+  
+  .bottom-nav {
+    height: 50px;
+  }
+  
+  .nav-link {
+    padding: 4px 2px;
   }
 } 

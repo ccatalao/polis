@@ -8,6 +8,7 @@ import Municipio from './pages/Municipio';
 import Projects from './pages/Projects';
 import Funding from './pages/Funding';
 import Chapters from './pages/Chapters';
+import GeoMapping from './pages/GeoMapping';
 
 // Navigation tabs component
 const NavigationTabs = () => {
@@ -53,6 +54,13 @@ const NavigationTabs = () => {
         </svg>
         <span className="nav-label">Financiamento</span>
       </Link>
+      <Link to="/mapping" className={isActive('/mapping')}>
+        <svg className="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <span className="nav-label">Mapa</span>
+      </Link>
       <Link to="/chapters" className={isActive('/chapters')}>
         <svg className="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -74,7 +82,7 @@ const Layout = ({ children }) => {
       <header className="app-header">
         <div className="container">
           <Link to="/" className="logo-link">
-            <div className="logo">Polis</div>
+            <div className="logo">Polis - Planeamento Informado</div>
           </Link>
         </div>
       </header>
@@ -121,6 +129,14 @@ export default function App() {
           element={
             <Layout>
               <Funding />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/mapping" 
+          element={
+            <Layout>
+              <GeoMapping />
             </Layout>
           } 
         />

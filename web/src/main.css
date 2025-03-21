@@ -1,0 +1,715 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f5f5f7;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Full-width container styles for Home page */
+.full-width-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.full-width {
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.full-width-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0;
+  width: 100%;
+}
+
+/* Add mobile fullwidth support */
+.mobile-fullwidth {
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+}
+
+/* Ensure the image container takes full width on mobile */
+.mobile-fullwidth .content-image-link {
+  width: 100vw;
+  max-width: 100%;
+}
+
+.intro-content, .footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Updated card styles inspired by home.css */
+.full-width-grid .content-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+.full-width-grid .content-card:hover {
+  transform: none;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  border-color: #c0c0c0;
+}
+
+.full-width-grid .content-image-link {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  aspect-ratio: 4/3;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+
+/* Loading Animation for Images */
+.full-width-grid .content-image-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #e0e0e0 0%, #f0f0f0 50%, #e0e0e0 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Chapter List Styles */
+.chapter-list {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.chapters-grid,
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+}
+
+/* Card Styles */
+.chapter-card,
+.content-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #e0e0e0;
+}
+
+.chapter-card:hover,
+.content-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-color: #d1d1d1;
+}
+
+/* Image Styles */
+.content-image-link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 225px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.content-image,
+.chapter-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.content-image picture,
+.chapter-image picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.content-image img,
+.chapter-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+/* Overlay Effects */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.image-overlay span {
+  color: white;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid white;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.content-image-link:hover .image-overlay {
+  opacity: 1;
+}
+
+.content-image-link:hover img {
+  transform: scale(1.05);
+}
+
+/* Content Styles */
+.content-info,
+.chapter-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.content-info h3,
+.chapter-content h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  color: #1d1d1f;
+}
+
+.content-info p,
+.chapter-content p {
+  font-size: 14px;
+  color: #424245;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+/* Button Styles */
+.visit-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #e44d26;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.visit-button:hover {
+  background-color: #d03d1a;
+}
+
+.back-button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: 1px solid #e44d26;
+  color: #e44d26;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background: #e44d26;
+  color: white;
+}
+
+/* Header Styles */
+.chapter-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.chapter-error {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Loading Animation */
+@keyframes loadingPulse {
+  0% { background-color: #f0f0f0; }
+  50% { background-color: #e0e0e0; }
+  100% { background-color: #f0f0f0; }
+}
+
+.chapter-image img:not([loaded]) {
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .chapters-grid,
+  .content-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .full-width-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0;
+  }
+  
+  .full-width-grid .content-image-link {
+    height: 220px;
+    width: 100vw;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .full-width-grid .content-card {
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .chapter-list {
+    padding: 10px;
+  }
+  
+  .content-info {
+    padding: 20px;
+  }
+  
+  .intro-content, .footer-content {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chapters-grid,
+  .content-grid,
+  .full-width-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .full-width-grid .content-card {
+    margin-bottom: 0;
+    width: 100%;
+  }
+  
+  .full-width-grid .content-image-link {
+    height: 200px;
+  }
+  
+  .content-info h3 {
+    font-size: 20px;
+  }
+  
+  .title-container {
+    min-height: 90px;
+    padding: 15px 8px;
+  }
+  
+  .card-title {
+    font-size: 14px;
+  }
+  
+  .introduction.full-width {
+    padding: 1.5rem 0;
+  }
+}
+
+.introduction {
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #333;
+  padding-bottom: 2rem;
+}
+
+.introduction p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.introduction ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 2rem 0;
+}
+
+.introduction li {
+  margin-bottom: 1.2rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.introduction li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #e44d26;
+}
+
+.introduction strong {
+  color: #000;
+  font-weight: 600;
+}
+
+/* About Component Styles */
+.about-footer {
+  margin-top: 0;
+  padding: 2rem 0;
+  background-color: #f8f9fa;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.about-footer h3 {
+  color: #1d1d1f;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.about-footer p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.introduction .content-grid {
+  margin-top: 2rem;
+}
+
+.introduction .content-card {
+  background-color: #fff;
+  padding: 1.5rem;
+}
+
+.introduction .content-card h3 {
+  color: #1d1d1f;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.introduction .content-card ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1rem 0;
+}
+
+.introduction .content-card li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.introduction .content-card li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #e44d26;
+}
+
+.introduction .content-card .visit-button {
+  margin-top: 1rem;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.title-container {
+  background: linear-gradient(
+    45deg,
+    #2563eb,
+    #3b82f6,
+    #1d4ed8,
+    #2563eb
+  );
+  background-size: 300% 300%;
+  animation: gradientAnimation 8s ease infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 225px;
+  padding: 40px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.title-container:hover::before {
+  opacity: 1;
+}
+
+.card-title {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  line-height: 1.2;
+  padding: 0 20px;
+}
+
+.title-container:hover .card-title {
+  transform: scale(1.05);
+}
+
+/* These styles are from Home.css but renamed to match our class structure */
+.home {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  color: #1d1d1f;
+  margin-bottom: 1.5rem;
+}
+
+.hero .introduction {
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: #333;
+}
+
+.hero .introduction p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* These can be used for backward compatibility if needed */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 20px 0;
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-color: #d1d1d1;
+}
+
+.feature-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #e44d26;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+  align-self: flex-start;
+}
+
+.feature-button:hover {
+  background-color: #d03d1a;
+}
+
+/* Responsive adjustments for hero section and features */
+@media (max-width: 768px) {
+  .hero h2 {
+    font-size: 2rem;
+  }
+  
+  .home {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h2 {
+    font-size: 1.75rem;
+  }
+}
+
+/* Image loading styles */
+.content-image.loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f0f0f0;
+  z-index: 2;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #f0f0f0;
+  }
+  50% {
+    background-color: #e0e0e0;
+  }
+  100% {
+    background-color: #f0f0f0;
+  }
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .full-width-container {
+    width: 100vw;
+    min-height: 100vh;
+  }
+  
+  .full-width-grid {
+    width: 100vw;
+  }
+  
+  .content-card.mobile-fullwidth {
+    width: 100vw;
+  }
+  
+  .content-image-link {
+    width: 100vw;
+    max-width: 100vw;
+  }
+  
+  /* Prevent scrollbar on iOS */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Responsive design for iOS */
+@media screen and (max-width: 428px) {
+  /* iPhone Pro Max width */
+  .full-width-grid .content-image-link {
+    height: 180px; /* Shorter images on iPhone */
+  }
+  
+  .content-info h3 {
+    font-size: 18px;
+  }
+  
+  .content-info p {
+    font-size: 14px;
+  }
+  
+  .visit-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+/* Improve tap targets on mobile */
+@media (max-width: 768px) {
+  .visit-button, 
+  .back-button {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+  }
+}

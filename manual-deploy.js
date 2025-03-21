@@ -7,7 +7,7 @@ const path = require('path');
 // Configuration
 const buildDir = 'web-build';
 const deployBranch = 'gh-pages';
-const remote = 'origin';
+const remote = 'https://github.com/ccatalao/polis.git';
 const commitMessage = 'Deploy to GitHub Pages';
 
 console.log('📦 Starting manual GitHub Pages deployment...');
@@ -39,21 +39,10 @@ try {
   execSync('git config --local http.lowSpeedLimit 1000');    // Lower threshold for low speed detection
   execSync('git config --local http.lowSpeedTime 60');       // Longer time for low speed tolerance
   
-  // Try to fetch existing gh-pages branch
-  console.log(`🔍 Trying to fetch existing ${deployBranch} branch...`);
-  try {
-    execSync(`git fetch "${process.cwd()}/.." ${deployBranch}`, { timeout: 60000 });
-    execSync(`git checkout -b ${deployBranch} FETCH_HEAD`);
-    console.log(`✅ Successfully fetched ${deployBranch} branch`);
-  } catch (e) {
-    console.log(`ℹ️ No existing ${deployBranch} branch found or fetch failed, creating new branch...`);
-    execSync(`git checkout --orphan ${deployBranch}`);
-    execSync('git rm -rf .');
-  }
-  
   // Copy build files to temporary directory
   console.log('📋 Copying build files...');
   execSync(`cp -R "${process.cwd()}/../${buildDir}/"* .`);
+  execSync('touch .nojekyll');  // Ensure .nojekyll file exists
   
   // Add and commit files
   execSync('git add .');
@@ -64,20 +53,35 @@ try {
     process.exit(0);
   }
   
-  // Push to GitHub with increased timeout
-  console.log(`🚀 Pushing to ${remote}/${deployBranch}...`);
-  execSync(`git push --force "${process.cwd()}/.." ${deployBranch}:${deployBranch}`, { timeout: 120000 });
+  // Add remote and push to GitHub
+  console.log(`🚀 Adding remote repository and pushing to ${deployBranch} branch...`);
+  execSync(`git remote add origin ${remote}`);
   
-  // Verify remote update
-  process.chdir('..');
-  execSync(`git fetch ${remote} ${deployBranch}:refs/remotes/${remote}/${deployBranch}`, { timeout: 60000 });
+  // Get GitHub credentials if needed
+  const username = process.env.GITHUB_USERNAME || execSync('git config user.name').toString().trim();
   
-  // Cleanup temporary directory
-  console.log('🧹 Cleaning up...');
-  execSync(`rm -rf "${tempDir}"`);
+  // Check if GitHub token is available
+  const token = process.env.GITHUB_TOKEN;
+  let pushUrl = remote;
+  
+  if (token) {
+    // Use token for authentication if available
+    pushUrl = remote.replace('https://', `https://${token}@`);
+  } else {
+    console.log('ℹ️ No GitHub token found. Using regular authentication.');
+    console.log('ℹ️ If this fails, you may need to provide GitHub credentials manually.');
+  }
+  
+  try {
+    execSync(`git push --force origin HEAD:${deployBranch}`);
+  } catch (error) {
+    console.error('❌ Failed to push with default remote. You may need to authenticate manually.');
+    console.log('🔒 Falling back to manual deployment instructions...');
+    throw error;
+  }
   
   console.log('✅ Deployment completed successfully!');
-  console.log(`🌐 Your site should be available at: ${JSON.parse(fs.readFileSync('package.json')).homepage}`);
+  console.log(`🌐 Your site should be available at: https://ccatalao.github.io/polis/`);
 } catch (error) {
   console.error('❌ Deployment failed with error:', error.message);
   console.error('Try deploying manually:');

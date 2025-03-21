@@ -1,38 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import chaptersData from '../data/chapters.json';
+import '../main.css';
 
-// Helper function to properly format image paths
-const formatImagePath = (imageUrl) => {
-  if (!imageUrl || !imageUrl.fallback) {
-    return 'https://via.placeholder.com/400x300?text=Image';
-  }
-  
-  // Remove the leading ./ from the path
-  const path = imageUrl.fallback.replace(/^\.\//, '');
-  return `/polis/${path}`;
-};
-
-// Chapter Card component
+// Chapter Card component with consistent styling from main.css
 const ChapterCard = ({ chapter, onOpenDetails }) => {
+  // State to track image loading
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  
+  // Ensure proper image path handling, consistent with other components
+  const getImagePath = (path) => {
+    if (!path || !path.fallback) return 'https://via.placeholder.com/400x300?text=Chapter';
+    
+    // Return the original path if it already includes the full URL or starts with /polis/
+    if (path.fallback.startsWith('http') || path.fallback.startsWith('/polis/')) {
+      return path.fallback;
+    }
+    
+    // For fallback image paths in the chapter data
+    if (path.fallback.startsWith('./')) {
+      return `/polis${path.fallback.substring(1)}`;
+    }
+    
+    // Otherwise, prefix with /polis/
+    return `/polis/${path.fallback}`;
+  };
+  
   return (
-    <div className="chapter-card">
-      <img 
-        src={formatImagePath(chapter.imageUrl)} 
-        alt={chapter.title}
-        className="chapter-image"
-        onError={(e) => {
-          if (!e.target.dataset.errorHandled) {
-            console.error(`Image error for category ${chapter.id}`);
-            e.target.src = 'https://via.placeholder.com/400x300?text=Error';
-            e.target.dataset.errorHandled = 'true';
-          }
-        }}
-      />
-      <div className="chapter-content">
-        <h3 className="chapter-title">{chapter.title}</h3>
-        <p className="chapter-description">{chapter.description}</p>
+    <div className="content-card mobile-fullwidth">
+      <div className="content-image-link">
+        <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
+          <picture>
+            <img 
+              src={getImagePath(chapter.imageUrl)} 
+              alt={chapter.title}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              onError={(e) => {
+                if (!imageFailed) {
+                  setImageFailed(true);
+                  console.error(`Image error for category ${chapter.id}`);
+                  e.target.src = 'https://via.placeholder.com/400x300?text=Error';
+                }
+              }}
+            />
+          </picture>
+        </div>
+        <div className="image-overlay">
+          <span>Ver publicações</span>
+        </div>
+      </div>
+      <div className="content-info">
+        <h3>{chapter.title}</h3>
+        <p>{chapter.description}</p>
         <button 
-          className="chapter-link" 
+          className="visit-button" 
           onClick={() => onOpenDetails(chapter)}
         >
           Ver publicações
@@ -42,31 +64,63 @@ const ChapterCard = ({ chapter, onOpenDetails }) => {
   );
 };
 
-// Publication Card component
-const PublicationCard = ({ publication, categoryId }) => {
+// Publication Card component with consistent styling
+const PublicationCard = ({ publication }) => {
+  // State to track image loading
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
+  
+  // Ensure proper image path handling, consistent with other components
+  const getImagePath = (path) => {
+    if (!path || !path.fallback) return 'https://via.placeholder.com/400x300?text=Publication';
+    
+    // Return the original path if it already includes the full URL or starts with /polis/
+    if (path.fallback.startsWith('http') || path.fallback.startsWith('/polis/')) {
+      return path.fallback;
+    }
+    
+    // For fallback image paths in the publication data
+    if (path.fallback.startsWith('./')) {
+      return `/polis${path.fallback.substring(1)}`;
+    }
+    
+    // Otherwise, prefix with /polis/
+    return `/polis/${path.fallback}`;
+  };
+
   const handleOpenUrl = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <div className="publication-card">
-      <img 
-        src={formatImagePath(publication.imageUrl)} 
-        alt={publication.title}
-        className="publication-image"
-        onError={(e) => {
-          if (!e.target.dataset.errorHandled) {
-            console.error(`Image error for publication ${publication.id}`);
-            e.target.src = 'https://via.placeholder.com/400x300?text=Error';
-            e.target.dataset.errorHandled = 'true';
-          }
-        }}
-      />
-      <div className="publication-content">
-        <h3 className="publication-title">{publication.title}</h3>
-        <p className="publication-description">{publication.description}</p>
+    <div className="content-card mobile-fullwidth">
+      <div className="content-image-link">
+        <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
+          <picture>
+            <img 
+              src={getImagePath(publication.imageUrl)} 
+              alt={publication.title}
+              loading="lazy"
+              onLoad={() => setImageLoaded(true)}
+              onError={(e) => {
+                if (!imageFailed) {
+                  setImageFailed(true);
+                  console.error(`Image error for publication ${publication.id}`);
+                  e.target.src = 'https://via.placeholder.com/400x300?text=Error';
+                }
+              }}
+            />
+          </picture>
+        </div>
+        <div className="image-overlay">
+          <span>Ver detalhes</span>
+        </div>
+      </div>
+      <div className="content-info">
+        <h3>{publication.title}</h3>
+        <p>{publication.description}</p>
         <button 
-          className="publication-link" 
+          className="visit-button" 
           onClick={() => handleOpenUrl(publication.url)}
         >
           Visitar site
@@ -76,26 +130,30 @@ const PublicationCard = ({ publication, categoryId }) => {
   );
 };
 
-// Chapter Detail component
+// Chapter Detail component with consistent styling
 const ChapterDetail = ({ chapter, onBack }) => {
   if (!chapter || !chapter.content) return null;
 
   return (
-    <div className="chapter-detail">
-      <div className="chapter-detail-header">
-        <h2 className="chapter-detail-title">{chapter.title}</h2>
-        <p className="chapter-detail-description">{chapter.description}</p>
-        <button className="back-button" onClick={onBack}>
-          Voltar
-        </button>
+    <div className="full-width-container">
+      <div className="title-container">
+        <h1 className="card-title">{chapter.title}</h1>
       </div>
       
-      <div className="publications-container">
+      <div className="introduction full-width">
+        <div className="intro-content">
+          <p>{chapter.description}</p>
+          <button className="back-button" onClick={onBack} style={{ marginTop: '20px' }}>
+            Voltar para publicações
+          </button>
+        </div>
+      </div>
+      
+      <div className="full-width-grid">
         {chapter.content.map(publication => (
           <PublicationCard 
             key={publication.id} 
             publication={publication}
-            categoryId={chapter.id}
           />
         ))}
       </div>
@@ -107,6 +165,29 @@ const Chapters = () => {
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedChapter, setSelectedChapter] = useState(null);
+  // Force a re-render once on component mount to ensure proper layout
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    // Set mounted state to true after component mounts
+    // This forces a re-render after the component is mounted
+    if (!mounted) {
+      setMounted(true);
+    }
+    
+    // Add a resize event listener to force re-renders on orientation change
+    const handleResize = () => {
+      // Only force re-render on significant changes
+      if (window.innerWidth <= 768) {
+        // Force a re-render by toggling mounted state
+        setMounted(false);
+        setTimeout(() => setMounted(true), 50);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [mounted]);
 
   useEffect(() => {
     // Load chapters from the imported JSON file
@@ -150,22 +231,18 @@ const Chapters = () => {
   // If no chapters data is available yet, show placeholder
   if (chapters.length === 0) {
     return (
-      <div>
-        <div className="hero">
-          <div className="container">
-            <h1>Publicações de acesso aberto</h1>
-            <p>
-              Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.
-            </p>
-          </div>
+      <div className="full-width-container">
+        <div className="title-container">
+          <h1 className="card-title">Publicações</h1>
         </div>
         
-        <div className="container" style={{ padding: '40px 20px', textAlign: 'center' }}>
-          <h2 style={{ marginBottom: '20px' }}>Em desenvolvimento</h2>
-          <p>
-            Esta secção está atualmente em desenvolvimento. Em breve, encontrará aqui uma biblioteca
-            de recursos académicos e publicações científicas sobre planeamento urbano e ordenamento do território.
-          </p>
+        <div className="introduction full-width">
+          <div className="intro-content">
+            <p>
+              Aceda a conhecimento científico sobre urbanismo e ordenamento do território.
+            </p>
+            
+          </div>
         </div>
       </div>
     );
@@ -173,40 +250,25 @@ const Chapters = () => {
 
   // If a chapter is selected, show its details
   if (selectedChapter) {
-    return (
-      <div className="chapters-page">
-        <div className="hero">
-          <div className="container">
-            <h1>Publicações de acesso aberto</h1>
-            <p>
-              Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.
-            </p>
-          </div>
-        </div>
-        
-        <div className="container">
-          <ChapterDetail 
-            chapter={selectedChapter} 
-            onBack={handleBackToChapters} 
-          />
-        </div>
-      </div>
-    );
+    return <ChapterDetail chapter={selectedChapter} onBack={handleBackToChapters} />;
   }
 
   // Show list of chapters
   return (
-    <div className="chapters-page">
-      <div className="hero">
-        <div className="container">
-          <h1>Publicações de acesso aberto</h1>
+    <div className="full-width-container">
+      <div className="title-container">
+        <h1 className="card-title">Publicações de acesso aberto</h1>
+      </div>
+      
+      <div className="introduction full-width">
+        <div className="intro-content">
           <p>
             Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.
           </p>
         </div>
       </div>
       
-      <div className="chapters-container">
+      <div className="full-width-grid">
         {chapters.map(chapter => (
           <ChapterCard 
             key={chapter.id} 
