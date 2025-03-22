@@ -403,6 +403,84 @@ class OverpassService {
     
     return geojson;
   }
+
+  /**
+   * Get transport hubs in Palmela
+   * @returns {Promise<object>} Transport hubs data from Overpass API
+   */
+  async getTransportHubs() {
+    const query = `
+      [out:json];
+      area["name"="Palmela"]["admin_level"="8"]->.palmelaArea;
+      (
+        // Bus stations and stops
+        node["highway"="bus_stop"](area.palmelaArea);
+        way["highway"="bus_stop"](area.palmelaArea);
+        node["amenity"="bus_station"](area.palmelaArea);
+        way["amenity"="bus_station"](area.palmelaArea);
+        
+        // Train stations
+        node["railway"="station"](area.palmelaArea);
+        way["railway"="station"](area.palmelaArea);
+        node["railway"="halt"](area.palmelaArea);
+        way["railway"="halt"](area.palmelaArea);
+        
+        // Taxi stands
+        node["amenity"="taxi"](area.palmelaArea);
+        
+        // Car parking
+        node["amenity"="parking"](area.palmelaArea);
+        way["amenity"="parking"](area.palmelaArea);
+        
+        // Fuel stations
+        node["amenity"="fuel"](area.palmelaArea);
+        way["amenity"="fuel"](area.palmelaArea);
+      );
+      out body;
+      >;
+      out skel qt;
+    `;
+    return this.queryOverpass(query, "transport_hubs");
+  }
+
+  /**
+   * Get healthcare facilities in Palmela
+   * @returns {Promise<object>} Healthcare facilities data from Overpass API
+   */
+  async getHealthcareFacilities() {
+    const query = `
+      [out:json];
+      area["name"="Palmela"]["admin_level"="8"]->.palmelaArea;
+      (
+        // Hospitals
+        node["amenity"="hospital"](area.palmelaArea);
+        way["amenity"="hospital"](area.palmelaArea);
+        relation["amenity"="hospital"](area.palmelaArea);
+        
+        // Clinics and medical centers
+        node["amenity"="clinic"](area.palmelaArea);
+        way["amenity"="clinic"](area.palmelaArea);
+        node["amenity"="doctors"](area.palmelaArea);
+        way["amenity"="doctors"](area.palmelaArea);
+        
+        // Pharmacies
+        node["amenity"="pharmacy"](area.palmelaArea);
+        way["amenity"="pharmacy"](area.palmelaArea);
+        
+        // Dental clinics
+        node["amenity"="dentist"](area.palmelaArea);
+        way["amenity"="dentist"](area.palmelaArea);
+        
+        // Veterinary facilities
+        node["amenity"="veterinary"](area.palmelaArea);
+        way["amenity"="veterinary"](area.palmelaArea);
+      );
+      out body;
+      >;
+      out skel qt;
+    `;
+    return this.queryOverpass(query, "healthcare_facilities");
+  }
 }
 
 // Create and export a singleton instance

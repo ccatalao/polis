@@ -10,7 +10,9 @@ const featureTypes = [
   { id: 'historical_sites', name: 'Locais Históricos', icon: '🏛️' },
   { id: 'environmental_features', name: 'Ambiente', icon: '🌳' },
   { id: 'urban_elements', name: 'Elementos Urbanos', icon: '🏙️' },
-  { id: 'wineries', name: 'Adegas', icon: '🍷', custom: ['craft=winery', 'amenity=winery'] }
+  { id: 'wineries', name: 'Adegas', icon: '🍷', custom: ['craft=winery', 'amenity=winery'] },
+  { id: 'transport_hubs', name: 'Transportes', icon: '🚌' },
+  { id: 'healthcare_facilities', name: 'Saúde', icon: '🏥' }
 ];
 
 // Legend items for map features
@@ -31,6 +33,49 @@ const GeoMapping = () => {
   const [mounted, setMounted] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [mapStyle, setMapStyle] = useState('streets');
+  const [activeFilters, setActiveFilters] = useState({});
+  
+  // Define filter options for each feature type
+  const filterOptions = {
+    schools: [
+      { id: 'primary', label: 'Primária', property: 'isced', value: '1' },
+      { id: 'secondary', label: 'Secundária', property: 'isced', value: '2,3' }
+    ],
+    historical_sites: [
+      { id: 'castle', label: 'Castelo', property: 'historic', value: 'castle' },
+      { id: 'monument', label: 'Monumento', property: 'historic', value: 'monument' },
+      { id: 'ruins', label: 'Ruínas', property: 'historic', value: 'ruins' },
+      { id: 'archaeological', label: 'Arqueológico', property: 'historic', value: 'archaeological_site' }
+    ],
+    environmental_features: [
+      { id: 'park', label: 'Parques', property: 'leisure', value: 'park' },
+      { id: 'forest', label: 'Florestas', property: 'landuse', value: 'forest' },
+      { id: 'water', label: 'Água', property: 'natural', value: 'water' }
+    ],
+    urban_elements: [
+      { id: 'restaurant', label: 'Restaurantes', property: 'amenity', value: 'restaurant' },
+      { id: 'building', label: 'Edifícios', property: 'building', value: 'yes' }
+    ],
+    wineries: [
+      { id: 'winery', label: 'Adegas', property: 'craft', value: 'winery' },
+      { id: 'vineyard', label: 'Vinhas', property: 'landuse', value: 'vineyard' }
+    ],
+    transport_hubs: [
+      { id: 'bus', label: 'Paragens de Autocarro', property: 'highway', value: 'bus_stop' },
+      { id: 'train', label: 'Estações de Comboio', property: 'railway', value: 'station,halt' },
+      { id: 'parking', label: 'Estacionamentos', property: 'amenity', value: 'parking' },
+      { id: 'fuel', label: 'Postos de Combustível', property: 'amenity', value: 'fuel' },
+      { id: 'taxi', label: 'Praças de Táxi', property: 'amenity', value: 'taxi' }
+    ],
+    healthcare_facilities: [
+      { id: 'hospital', label: 'Hospitais', property: 'amenity', value: 'hospital' },
+      { id: 'clinic', label: 'Clínicas', property: 'amenity', value: 'clinic' },
+      { id: 'doctors', label: 'Consultórios', property: 'amenity', value: 'doctors' },
+      { id: 'pharmacy', label: 'Farmácias', property: 'amenity', value: 'pharmacy' },
+      { id: 'dentist', label: 'Dentistas', property: 'amenity', value: 'dentist' },
+      { id: 'veterinary', label: 'Veterinários', property: 'amenity', value: 'veterinary' }
+    ]
+  };
   
   // Handle resize events for mobile responsiveness
   useEffect(() => {
@@ -78,6 +123,12 @@ const GeoMapping = () => {
             case 'urban_elements':
               data = await overpassService.getUrbanElements();
               break;
+            case 'transport_hubs':
+              data = await overpassService.getTransportHubs();
+              break;
+            case 'healthcare_facilities':
+              data = await overpassService.getHealthcareFacilities();
+              break;
             default:
               data = await overpassService.getSchools();
           }
@@ -99,9 +150,26 @@ const GeoMapping = () => {
     fetchData();
   }, [selectedFeatureType]);
   
+  // Update the displayed data when filters change
+  const [filteredData, setFilteredData] = useState(null);
+  
+  useEffect(() => {
+    if (geojsonData) {
+      const filtered = getFilteredData(geojsonData);
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(null);
+    }
+  }, [geojsonData, activeFilters, selectedFeatureType]); // Re-apply filters when any of these change
+  
   // Handle feature selection change
   const handleFeatureTypeChange = (event) => {
     setSelectedFeatureType(event.target.value);
+    // Clear filters when changing feature type
+    setActiveFilters(prev => ({
+      ...prev,
+      [event.target.value]: []
+    }));
   };
   
   // Enhanced feature click handler
@@ -145,10 +213,75 @@ const GeoMapping = () => {
       'landuse': 'Uso da Terra',
       'height': 'Altura',
       'denomination': 'Denominação',
-      'religion': 'Religião'
+      'religion': 'Religião',
+      // Transport-related labels
+      'highway': 'Tipo de Via',
+      'railway': 'Tipo Ferroviário',
+      'ref': 'Referência',
+      'route_ref': 'Linhas',
+      'public_transport': 'Transporte Público',
+      'network': 'Rede',
+      'parking': 'Estacionamento',
+      'fee': 'Pagamento',
+      'fuel:diesel': 'Gasóleo',
+      'fuel:petrol': 'Gasolina',
+      'fuel:lpg': 'GPL',
+      'payment:credit_card': 'Cartão de Crédito',
+      'payment:debit_card': 'Cartão de Débito',
+      // Healthcare-related labels
+      'healthcare': 'Tipo de Saúde',
+      'healthcare:speciality': 'Especialidade',
+      'emergency': 'Emergência',
+      'dispensing': 'Dispensa Medicamentos',
+      'doctor:type': 'Tipo de Médico',
+      'vaccination': 'Vacinação',
+      'medical_supply': 'Suprimentos Médicos',
+      'wheelchair': 'Acessibilidade',
+      'contact:phone': 'Telefone de Contacto',
+      'contact:email': 'Email de Contacto',
+      'health_facility:type': 'Tipo de Instalação de Saúde'
     };
     
     return labelMap[key] || key;
+  };
+  
+  // Function to apply filters to the geojson data
+  const getFilteredData = (data) => {
+    if (!data || !data.features || data.features.length === 0) return data;
+    
+    // Get active filters for the current feature type
+    const currentFilters = activeFilters[selectedFeatureType] || [];
+    
+    // If no filters are active, return the original data
+    if (currentFilters.length === 0) return data;
+    
+    // Apply filters to the data
+    const filteredFeatures = data.features.filter(feature => {
+      // If no filters are active, include all features
+      if (currentFilters.length === 0) return true;
+      
+      // Check if the feature matches any of the active filters
+      return currentFilters.some(filterId => {
+        const filter = filterOptions[selectedFeatureType].find(f => f.id === filterId);
+        if (!filter) return false;
+        
+        const { property, value } = filter;
+        const featureValue = feature.properties[property];
+        
+        // Handle multiple values (comma-separated)
+        if (value.includes(',')) {
+          const allowedValues = value.split(',');
+          return featureValue && allowedValues.includes(featureValue);
+        }
+        
+        return featureValue && featureValue === value;
+      });
+    });
+    
+    return {
+      ...data,
+      features: filteredFeatures
+    };
   };
   
   return (
@@ -192,13 +325,49 @@ const GeoMapping = () => {
               <option value="dark">Escuro</option>
             </select>
           </div>
+          
+          {/* Add filter options if available for the selected feature type */}
+          {filterOptions[selectedFeatureType] && filterOptions[selectedFeatureType].length > 0 && (
+            <div className="filter-options">
+              <div className="filter-title">Filtrar por:</div>
+              <div className="filter-checkboxes">
+                {filterOptions[selectedFeatureType].map(filter => (
+                  <label key={filter.id} className="filter-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={activeFilters[selectedFeatureType]?.includes(filter.id) || false}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        setActiveFilters(prev => {
+                          // Get current filters for this feature type
+                          const currentTypeFilters = prev[selectedFeatureType] || [];
+                          
+                          // Update the filters
+                          const updatedTypeFilters = isChecked
+                            ? [...currentTypeFilters, filter.id]
+                            : currentTypeFilters.filter(id => id !== filter.id);
+                          
+                          // Return the updated state
+                          return {
+                            ...prev,
+                            [selectedFeatureType]: updatedTypeFilters
+                          };
+                        });
+                      }}
+                    />
+                    {filter.label}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
       <div className="full-width map-container">
         <div className="intro-content">
           <h2 className="section-title">
-            {activeFeatureType.icon} {activeFeatureType.name} {geojsonData && !loading ? `(${geojsonData.features.length})` : ''}
+            {activeFeatureType.icon} {activeFeatureType.name} {filteredData && !loading ? `(${filteredData.features.length})` : ''}
           </h2>
           
           {loading && (
@@ -219,7 +388,7 @@ const GeoMapping = () => {
           
           <div className="map-wrapper">
             <MapComponent 
-              geojsonData={geojsonData}
+              geojsonData={filteredData}
               onFeatureClick={handleFeatureClick}
               center={[38.569, -8.8]} // Palmela coordinates
               zoom={12}
@@ -270,7 +439,11 @@ const GeoMapping = () => {
           
           <div className="data-info">
             <p>
-              {geojsonData && `${geojsonData.features.length} elementos encontrados.`}
+              {filteredData && geojsonData && (
+                filteredData.features.length === geojsonData.features.length ?
+                `${filteredData.features.length} elementos encontrados.` :
+                `${filteredData.features.length} elementos filtrados de ${geojsonData.features.length} totais.`
+              )}
               Os dados são obtidos do OpenStreetMap através da API Overpass.
             </p>
             <p className="data-attribution">

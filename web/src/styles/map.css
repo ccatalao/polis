@@ -475,4 +475,59 @@
     max-width: 100%;
     margin-left: 0;
   }
+}
+
+/* Filter options */
+.filter-options {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.filter-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.filter-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 12px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s;
+}
+
+.filter-checkbox-label:hover {
+  background-color: #f0f0f0;
+}
+
+.filter-checkbox-label input {
+  margin-right: 8px;
+}
+
+.filter-checkbox-label input:checked + .filter-label-text {
+  font-weight: bold;
+}
+
+/* Responsive adjustments for filters */
+@media (max-width: 768px) {
+  .filter-checkboxes {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .filter-checkbox-label {
+    width: 100%;
+  }
 } 
