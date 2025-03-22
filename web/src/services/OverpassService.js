@@ -481,6 +481,51 @@ class OverpassService {
     `;
     return this.queryOverpass(query, "healthcare_facilities");
   }
+
+  /**
+   * Get commercial areas in Palmela
+   * @returns {Promise<object>} Commercial areas data from Overpass API
+   */
+  async getCommercialAreas() {
+    const query = `
+      [out:json];
+      area["name"="Palmela"]["admin_level"="8"]->.palmelaArea;
+      (
+        // Shopping centers and malls
+        node["shop"="mall"](area.palmelaArea);
+        way["shop"="mall"](area.palmelaArea);
+        relation["shop"="mall"](area.palmelaArea);
+        
+        // Supermarkets
+        node["shop"="supermarket"](area.palmelaArea);
+        way["shop"="supermarket"](area.palmelaArea);
+        
+        // Convenience stores
+        node["shop"="convenience"](area.palmelaArea);
+        way["shop"="convenience"](area.palmelaArea);
+        
+        // Department stores
+        node["shop"="department_store"](area.palmelaArea);
+        way["shop"="department_store"](area.palmelaArea);
+        
+        // Markets
+        node["amenity"="marketplace"](area.palmelaArea);
+        way["amenity"="marketplace"](area.palmelaArea);
+        
+        // Commercial landuse zones
+        way["landuse"="commercial"](area.palmelaArea);
+        relation["landuse"="commercial"](area.palmelaArea);
+        
+        // Retail landuse zones
+        way["landuse"="retail"](area.palmelaArea);
+        relation["landuse"="retail"](area.palmelaArea);
+      );
+      out body;
+      >;
+      out skel qt;
+    `;
+    return this.queryOverpass(query, "commercial_areas");
+  }
 }
 
 // Create and export a singleton instance

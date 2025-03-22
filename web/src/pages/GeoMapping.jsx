@@ -12,7 +12,8 @@ const featureTypes = [
   { id: 'urban_elements', name: 'Elementos Urbanos', icon: '🏙️' },
   { id: 'wineries', name: 'Adegas', icon: '🍷', custom: ['craft=winery', 'amenity=winery'] },
   { id: 'transport_hubs', name: 'Transportes', icon: '🚌' },
-  { id: 'healthcare_facilities', name: 'Saúde', icon: '🏥' }
+  { id: 'healthcare_facilities', name: 'Saúde', icon: '🏥' },
+  { id: 'commercial_areas', name: 'Comércio', icon: '🏬' }
 ];
 
 // Legend items for map features
@@ -74,6 +75,15 @@ const GeoMapping = () => {
       { id: 'pharmacy', label: 'Farmácias', property: 'amenity', value: 'pharmacy' },
       { id: 'dentist', label: 'Dentistas', property: 'amenity', value: 'dentist' },
       { id: 'veterinary', label: 'Veterinários', property: 'amenity', value: 'veterinary' }
+    ],
+    commercial_areas: [
+      { id: 'mall', label: 'Centros Comerciais', property: 'shop', value: 'mall' },
+      { id: 'supermarket', label: 'Supermercados', property: 'shop', value: 'supermarket' },
+      { id: 'convenience', label: 'Lojas de Conveniência', property: 'shop', value: 'convenience' },
+      { id: 'department_store', label: 'Grandes Armazéns', property: 'shop', value: 'department_store' },
+      { id: 'marketplace', label: 'Mercados', property: 'amenity', value: 'marketplace' },
+      { id: 'commercial', label: 'Zonas Comerciais', property: 'landuse', value: 'commercial' },
+      { id: 'retail', label: 'Zonas de Retalho', property: 'landuse', value: 'retail' }
     ]
   };
   
@@ -128,6 +138,9 @@ const GeoMapping = () => {
               break;
             case 'healthcare_facilities':
               data = await overpassService.getHealthcareFacilities();
+              break;
+            case 'commercial_areas':
+              data = await overpassService.getCommercialAreas();
               break;
             default:
               data = await overpassService.getSchools();
@@ -239,7 +252,23 @@ const GeoMapping = () => {
       'wheelchair': 'Acessibilidade',
       'contact:phone': 'Telefone de Contacto',
       'contact:email': 'Email de Contacto',
-      'health_facility:type': 'Tipo de Instalação de Saúde'
+      'health_facility:type': 'Tipo de Instalação de Saúde',
+      // Commerce-related labels
+      'shop': 'Tipo de Loja',
+      'brand': 'Marca',
+      'brand:wikidata': 'Marca (Wikidata)',
+      'department': 'Departamento',
+      'payment:cash': 'Pagamento em Dinheiro',
+      'second_hand': 'Segunda Mão',
+      'self_service': 'Self-Service',
+      'organic': 'Produtos Orgânicos',
+      'origin': 'Origem',
+      'produce': 'Produtos',
+      'construction': 'Construção',
+      'clothes': 'Roupas',
+      'merchandise': 'Mercadorias',
+      'indoor': 'Interior',
+      'level': 'Nível'
     };
     
     return labelMap[key] || key;
