@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import municipioData from '../data/municipio.json';
-import '../main.css';
+import '../styles/map.css';
 
 // Enhanced Municipal Service Card component with features directly embedded
 const ServiceCard = ({ service }) => {
@@ -53,7 +53,7 @@ const ServiceCard = ({ service }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Visitar site</span>
+          <span>Website da Câmara Municipal de Palmela</span>
         </div>
       </div>
 
@@ -137,7 +137,7 @@ const Municipio = () => {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
-        <p className="loading-text">A carregar serviços municipais...</p>
+        <p className="loading-text">A carregar informação municipal...</p>
       </div>
     );
   }
@@ -146,15 +146,11 @@ const Municipio = () => {
   if (services.length === 0) {
     return (
       <div className="full-width-container">
-        <div className="title-container">
-          <h1 className="card-title">Serviços Municipais</h1>
-        </div>
-        
         <div className="introduction full-width">
           <div className="intro-content">
             <p>
-              Aceda aos serviços e recursos municipais em matéria de urbanismo, 
-              ordenamento do território e habitação.
+              Aceda a informação e recursos municipais nas áreas do ordenamento do território, 
+              urbanismo e reabilitação urbana.
             </p>
             
             <p style={{ textAlign: 'center', marginTop: '40px', fontWeight: 'bold' }}>
@@ -168,15 +164,11 @@ const Municipio = () => {
 
   return (
     <div className="full-width-container">
-      <div className="title-container">
-        <h1 className="card-title">Serviços Municipais</h1>
-      </div>
-      
       <div className="introduction full-width">
         <div className="intro-content">
           <p>
-            Aceda aos serviços e recursos municipais em matéria de urbanismo, 
-            ordenamento do território e habitação.
+          Aceda a informação e recursos municipais nas áreas do ordenamento do território, 
+          urbanismo e reabilitação urbana.
           </p>
         </div>
       </div>

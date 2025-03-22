@@ -6,7 +6,6 @@ import './styles.css';
 import Home from './pages/Home';
 import Municipio from './pages/Municipio';
 import Projects from './pages/Projects';
-import Funding from './pages/Funding';
 import Chapters from './pages/Chapters';
 import GeoMapping from './pages/GeoMapping';
 
@@ -25,7 +24,7 @@ const NavigationTabs = () => {
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-        <span className="nav-label">Home</span>
+        <span className="nav-label">Início</span>
       </Link>
       <Link to="/municipio" className={isActive('/municipio')}>
         <svg className="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -44,15 +43,6 @@ const NavigationTabs = () => {
           <line x1="12" y1="22.08" x2="12" y2="12"></line>
         </svg>
         <span className="nav-label">Projetos</span>
-      </Link>
-      <Link to="/funding" className={isActive('/funding')}>
-        <svg className="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <path d="M16 8h-6a2 2 0 0 0-2 2v1M8 14h5a2 2 0 0 0 2-2v-1"></path>
-          <line x1="7" y1="10" x2="16" y2="10"></line>
-          <line x1="7" y1="14" x2="16" y2="14"></line>
-        </svg>
-        <span className="nav-label">Financiamento</span>
       </Link>
       <Link to="/mapping" className={isActive('/mapping')}>
         <svg className="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -77,19 +67,37 @@ const NavigationTabs = () => {
 
 // Layout component that includes navigation
 const Layout = ({ children }) => {
+  const location = useLocation();
+  
+  // Function to get the title based on the current route path
+  const getSectionTitle = () => {
+    switch (location.pathname) {
+      case '/':
+        return 'Polis';
+      case '/municipio':
+        return 'Município';
+      case '/projects':
+        return 'Projetos';
+      case '/mapping':
+        return 'Mapa';
+      case '/chapters':
+        return 'Publicações';
+      default:
+        return 'Polis';
+    }
+  };
+  
   return (
     <div className="app-container">
       <header className="app-header">
         <div className="container">
-          <Link to="/" className="logo-link">
-            <div className="logo">Polis - Planeamento Informado</div>
-          </Link>
+          <h1 className="header-title">{getSectionTitle()}</h1>
         </div>
       </header>
       
-      <main className="app-content">
+      <div className="app-content">
         {children}
-      </main>
+      </div>
       
       <NavigationTabs />
     </div>
@@ -121,14 +129,6 @@ export default function App() {
           element={
             <Layout>
               <Projects />
-            </Layout>
-          } 
-        />
-        <Route 
-          path="/funding" 
-          element={
-            <Layout>
-              <Funding />
             </Layout>
           } 
         />

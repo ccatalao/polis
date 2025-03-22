@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../main.css';
+import '../styles/map.css';
 
 // Feature Card Component with path handling logic
 const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
@@ -30,9 +30,25 @@ const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
     }
   };
 
+  // Determine the button text based on the destination
+  const getExploreText = (linkPath) => {
+    switch(linkPath) {
+      case '/municipio':
+        return 'Informação do Município';
+      case '/projects':
+        return 'Ver Projetos';
+      case '/chapters':
+        return 'Ler Publicações';
+      case '/mapa':
+        return 'Explorar Mapa';
+      default:
+        return 'Explorar';
+    }
+  };
+
   return (
     <div className="content-card mobile-fullwidth">
-      <div className="content-image-link">
+      <Link to={linkTo} className="content-image-link">
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
@@ -45,15 +61,13 @@ const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Explore</span>
+          <span>{getExploreText(linkTo)}</span>
         </div>
-      </div>
+      </Link>
       <div className="content-info">
         <h3>{title}</h3>
         <p>{description}</p>
-        <Link to={linkTo} className="visit-button">
-          Ver mais
-        </Link>
+
       </div>
     </div>
   );
@@ -86,33 +100,28 @@ const Home = () => {
 
   return (
     <div className="full-width-container">
-      <div className="title-container">
-        <h1 className="card-title">Planeamento Urbano Informado</h1>
-      </div>
       
       <div className="introduction full-width">
         <div className="intro-content">
           <p>
             Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis. 
-            Descubra recursos, serviços e conhecimentos relacionados ao planeamento urbano.
+            Descubra recursos, serviços e informação sobre ordenamento do território, 
+            urbanismo e reabilitação urbana. Oferecemos acesso a:
           </p>
-          
-          <p>
-            A plataforma <strong>Polis</strong> oferece acesso a:
-          </p>
+
           
           <ul>
-            <li>Publicações académicas de acesso aberto sobre urbanismo</li>
-            <li>Projetos europeus de desenvolvimento urbano</li>
-            <li>Oportunidades de financiamento para iniciativas locais</li>
-            <li>Informações sobre serviços municipais de planeamento e habitação</li>
+            <li>Informação do município de Palmela</li>
+            <li>Projetos europeus e oportunidades de financiamento</li>
+            <li>Publicações científicas</li>
+            <li>Mapeamento interativo de Palmela</li>
           </ul>
         </div>
       </div>
       
       <div className="full-width-grid">
         <FeatureCard
-          title="Serviços Municipais"
+          title="Município de Palmela"
           description="Aceda aos serviços e recursos municipais em matéria de urbanismo, ordenamento do território e habitação."
           imageUrl="/images/home/municipio.webp"
           linkTo="/municipio"
@@ -126,17 +135,16 @@ const Home = () => {
         />
 
         <FeatureCard
-          title="Financiamento"
-          description="Descubra fontes de financiamento disponíveis para projetos de desenvolvimento urbano sustentável."
-          imageUrl="/images/home/funding.webp"
-          linkTo="/funding"
-        />
-
-        <FeatureCard
-          title="Publicações de acesso aberto"
+          title="Publicações"
           description="Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território."
           imageUrl="/images/home/publicacoes.webp"
           linkTo="/chapters"
+        />
+        <FeatureCard
+          title="Mapas Interativos"
+          description="Explore os dados geográficos de Palmela."
+          imageUrl="/images/home/mapa.webp"
+          linkTo="/mapping"
         />
       </div>
       

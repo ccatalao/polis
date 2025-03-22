@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import chaptersData from '../data/chapters.json';
-import '../main.css';
+import '../styles/map.css';
 
 // Chapter Card component with consistent styling from main.css
 const ChapterCard = ({ chapter, onOpenDetails }) => {
@@ -47,7 +47,7 @@ const ChapterCard = ({ chapter, onOpenDetails }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Ver publicações</span>
+          <span>Ver revistas</span>
         </div>
       </div>
       <div className="content-info">
@@ -57,7 +57,7 @@ const ChapterCard = ({ chapter, onOpenDetails }) => {
           className="visit-button" 
           onClick={() => onOpenDetails(chapter)}
         >
-          Ver publicações
+          Ver revistas
         </button>
       </div>
     </div>
@@ -113,7 +113,7 @@ const PublicationCard = ({ publication }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Ver detalhes</span>
+          <span>Ver revista</span>
         </div>
       </div>
       <div className="content-info">
@@ -123,7 +123,7 @@ const PublicationCard = ({ publication }) => {
           className="visit-button" 
           onClick={() => handleOpenUrl(publication.url)}
         >
-          Visitar site
+          Artigos
         </button>
       </div>
     </div>
@@ -144,7 +144,7 @@ const ChapterDetail = ({ chapter, onBack }) => {
         <div className="intro-content">
           <p>{chapter.description}</p>
           <button className="back-button" onClick={onBack} style={{ marginTop: '20px' }}>
-            Voltar para publicações
+            Voltar para Publicações
           </button>
         </div>
       </div>
@@ -232,14 +232,10 @@ const Chapters = () => {
   if (chapters.length === 0) {
     return (
       <div className="full-width-container">
-        <div className="title-container">
-          <h1 className="card-title">Publicações</h1>
-        </div>
-        
         <div className="introduction full-width">
           <div className="intro-content">
             <p>
-              Aceda a conhecimento científico sobre urbanismo e ordenamento do território.
+              Aceda a conhecimento científico sobre urbanismo, arquitetura e ordenamento do território.
             </p>
             
           </div>
@@ -250,20 +246,40 @@ const Chapters = () => {
 
   // If a chapter is selected, show its details
   if (selectedChapter) {
-    return <ChapterDetail chapter={selectedChapter} onBack={handleBackToChapters} />;
+    return (
+      <div className="full-width-container">
+        <div className="title-container">
+          <h1 className="card-title">{selectedChapter.title}</h1>
+        </div>
+        
+        <div className="introduction full-width">
+          <div className="intro-content">
+            <p>{selectedChapter.description}</p>
+            <button className="back-button" onClick={handleBackToChapters} style={{ marginTop: '20px' }}>
+              Voltar para Publicações
+            </button>
+          </div>
+        </div>
+        
+        <div className="full-width-grid">
+          {selectedChapter.content.map(publication => (
+            <PublicationCard 
+              key={publication.id} 
+              publication={publication}
+            />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   // Show list of chapters
   return (
     <div className="full-width-container">
-      <div className="title-container">
-        <h1 className="card-title">Publicações de acesso aberto</h1>
-      </div>
-      
       <div className="introduction full-width">
         <div className="intro-content">
           <p>
-            Aceda a revistas científicas e recursos académicos sobre urbanismo e ordenamento do território.
+          Aceda a conhecimento científico sobre urbanismo, arquitetura e ordenamento do território.
           </p>
         </div>
       </div>

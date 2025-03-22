@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapComponent from '../components/MapComponent';
 import overpassService from '../services/OverpassService';
-import '../main.css';
+import '../styles/main.css';
 import '../styles/map.css';
 
 // Feature types with user-friendly names
@@ -315,10 +315,6 @@ const GeoMapping = () => {
   
   return (
     <div className="full-width-container">
-      <div className="title-container">
-        <h1 className="card-title">Mapeamento Geográfico de Palmela</h1>
-      </div>
-      
       <div className="introduction full-width">
         <div className="intro-content">
           <p>

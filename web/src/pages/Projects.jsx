@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import projectsData from '../data/projects.json';
-import '../main.css';
+import '../styles/map.css';
 
 // Enhanced Project Card component with features directly embedded
 const ProjectCard = ({ project }) => {
@@ -151,10 +151,6 @@ const Projects = () => {
   if (projects.length === 0) {
     return (
       <div className="full-width-container">
-        <div className="title-container">
-          <h1 className="card-title">Projetos europeus</h1>
-        </div>
-        
         <div className="introduction full-width">
           <div className="intro-content">
             <p>
@@ -170,10 +166,6 @@ const Projects = () => {
 
   return (
     <div className="full-width-container">
-      <div className="title-container">
-        <h1 className="card-title">Projetos europeus</h1>
-      </div>
-      
       <div className="introduction full-width">
         <div className="intro-content">
           <p>

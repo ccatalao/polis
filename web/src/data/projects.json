@@ -1,6 +1,30 @@
 {
   "projects": [
     {
+      "id": "dut",
+      "title": "DUT Driving Urban Transitions",
+      "description": "Financiamento de projetos transnacionais de investigação e inovação.",
+      "url": "https://dutpartnership.eu/dut-call-2025/",
+      "features": [
+        {
+          "feature": "Acesso a financiamento",
+          "featureURL": "https://dutpartnership.eu/funding-opportunities/"
+        },
+        {
+          "feature": "Biblioteca de recursos",
+          "featureURL": "https://dutpartnership.eu/media-library/"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/dut.webp",
+        "fallback": "/images/projects/dut.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
       "id": "cordis",
       "title": "CORDIS",
       "description": "Repositório de projetos de investigação financiados pela União Europeia.",
@@ -22,6 +46,82 @@
       "imageUrl": {
         "webp": "/images/projects/cordis.webp",
         "fallback": "/images/projects/cordis.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
+      "id": "new-european-bauhaus",
+      "title": "Nova Bauhaus Europeia",
+      "description": "Reimaginar a vida sustentável na Europa: Uma plataforma para experimentação e inovação estética nas cidades europeias, com acesso a financiamento da UE para projetos sustentáveis e inclusivos.",
+      "url": "https://new-european-bauhaus.europa.eu/index_en",
+      "features": [
+        {
+          "feature": "Financiamento",
+          "featureURL": "https://new-european-bauhaus.europa.eu/get-involved/funding-opportunities_en"
+        },
+        {
+          "feature": "Recursos e instrumentos",
+          "featureURL": "https://new-european-bauhaus.europa.eu/tools-and-resources_en"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/bauhaus.webp",
+        "fallback": "/images/projects/bauhaus.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
+      "id": "life",
+      "title": "Programa LIFE",
+      "description": "Projetos de ação ambiental e climática",
+      "url": "https://cinea.ec.europa.eu/programmes/life_en",
+      "features": [
+        {
+          "feature": "Oportunidades de financiamento",
+          "featureURL": "https://cinea.ec.europa.eu/funding-opportunities_en"
+        },
+        {
+          "feature": "Adaptação Climática",
+          "featureURL": "https://cinea.ec.europa.eu/programmes/life/climate-change-mitigation-and-adaptation_en"
+        },
+        {
+          "feature": "Estudos e publicações",
+          "featureURL": "https://cinea.ec.europa.eu/publications_en"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/life.webp",
+        "fallback": "/images/projects/life.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
+      "id": "erdf",
+      "title": "Fundo Europeu de Desenvolvimento Regional (FEDER)",
+      "description": "Desenvolvimento urbano sustentável, economia de baixo carbono",
+      "url": "https://ec.europa.eu/regional_policy/funding/erdf_en",
+      "features": [
+        {
+          "feature": "Financiamento",
+          "featureURL": "https://ec.europa.eu/regional_policy/funding_en"
+        },
+        {
+          "feature": "Mapa de projetos",
+          "featureURL": "https://ec.europa.eu/regional_policy/information-sources/maps_en"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/feder.webp",
+        "fallback": "/images/projects/feder.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -77,6 +177,54 @@
       }
     },
     {
+      "id": "investeu",
+      "title": "InvestEU",
+      "description": "Infraestrutura urbana, renovações de eficiência energética. Dá um impulso ao investimento, inovação e criação de empregos na Europa durante o período 2021-27. usando garantias do orçamento da UE.",
+      "url": "https://investeu.europa.eu/",
+      "features": [
+        {
+          "feature": "Portal de investimento",
+          "featureURL": "https://investeu.europa.eu/investeu-programme/investeu-portal_en"
+        },
+        {
+          "feature": "Mapa de investimentos",
+          "featureURL": "https://investeu.europa.eu/investeu-operations/investeu-operations-map_en"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/investeu.webp",
+        "fallback": "/images/projects/investeu.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
+      "id": "jtf",
+      "title": "Fundo para uma Transição Justa",
+      "description": "Apoio às regiões mais afetadas pela transição para a neutralidade climática",
+      "url": "https://ec.europa.eu/regional_policy/funding/just-transition-fund/just-transition-platform_en",
+      "features": [
+        {
+          "feature": "Mecanismos de financiamento",
+          "featureURL": "https://ec.europa.eu/regional_policy/whats-new/tenders-and-grants/calls-for-expressions-of-interest_en"
+        },
+        {
+          "feature": "Assitência técnica",
+          "featureURL": "https://ec.europa.eu/regional_policy/funding/just-transition-fund/just-transition-platform/supportground_en"
+        }
+      ],
+      "imageUrl": {
+        "webp": "/images/projects/jtf.webp",
+        "fallback": "/images/projects/jtf.jpeg",
+        "thumbnail": {
+          "width": 400,
+          "height": 300
+        }
+      }
+    },
+    {
       "id": "keep-eu",
       "title": "KEEP.eu",
       "description": "Base de dados de projetos de cooperação territorial.",
@@ -87,8 +235,8 @@
           "featureURL": "https://keep.eu/countries-and-regions/"
         },
         {
-          "feature": "Pesquisa de projetos",
-          "featureURL": "https://keep.eu/projects/"
+          "feature": "Oportunidades de financiamento",
+          "featureURL": "https://interreg.eu/calls-for-projects/"
         },
         {
           "feature": "Informação de parcerias",

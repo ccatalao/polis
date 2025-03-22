@@ -2,7 +2,7 @@
   "chapters": {
     "urbanism": {
       "title": "Urbanismo",
-      "description": "Publicações científicas em urbanismo e reabilitação urbana",
+      "description": "Publicações de urbanismo e reabilitação urbana",
       "imageUrl": {
         "webp": "/images/publications/urbanism.webp",
         "fallback": "/images/publications/urbanism.jpeg",
@@ -421,8 +421,8 @@
       ]
     },
     "planning": {
-      "title": "Planeamento Territorial",
-      "description": "Publicações sobre planeamento e ordenamento do território",
+      "title": "Ordenamento do território",
+      "description": "Publicações de planeamento territorial",
       "imageUrl": {
         "webp": "/images/publications/planning.webp",
         "fallback": "/images/publications/planning.jpeg",
@@ -646,7 +646,7 @@
     },
     "architecture": {
       "title": "Arquitectura",
-      "description": "Publicações dedicadas ao estudo e desenvolvimento da arquitetura",
+      "description": "Publicações de arquitetura",
       "imageUrl": {
         "webp": "/images/publications/architecture.webp",
         "fallback": "/images/publications/architecture.jpeg",
