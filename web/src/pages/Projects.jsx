@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import projectsData from '../data/projects.json';
 import '../main.css';
 
-// Project Card component with consistent styling from main.css
-const ProjectCard = ({ project, onOpenDetails }) => {
+// Enhanced Project Card component with features directly embedded
+const ProjectCard = ({ project }) => {
   // State to track image loading
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
@@ -28,9 +28,13 @@ const ProjectCard = ({ project, onOpenDetails }) => {
   
   const imageUrl = project.imageUrl?.fallback || project.imageUrl;
   
+  const handleOpenUrl = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  
   return (
     <div className="content-card mobile-fullwidth">
-      <div className="content-image-link">
+      <div className="content-image-link" onClick={() => handleOpenUrl(project.url)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
@@ -49,60 +53,41 @@ const ProjectCard = ({ project, onOpenDetails }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Detalhes</span>
+          <span>Visitar site</span>
         </div>
       </div>
+
       <div className="content-info">
         <h3>{project.title}</h3>
         <p>{project.description}</p>
-        <button 
-          className="visit-button" 
-          onClick={() => onOpenDetails(project)}
-        >
-          Ver detalhes
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// Project Detail Modal
-const ProjectDetailModal = ({ project, onClose }) => {
-  if (!project) return null;
-
-  const handleOpenUrl = (url) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2 className="modal-title">{project.title}</h2>
-        <p className="modal-description">{project.description}</p>
         
+        {/* Always visible features section */}
         <div className="feature-list">
-          <h3 className="feature-list-title">Características:</h3>
+          <h4 className="feature-list-title">Destaques:</h4>
           {project.features.map((feature, index) => (
             <div className="feature-list-item" key={index}>
-              <span className="feature-text">
-                • {typeof feature === 'string' ? feature : feature.feature}
-              </span>
+              {typeof feature === 'string' ? (
+                <div className="feature-text">• {feature}</div>
+              ) : (
+                <a 
+                  href={feature.featureURL} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="feature-link"
+                >
+                  • {feature.feature}
+                </a>
+              )}
             </div>
           ))}
         </div>
         
-        <div className="modal-actions">
-          <button 
-            className="visit-button" 
-            onClick={() => handleOpenUrl(project.url)}
-          >
-            Visitar site
-          </button>
-          
-          <button className="back-button" onClick={onClose}>
-            Fechar
-          </button>
-        </div>
+        <button 
+          className="visit-button" 
+          onClick={() => handleOpenUrl(project.url)}
+        >
+          Visitar site
+        </button>
       </div>
     </div>
   );
@@ -111,7 +96,6 @@ const ProjectDetailModal = ({ project, onClose }) => {
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProject, setSelectedProject] = useState(null);
   // Force a re-render once on component mount to ensure proper layout
   const [mounted, setMounted] = useState(false);
   
@@ -154,14 +138,6 @@ const Projects = () => {
     }
   }, []);
 
-  const handleOpenDetails = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedProject(null);
-  };
-
   if (loading) {
     return (
       <div className="loading-container">
@@ -185,14 +161,7 @@ const Projects = () => {
               Explore oportunidades de financiamento e colaboração em projetos europeus de desenvolvimento urbano.
             </p>
             
-            <p style={{ textAlign: 'center', marginTop: '40px', fontWeight: 'bold' }}>
-              Esta secção está atualmente em desenvolvimento.
-            </p>
-            
-            <p style={{ textAlign: 'center' }}>
-              Em breve, encontrará aqui informação sobre projetos 
-              europeus de desenvolvimento urbano, oportunidades de financiamento e colaborações internacionais.
-            </p>
+
           </div>
         </div>
       </div>
@@ -218,17 +187,9 @@ const Projects = () => {
           <ProjectCard
             key={project.id}
             project={project}
-            onOpenDetails={handleOpenDetails}
           />
         ))}
       </div>
-      
-      {selectedProject && (
-        <ProjectDetailModal
-          project={selectedProject}
-          onClose={handleCloseModal}
-        />
-      )}
     </div>
   );
 };

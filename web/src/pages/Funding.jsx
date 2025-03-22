@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import fundingData from '../data/funding.json';
 import '../main.css';
 
-// Funding Card component with consistent styling from main.css
-const FundingCard = ({ funding, onOpenDetails }) => {
+// Enhanced Funding Card component with features directly embedded
+const FundingCard = ({ funding }) => {
   // State to track image loading
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
@@ -28,9 +28,13 @@ const FundingCard = ({ funding, onOpenDetails }) => {
   
   const imageUrl = funding.imageUrl?.fallback || funding.imageUrl;
   
+  const handleOpenUrl = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  
   return (
     <div className="content-card mobile-fullwidth">
-      <div className="content-image-link">
+      <div className="content-image-link" onClick={() => handleOpenUrl(funding.url)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
@@ -49,7 +53,7 @@ const FundingCard = ({ funding, onOpenDetails }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Detalhes</span>
+          <span>Visitar site</span>
         </div>
       </div>
       <div className="content-info">
@@ -58,72 +62,39 @@ const FundingCard = ({ funding, onOpenDetails }) => {
         {funding.deadline && (
           <p className="funding-deadline"><strong>Prazo:</strong> {funding.deadline}</p>
         )}
+        
+        {/* Eligibility if available */}
+        {funding.eligibility && (
+          <p className="funding-eligibility"><strong>Elegibilidade:</strong> {funding.eligibility}</p>
+        )}
+        
+        {/* Always visible features section */}
+        <div className="feature-list">
+          <h4 className="feature-list-title">Destaques:</h4>
+          {funding.features && funding.features.map((feature, index) => (
+            <div className="feature-list-item" key={index}>
+              {typeof feature === 'string' ? (
+                <div className="feature-text">• {feature}</div>
+              ) : (
+                <a 
+                  href={feature.featureURL} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="feature-link"
+                >
+                  • {feature.feature}
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+        
         <button 
           className="visit-button" 
-          onClick={() => onOpenDetails(funding)}
+          onClick={() => handleOpenUrl(funding.url)}
         >
-          Ver detalhes
+          Visitar site
         </button>
-      </div>
-    </div>
-  );
-};
-
-// Funding Detail Modal
-const FundingDetailModal = ({ funding, onClose }) => {
-  if (!funding) return null;
-
-  const handleOpenUrl = (url) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2 className="modal-title">{funding.title}</h2>
-        <p className="modal-description">{funding.description}</p>
-        
-        <div className="feature-list">
-          {funding.deadline && (
-            <div className="feature-list-item">
-              <h3 className="feature-list-title">Prazo:</h3>
-              <span className="feature-text">{funding.deadline}</span>
-            </div>
-          )}
-          
-          {funding.eligibility && (
-            <div className="feature-list-item">
-              <h3 className="feature-list-title">Elegibilidade:</h3>
-              <span className="feature-text">{funding.eligibility}</span>
-            </div>
-          )}
-          
-          {funding.features && funding.features.length > 0 && (
-            <>
-              <h3 className="feature-list-title">Características:</h3>
-              {funding.features.map((feature, index) => (
-                <div className="feature-list-item" key={index}>
-                  <span className="feature-text">
-                    • {typeof feature === 'string' ? feature : feature.feature}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-        
-        <div className="modal-actions">
-          <button 
-            className="visit-button" 
-            onClick={() => handleOpenUrl(funding.url)}
-          >
-            Visitar site
-          </button>
-          
-          <button className="back-button" onClick={onClose}>
-            Fechar
-          </button>
-        </div>
       </div>
     </div>
   );
@@ -132,7 +103,6 @@ const FundingDetailModal = ({ funding, onClose }) => {
 const Funding = () => {
   const [fundingSources, setFundingSources] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedFunding, setSelectedFunding] = useState(null);
   // Force a re-render once on component mount to ensure proper layout
   const [mounted, setMounted] = useState(false);
   
@@ -174,14 +144,6 @@ const Funding = () => {
       setLoading(false);
     }
   }, []);
-
-  const handleOpenDetails = (funding) => {
-    setSelectedFunding(funding);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedFunding(null);
-  };
 
   if (loading) {
     return (
@@ -239,17 +201,9 @@ const Funding = () => {
           <FundingCard
             key={fund.id}
             funding={fund}
-            onOpenDetails={handleOpenDetails}
           />
         ))}
       </div>
-      
-      {selectedFunding && (
-        <FundingDetailModal
-          funding={selectedFunding}
-          onClose={handleCloseModal}
-        />
-      )}
     </div>
   );
 };
