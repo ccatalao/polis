@@ -188,12 +188,12 @@ const Home = () => {
           <p>
             Um guia para políticas de desenvolvimento local mais eficazes e sustentáveis. 
             Descubra recursos, serviços e informação sobre ordenamento do território, 
-            urbanismo e reabilitação urbana. Oferecemos acesso a:
+            urbanismo e reabilitação urbana:
           </p>
 
           
           <ul>
-            <li>Informação do município de Palmela</li>
+            <li>Informação municipal</li>
             <li>Projetos europeus e oportunidades de financiamento</li>
             <li>Publicações científicas</li>
             <li>Mapeamento interativo de Palmela</li>
@@ -232,13 +232,13 @@ const Home = () => {
       
       <div className="about-footer full-width">
         <div className="footer-content">
-          <h3>Sobre o Polis</h3>
+          <h3>Sobre Palmela Polis</h3>
           <p>
-          Polis é um recurso desenvolvido pela Comissão de Ordenamento do Território, Urbanismo, Reabilitação Urbana e Obras Públicas no âmbito do seu trabalho na Assembleia Municipal de Palmela.
+          <strong>Palmela Polis</strong> é um recurso criado pela Comissão de Ordenamento do Território, Urbanismo, Reabilitação Urbana e Obras Públicas da Assembleia Municipal de Palmela.
           </p>
           <p></p>
           <p>
-          Destina-se a cidadãos, decisores políticos e a todos os interessados nas áreas do urbanismo, planeamento territorial e reabilitação urbana em Palmela.
+          Foi desenvolvido para apoiar cidadãos, decisores políticos e todos os interessados no planeamento informado e sustentável dem Palmela.
           </p>
         </div>
       </div>

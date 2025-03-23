@@ -44,6 +44,9 @@ export default defineConfig({
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Polis">
   <link rel="apple-touch-startup-image" href="/polis/favicon.svg">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>`
         );
       }
@@ -59,6 +62,13 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+        // Add a content hash to CSS files to prevent caching issues
+        assetFileNames: ({ name }) => {
+          if (/\.css$/.test(name ?? '')) {
+            return 'assets/[name]-[hash][extname]';
+          }
+          return 'assets/[name][extname]';
         },
       },
     },

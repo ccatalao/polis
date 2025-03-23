@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/main.css';
 
 /**
- * SearchBar component
+ * SearchBar component (v1.1.0)
  * 
  * A collapsible search input that appears when the search icon is clicked.
  * The search icon is displayed in the top banner.
@@ -38,10 +38,17 @@ const SearchBar = () => {
   return (
     <>
       {/* Search icon for the header */}
-      <div className="header-search-icon" onClick={toggleSearch} aria-label="Toggle search">
+      <button 
+        className="header-search-icon" 
+        onClick={toggleSearch} 
+        aria-label="Toggle search"
+        type="button"
+      >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
           viewBox="0 0 24 24" 
+          width="24" 
+          height="24" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="2" 
@@ -52,7 +59,7 @@ const SearchBar = () => {
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-      </div>
+      </button>
 
       {/* Expandable search input */}
       <div className={`search-bar ${searchVisible ? 'search-visible' : ''}`}>
@@ -61,7 +68,7 @@ const SearchBar = () => {
           <input
             type="text"
             className="search-input"
-            placeholder="Pesquisar em todas as secções..."
+            placeholder="Pesquisar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             aria-label="Search"
@@ -70,6 +77,8 @@ const SearchBar = () => {
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               viewBox="0 0 24 24" 
+              width="24"
+              height="24"
               fill="none" 
               stroke="currentColor" 
               strokeWidth="2" 

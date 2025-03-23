@@ -15,6 +15,8 @@ import Chapters from './pages/Chapters';
 import GeoMapping from './pages/GeoMapping';
 import SearchResults from './pages/SearchResults';
 
+// Version: 1.1.0 - Fixed responsive layout and header elements
+
 // Navigation tabs component
 const NavigationTabs = () => {
   const location = useLocation();
@@ -106,6 +108,7 @@ const NavigationTabs = () => {
 // Layout component that includes navigation
 const Layout = ({ children }) => {
   const location = useLocation();
+  const appVersion = "1.1.0"; // App version for tracking
   
   // Enhanced useEffect to force scroll to top when location changes
   useEffect(() => {
@@ -143,7 +146,7 @@ const Layout = ({ children }) => {
   const getSectionTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Polis - Planeamento Informado';
+        return 'Palmela Polis';
       case '/municipio':
         return 'Município';
       case '/projects':
@@ -155,7 +158,7 @@ const Layout = ({ children }) => {
       case '/search':
         return 'Resultados da Pesquisa';
       default:
-        return 'Polis - Planeamento informado';
+        return 'Palmela Polis';
     }
   };
   
@@ -168,7 +171,7 @@ const Layout = ({ children }) => {
   const showBackButton = location.pathname !== '/';
   
   return (
-    <div className="app-container">
+    <div className="app-container" data-version={appVersion}>
       <header className="app-header">
         <div className="container">
           {showBackButton && (

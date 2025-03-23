@@ -11,25 +11,30 @@ const ChapterCard = ({ chapter, onOpenDetails }) => {
   
   // Ensure proper image path handling, consistent with other components
   const getImagePath = (path) => {
-    if (!path || !path.fallback) return 'https://via.placeholder.com/400x300?text=Chapter';
+    if (!path) return 'https://via.placeholder.com/400x300?text=Chapter';
+    
+    // Handle both string paths and objects with fallback property
+    const imagePath = typeof path === 'string' ? path : path.fallback;
+    
+    if (!imagePath) return 'https://via.placeholder.com/400x300?text=Chapter';
     
     // Return the original path if it already includes the full URL or starts with /polis/
-    if (path.fallback.startsWith('http') || path.fallback.startsWith('/polis/')) {
-      return path.fallback;
+    if (imagePath.startsWith('http') || imagePath.startsWith('/polis/')) {
+      return imagePath;
     }
     
     // For fallback image paths in the chapter data
-    if (path.fallback.startsWith('./')) {
-      return `/polis${path.fallback.substring(1)}`;
+    if (imagePath.startsWith('./')) {
+      return `/polis${imagePath.substring(1)}`;
     }
     
     // Otherwise, prefix with /polis/
-    return `/polis/${path.fallback}`;
+    return `/polis/${imagePath}`;
   };
   
   return (
     <div className="content-card mobile-fullwidth" id={`chapter-${chapter.id}`}>
-      <div className="content-image-link">
+      <div className="content-image-link" onClick={() => onOpenDetails(chapter)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
@@ -73,20 +78,25 @@ const PublicationCard = ({ publication }) => {
   
   // Ensure proper image path handling, consistent with other components
   const getImagePath = (path) => {
-    if (!path || !path.fallback) return 'https://via.placeholder.com/400x300?text=Publication';
+    if (!path) return 'https://via.placeholder.com/400x300?text=Publication';
+    
+    // Handle both string paths and objects with fallback property
+    const imagePath = typeof path === 'string' ? path : path.fallback;
+    
+    if (!imagePath) return 'https://via.placeholder.com/400x300?text=Publication';
     
     // Return the original path if it already includes the full URL or starts with /polis/
-    if (path.fallback.startsWith('http') || path.fallback.startsWith('/polis/')) {
-      return path.fallback;
+    if (imagePath.startsWith('http') || imagePath.startsWith('/polis/')) {
+      return imagePath;
     }
     
     // For fallback image paths in the publication data
-    if (path.fallback.startsWith('./')) {
-      return `/polis${path.fallback.substring(1)}`;
+    if (imagePath.startsWith('./')) {
+      return `/polis${imagePath.substring(1)}`;
     }
     
     // Otherwise, prefix with /polis/
-    return `/polis/${path.fallback}`;
+    return `/polis/${imagePath}`;
   };
 
   const handleOpenUrl = (url) => {
@@ -105,7 +115,7 @@ const PublicationCard = ({ publication }) => {
 
   return (
     <div className="content-card mobile-fullwidth" id={`publication-${publication.id}`}>
-      <div className="content-image-link">
+      <div className="content-image-link" onClick={() => handleOpenUrl(publication.url)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
