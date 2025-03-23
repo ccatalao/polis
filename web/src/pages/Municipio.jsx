@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import municipioData from '../data/municipio.json';
-import '../styles/map.css';
+import '../styles/main.css';
+import { highlightSearchTerm } from '../utils/search';
 
 // Enhanced Municipal Service Card component with features directly embedded
 const ServiceCard = ({ service }) => {
@@ -43,7 +44,7 @@ const ServiceCard = ({ service }) => {
   };
   
   return (
-    <div className="content-card mobile-fullwidth">
+    <div className="content-card mobile-fullwidth" id={`municipio-${service.id}`}>
       <div className="content-image-link" onClick={() => handleOpenUrl(service.url)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
@@ -142,6 +143,13 @@ const Municipio = () => {
       setLoading(false);
     }
   }, []);
+  
+  // Highlight search terms when the component mounts
+  useEffect(() => {
+    if (!loading) {
+      highlightSearchTerm();
+    }
+  }, [loading]);
 
   if (loading) {
     return (

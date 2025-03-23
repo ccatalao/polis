@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import './styles.css';
+import './styles/main.css';
 
 // Import ScrollToTop component
 import ScrollToTop from './components/ScrollToTop';
+import SearchBar from './components/SearchBar';
 import { forceScrollToTop } from './utils/scroll';
 
 // Import pages (we'll create these next)
@@ -12,6 +13,7 @@ import Municipio from './pages/Municipio';
 import Projects from './pages/Projects';
 import Chapters from './pages/Chapters';
 import GeoMapping from './pages/GeoMapping';
+import SearchResults from './pages/SearchResults';
 
 // Navigation tabs component
 const NavigationTabs = () => {
@@ -98,6 +100,8 @@ const Layout = ({ children }) => {
         return 'Mapa';
       case '/chapters':
         return 'Publicações';
+      case '/search':
+        return 'Resultados da Pesquisa';
       default:
         return 'Polis';
     }
@@ -110,6 +114,8 @@ const Layout = ({ children }) => {
           <h1 className="header-title">{getSectionTitle()}</h1>
         </div>
       </header>
+      
+      <SearchBar />
       
       <div className="app-content">
         {children}
@@ -162,6 +168,14 @@ export default function App() {
           element={
             <Layout>
               <Chapters />
+            </Layout>
+          } 
+        />
+        <Route 
+          path="/search" 
+          element={
+            <Layout>
+              <SearchResults />
             </Layout>
           } 
         />

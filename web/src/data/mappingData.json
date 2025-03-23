@@ -1,0 +1,52 @@
+{
+  "mapping": [
+    {
+      "id": "schools",
+      "title": "Escolas",
+      "description": "Informações sobre escolas e instituições de ensino em Palmela.",
+      "keywords": ["educação", "ensino", "escola", "alunos"]
+    },
+    {
+      "id": "historical_sites",
+      "title": "Locais Históricos",
+      "description": "Locais históricos, monumentos e patrimônio cultural de Palmela.",
+      "keywords": ["história", "monumento", "castelo", "património", "cultural"]
+    },
+    {
+      "id": "environmental_features",
+      "title": "Ambiente",
+      "description": "Áreas verdes, parques, florestas e recursos naturais de Palmela.",
+      "keywords": ["ambiente", "natureza", "parque", "floresta", "água"]
+    },
+    {
+      "id": "urban_elements",
+      "title": "Elementos Urbanos",
+      "description": "Infraestrutura urbana, edifícios e restaurantes em Palmela.",
+      "keywords": ["urbano", "edifício", "restaurante", "infraestrutura"]
+    },
+    {
+      "id": "wineries",
+      "title": "Adegas",
+      "description": "Adegas e vinhas na região de Palmela.",
+      "keywords": ["vinho", "adega", "vinha", "produção", "uva"]
+    },
+    {
+      "id": "transport_hubs",
+      "title": "Transportes",
+      "description": "Pontos de transporte, estações e infraestrutura de transporte em Palmela.",
+      "keywords": ["transporte", "estação", "paragem", "autocarro", "comboio", "combustível"]
+    },
+    {
+      "id": "healthcare_facilities",
+      "title": "Saúde",
+      "description": "Hospitais, clínicas e serviços de saúde em Palmela.",
+      "keywords": ["saúde", "hospital", "clínica", "médico", "farmácia", "dentista"]
+    },
+    {
+      "id": "commercial_areas",
+      "title": "Comércio",
+      "description": "Áreas comerciais, lojas e mercados em Palmela.",
+      "keywords": ["comércio", "loja", "mercado", "supermercado", "shopping"]
+    }
+  ]
+} 

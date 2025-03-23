@@ -3,6 +3,7 @@ import MapComponent from '../components/MapComponent';
 import overpassService from '../services/OverpassService';
 import '../styles/main.css';
 import '../styles/map.css';
+import { highlightSearchTerm } from '../utils/search';
 
 // Feature types with user-friendly names
 const featureTypes = [
@@ -162,6 +163,13 @@ const GeoMapping = () => {
     
     fetchData();
   }, [selectedFeatureType]);
+  
+  // Highlight search terms when the component mounts
+  useEffect(() => {
+    if (!loading) {
+      highlightSearchTerm();
+    }
+  }, [loading]);
   
   // Update the displayed data when filters change
   const [filteredData, setFilteredData] = useState(null);
@@ -347,7 +355,7 @@ const GeoMapping = () => {
               <option value="streets">Normal</option>
               <option value="satellite">Satélite</option>
               <option value="terrain">Terreno</option>
-              <option value="dark">Escuro</option>
+              <option value="dark">Negro</option>
             </select>
           </div>
           
@@ -469,7 +477,7 @@ const GeoMapping = () => {
                 `${filteredData.features.length} elementos encontrados.` :
                 `${filteredData.features.length} elementos filtrados de ${geojsonData.features.length} totais.`
               )}
-              Os dados são obtidos do OpenStreetMap através da API Overpass.
+               Os dados são obtidos do OpenStreetMap através da API Overpass.
             </p>
             <p className="data-attribution">
               © Contribuidores do <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>

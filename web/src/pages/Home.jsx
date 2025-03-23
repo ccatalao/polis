@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/map.css';
+import '../styles/main.css';
 
 // Function to scroll to top
 const scrollToTop = () => {

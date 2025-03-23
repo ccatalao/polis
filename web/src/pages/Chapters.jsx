@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import chaptersData from '../data/chapters.json';
-import '../styles/map.css';
+import '../styles/main.css';
+import { highlightSearchTerm } from '../utils/search';
 
 // Chapter Card component with consistent styling from main.css
 const ChapterCard = ({ chapter, onOpenDetails }) => {
@@ -27,7 +28,7 @@ const ChapterCard = ({ chapter, onOpenDetails }) => {
   };
   
   return (
-    <div className="content-card mobile-fullwidth">
+    <div className="content-card mobile-fullwidth" id={`chapter-${chapter.id}`}>
       <div className="content-image-link">
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
@@ -103,7 +104,7 @@ const PublicationCard = ({ publication }) => {
   };
 
   return (
-    <div className="content-card mobile-fullwidth">
+    <div className="content-card mobile-fullwidth" id={`publication-${publication.id}`}>
       <div className="content-image-link">
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
@@ -220,6 +221,13 @@ const Chapters = () => {
       setLoading(false);
     }
   }, []);
+  
+  // Highlight search terms when the component mounts
+  useEffect(() => {
+    if (!loading) {
+      highlightSearchTerm();
+    }
+  }, [loading, selectedChapter]);
 
   const handleOpenChapterDetails = (chapter) => {
     setSelectedChapter(chapter);

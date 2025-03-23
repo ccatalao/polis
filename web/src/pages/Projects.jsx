@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import projectsData from '../data/projects.json';
-import '../styles/map.css';
+import '../styles/main.css';
+import { highlightSearchTerm } from '../utils/search';
 
 // Enhanced Project Card component with features directly embedded
 const ProjectCard = ({ project }) => {
@@ -43,7 +44,7 @@ const ProjectCard = ({ project }) => {
   };
   
   return (
-    <div className="content-card mobile-fullwidth">
+    <div className="content-card mobile-fullwidth" id={`project-${project.id}`}>
       <div className="content-image-link" onClick={() => handleOpenUrl(project.url)}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
@@ -147,6 +148,13 @@ const Projects = () => {
       setLoading(false);
     }
   }, []);
+  
+  // Highlight search terms when the component mounts
+  useEffect(() => {
+    if (!loading) {
+      highlightSearchTerm();
+    }
+  }, [loading]);
 
   if (loading) {
     return (
