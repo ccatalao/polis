@@ -89,7 +89,17 @@ const PublicationCard = ({ publication }) => {
   };
 
   const handleOpenUrl = (url) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    // More forceful scroll to top with smooth behavior
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    
+    // Short delay before opening the URL to ensure scroll completes
+    setTimeout(() => {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }, 100);
   };
 
   return (
@@ -213,10 +223,36 @@ const Chapters = () => {
 
   const handleOpenChapterDetails = (chapter) => {
     setSelectedChapter(chapter);
+    // More forceful scroll to top with smooth behavior
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    
+    // Fallback for older browsers or if smooth scrolling fails
+    setTimeout(() => {
+      if (window.pageYOffset > 0) {
+        window.scrollTo(0, 0);
+      }
+    }, 100);
   };
 
   const handleBackToChapters = () => {
     setSelectedChapter(null);
+    // More forceful scroll to top with smooth behavior
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    
+    // Fallback for older browsers or if smooth scrolling fails
+    setTimeout(() => {
+      if (window.pageYOffset > 0) {
+        window.scrollTo(0, 0);
+      }
+    }, 100);
   };
 
   if (loading) {

@@ -29,7 +29,17 @@ const ProjectCard = ({ project }) => {
   const imageUrl = project.imageUrl?.fallback || project.imageUrl;
   
   const handleOpenUrl = (url) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    // More forceful scroll to top with smooth behavior
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    
+    // Short delay before opening the URL to ensure scroll completes
+    setTimeout(() => {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }, 100);
   };
   
   return (

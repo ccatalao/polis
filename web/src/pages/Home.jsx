@@ -2,6 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/map.css';
 
+// Function to scroll to top
+const scrollToTop = () => {
+  // More forceful scroll to top with smooth behavior
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
+  
+  // Fallback for older browsers or if smooth scrolling fails
+  setTimeout(() => {
+    if (window.pageYOffset > 0) {
+      window.scrollTo(0, 0);
+    }
+  }, 100);
+};
+
 // Feature Card Component with path handling logic
 const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
   // State to track image loading
@@ -39,7 +56,7 @@ const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
         return 'Ver Projetos';
       case '/chapters':
         return 'Ler Publicações';
-      case '/mapa':
+      case '/mapping':
         return 'Explorar Mapa';
       default:
         return 'Explorar';
@@ -48,7 +65,7 @@ const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
 
   return (
     <div className="content-card mobile-fullwidth">
-      <Link to={linkTo} className="content-image-link">
+      <Link to={linkTo} className="content-image-link" onClick={scrollToTop}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
