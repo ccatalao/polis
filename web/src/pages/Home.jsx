@@ -238,7 +238,7 @@ const Home = () => {
           </p>
           <p></p>
           <p>
-          Foi desenvolvido para apoiar cidadãos, decisores políticos e todos os interessados no planeamento informado e sustentável dem Palmela.
+          Foi desenvolvido para apoiar cidadãos, decisores políticos e todos os interessados no planeamento informado e sustentável de Palmela.
           </p>
         </div>
       </div>

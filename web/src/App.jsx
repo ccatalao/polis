@@ -5,7 +5,7 @@ import './styles/main.css';
 // Import ScrollToTop component
 import ScrollToTop from './components/ScrollToTop';
 import SearchBar from './components/SearchBar';
-import { forceScrollToTop } from './utils/scroll';
+import { forceScrollToTop, enableScrolling, fixScrollContainer } from './utils/scroll';
 
 // Import pages (we'll create these next)
 import Home from './pages/Home';
@@ -15,7 +15,15 @@ import Chapters from './pages/Chapters';
 import GeoMapping from './pages/GeoMapping';
 import SearchResults from './pages/SearchResults';
 
-// Version: 1.1.0 - Fixed responsive layout and header elements
+// Version: 1.1.4 - Enhanced mobile scroll handling
+
+// Add viewport CSS variable for better mobile height handling
+const setViewportHeight = () => {
+  // First we get the viewport height and multiply it by 1% to get a value for a vh unit
+  const vh = window.innerHeight * 0.01;
+  // Then we set the value in the --vh custom property to the root of the document
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
 
 // Navigation tabs component
 const NavigationTabs = () => {
@@ -27,33 +35,23 @@ const NavigationTabs = () => {
   
   // Enhanced function to ensure scroll to top when clicking navigation
   const handleNavClick = (e) => {
-    // Immediately scroll to top without smooth behavior for instant results
-    window.scrollTo(0, 0);
+    // Enable scrolling first in case it was disabled
+    enableScrolling();
     
-    // Reset any scroll position values directly
-    if (document.documentElement) {
-      document.documentElement.scrollTop = 0;
-    }
-    if (document.body) {
-      document.body.scrollTop = 0;
-    }
+    // Use our enhanced scroll utility
+    forceScrollToTop();
     
     // Check if this is a navigation to the map page (where filters need to be visible)
     const isMapLink = e.currentTarget.getAttribute('href') === '/mapping';
     
-    // Then use the utility function as an additional measure
-    forceScrollToTop();
-    
     // Multiple attempts with short intervals for problematic cases
-    const attempts = isMapLink ? 10 : 5; // More attempts for mapping page
-    const interval = isMapLink ? 30 : 50; // Shorter interval for mapping page
+    const attempts = isMapLink ? 5 : 3;
     
     for (let i = 1; i <= attempts; i++) {
       setTimeout(() => {
-        window.scrollTo(0, 0);
-        if (document.documentElement) document.documentElement.scrollTop = 0;
-        if (document.body) document.body.scrollTop = 0;
-      }, i * interval);
+        enableScrolling();
+        forceScrollToTop();
+      }, i * 100);
     }
   };
   
@@ -108,39 +106,69 @@ const NavigationTabs = () => {
 // Layout component that includes navigation
 const Layout = ({ children }) => {
   const location = useLocation();
-  const appVersion = "1.1.0"; // App version for tracking
+  const appVersion = "1.1.4"; // App version for tracking
   
-  // Enhanced useEffect to force scroll to top when location changes
+  // Enhanced useEffect to force scroll to top and handle mobile scrolling issues
   useEffect(() => {
-    // Immediately scroll to top without smooth behavior for instant results
-    window.scrollTo(0, 0);
+    // Enable scrolling first (in case it was disabled)
+    enableScrolling();
     
-    // Reset any scroll position values directly
-    if (document.documentElement) {
-      document.documentElement.scrollTop = 0;
-    }
-    if (document.body) {
-      document.body.scrollTop = 0;
-    }
+    // Force scroll to top with our enhanced utility
+    forceScrollToTop();
     
     // Check if this is the mapping page (where filters need to be visible)
     const isMappingPage = location.pathname === '/mapping';
     
-    // Use the utility function as an additional measure
-    forceScrollToTop();
-    
-    // Multiple attempts with short intervals for problematic cases
-    const attempts = isMappingPage ? 10 : 5; // More attempts for mapping page
-    const interval = isMappingPage ? 30 : 50; // Shorter interval for mapping page
-    
-    for (let i = 1; i <= attempts; i++) {
+    // For mapping page, use more aggressive approach
+    if (isMappingPage) {
+      // Multiple attempts with decreasing intervals
+      const intervals = [10, 50, 100, 300, 600];
+      intervals.forEach(delay => {
+        setTimeout(() => {
+          enableScrolling();
+          forceScrollToTop();
+        }, delay);
+      });
+    } else {
+      // For other pages, fewer attempts are needed
       setTimeout(() => {
-        window.scrollTo(0, 0);
-        if (document.documentElement) document.documentElement.scrollTop = 0;
-        if (document.body) document.body.scrollTop = 0;
-      }, i * interval);
+        enableScrolling();
+        forceScrollToTop();
+      }, 100);
     }
+    
   }, [location.pathname]);
+  
+  // Initialize viewport height on mount
+  useEffect(() => {
+    // Set initial viewport height
+    setViewportHeight();
+    
+    // Update on resize and orientation change
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    
+    // Add scroll touchmove fix for iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      document.addEventListener('touchmove', function(e) {
+        // Allow scrolling in content areas
+        if (e.target.closest('.app-content')) {
+          return;
+        }
+        
+        // Prevent pull-to-refresh and bounce effects outside of content
+        if (document.documentElement.scrollTop === 0) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+    }
+    
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+      window.removeEventListener('orientationchange', setViewportHeight);
+    };
+  }, []);
   
   // Function to get the title based on the current route path
   const getSectionTitle = () => {

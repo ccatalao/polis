@@ -1,48 +1,67 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { forceScrollToTop } from '../utils/scroll';
+import { forceScrollToTop, enableScrolling, fixScrollContainer } from '../utils/scroll';
 
 /**
  * ScrollToTop component
  * 
- * This component uses the useLocation hook from react-router-dom to detect
- * when the route changes. When it does, it aggressively scrolls the window to the top
- * using multiple methods to ensure it works across all browsers and situations.
- * This ensures that when users navigate between pages, they always start
- * at the top of the new page, with all filters and menus visible.
+ * Enhanced version that handles PWA-specific scrolling issues.
+ * This component ensures proper scrolling behavior on all devices,
+ * with special handling for mobile PWAs where scrolling issues are common.
  */
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
+  // Initialize scroll container fixes once
   useEffect(() => {
-    // Immediately scroll to top without smooth behavior for instant results
-    window.scrollTo(0, 0);
+    // Fix viewport and scroll container for mobile
+    fixScrollContainer();
     
-    // Reset any scroll position values directly
-    if (document.documentElement) {
-      document.documentElement.scrollTop = 0;
-    }
-    if (document.body) {
-      document.body.scrollTop = 0;
-    }
+    // Update viewport height on resize
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+    };
     
-    // Check if this is the mapping page (where filters need to be visible)
-    const isMappingPage = pathname === '/mapping';
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
     
-    // Use the utility function as an additional measure
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, []);
+
+  // Handle route changes
+  useEffect(() => {
+    // First enable scrolling in case it was disabled
+    enableScrolling();
+    
+    // Force scroll to top with our enhanced function
     forceScrollToTop();
     
-    // Multiple attempts with short intervals for problematic cases
-    const attempts = isMappingPage ? 10 : 5; // More attempts for mapping page
-    const interval = isMappingPage ? 30 : 50; // Shorter interval for mapping page
+    // For mapping page, we need more aggressive scrolling
+    const isMappingPage = pathname === '/mapping';
     
-    for (let i = 1; i <= attempts; i++) {
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-        if (document.documentElement) document.documentElement.scrollTop = 0;
-        if (document.body) document.body.scrollTop = 0;
-      }, i * interval);
+    if (isMappingPage) {
+      // Multiple attempts with decreasing intervals
+      const intervals = [10, 50, 100, 300, 600];
+      intervals.forEach(delay => {
+        setTimeout(() => {
+          forceScrollToTop();
+          enableScrolling();
+        }, delay);
+      });
+    } else {
+      // For other pages, fewer attempts are needed
+      setTimeout(forceScrollToTop, 100);
+      setTimeout(forceScrollToTop, 300);
     }
+    
+    // Store current page for session history handling
+    sessionStorage.setItem('currentPage', pathname);
   }, [pathname]);
 
   // This component doesn't render anything

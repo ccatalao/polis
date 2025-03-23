@@ -22,20 +22,17 @@ export default defineConfig({
           const swDest = resolve(__dirname, 'web-build/sw.js');
           await fs.copyFile(swSrc, swDest).catch(err => console.error('Failed to copy service worker:', err));
           
-          // Create an apple-specific touch icon PNG if needed
-          // This step can be extended if you have a proper PNG icon
-          
           console.log('PWA assets copied successfully');
         } catch (error) {
           console.error('Error copying PWA assets:', error);
         }
       }
     },
-    // Add headers to disable caching for HTML files
+    // Add minimal PWA meta tags to HTML
     {
       name: 'html-transform',
       transformIndexHtml(html) {
-        // Add cache-control headers
+        // Add PWA meta tags without aggressive cache control
         return html.replace(
           '</head>',
           `
@@ -44,9 +41,6 @@ export default defineConfig({
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Polis">
   <link rel="apple-touch-startup-image" href="/polis/favicon.svg">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
 </head>`
         );
       }
@@ -63,13 +57,10 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
         },
-        // Add a content hash to CSS files to prevent caching issues
-        assetFileNames: ({ name }) => {
-          if (/\.css$/.test(name ?? '')) {
-            return 'assets/[name]-[hash][extname]';
-          }
-          return 'assets/[name][extname]';
-        },
+        // Use standard content hashing for all assets
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
     // Generate sourcemaps for debugging
@@ -83,10 +74,9 @@ export default defineConfig({
   },
   // Configure asset handling
   assetsInclude: ['**/*.webp', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
-  // Prevent browser caching during development
+  // Standard development server settings
   server: {
-    headers: {
-      'Cache-Control': 'no-store',
-    },
+    port: 3000,
+    open: true,
   },
 }); 

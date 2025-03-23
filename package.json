@@ -17,9 +17,8 @@
     "build:preview:ios": "npx eas build --profile preview --platform ios",
     "build:web": "node build-web.js",
     "predeploy": "npm run build:web",
-    "deploy": "cd web-build && git init && git add . && git commit -m \"Deploy to GitHub Pages with cache busting - $(date)\" && git remote add origin https://github.com/ccatalao/polis.git || true && git push -f origin HEAD:gh-pages",
-    "deploy:clean": "rm -rf web-build && npm run build:web && npm run deploy",
-    "deploy:full": "npm run deploy:clean && echo 'Deployed with fresh cache-busted assets'"
+    "deploy": "gh-pages -d web-build",
+    "deploy:clean": "rm -rf web-build && npm run build:web && npm run deploy"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",

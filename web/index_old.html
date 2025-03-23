@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/polis/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Polis - Planeamento Informado</title>
+    <meta name="description" content="Planeamento urbano informado">
+    
+    <!-- Timestamp to bust cache -->
+    <meta name="generated" content="2023-10-18-1200">
+    
+    <!-- PWA manifest with timestamp -->
+    <link rel="manifest" href="/polis/manifest.json?v=1.1.3">
+    
+    <!-- Helper for detecting when app is installed -->
+    <meta name="polis-installed" content="check">
+    
+    <!-- Ultra aggressive cache control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="ETag" content="v113-2023-10-18">
+    
+    <!-- PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Polis">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- PWA icons for iOS with timestamp -->
+    <link rel="apple-touch-icon" href="/polis/favicon.svg?v=1.1.3">
+    <link rel="apple-touch-icon" sizes="152x152" href="/polis/favicon.svg?v=1.1.3">
+    <link rel="apple-touch-icon" sizes="180x180" href="/polis/favicon.svg?v=1.1.3">
+    <link rel="apple-touch-icon" sizes="167x167" href="/polis/favicon.svg?v=1.1.3">
+    
+    <!-- Special script to force scroll to top for mapping page -->
+    <script>
+      // This script runs as soon as the page starts loading
+      (function() {
+        // Check if this is a navigation to the mapping page (handle both with and without /polis/ prefix)
+        if (window.location.pathname.includes('/mapping') || window.location.pathname.includes('/polis/mapping')) {
+          // Super aggressive approach to scroll to top
+          function forceTopScroll() {
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            
+            // Try with requestAnimationFrame for better timing
+            requestAnimationFrame(function() {
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            });
+          }
+          
+          // Check if we have the special flag from card click
+          const hasForceFlag = sessionStorage.getItem('force_map_scroll') === 'true';
+          const mapScrollTime = sessionStorage.getItem('map_scroll_time');
+          const isRecentClick = mapScrollTime && (Date.now() - parseInt(mapScrollTime)) < 10000; // Within 10 seconds
+          
+          // For card clicks, use an ultra-aggressive approach
+          if (hasForceFlag && isRecentClick) {
+            console.log('[HTML] Special card click flag detected - using extreme scrolling');
+            
+            // Ultra aggressive - immediate actions
+            forceTopScroll();
+            
+            // Ultra aggressive - multiple attempts
+            for (let i = 0; i < 20; i++) {
+              setTimeout(forceTopScroll, i * 10); // Faster intervals
+            }
+            
+            // Create CSS rule to prevent scrolling temporarily
+            const style = document.createElement('style');
+            style.textContent = `
+              html, body { 
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+                height: 100% !important;
+                top: 0 !important;
+                left: 0 !important;
+              }
+            `;
+            document.head.appendChild(style);
+            
+            // Remove the style after a short delay to allow normal scrolling again
+            setTimeout(() => {
+              document.head.removeChild(style);
+            }, 500);
+          }
+          
+          // Run immediately
+          forceTopScroll();
+          
+          // Run multiple times with different timing approaches
+          setTimeout(forceTopScroll, 0);
+          setTimeout(forceTopScroll, 50);
+          setTimeout(forceTopScroll, 100);
+          setTimeout(forceTopScroll, 300);
+          setTimeout(forceTopScroll, 500);
+          setTimeout(forceTopScroll, 1000);
+          
+          // Also run when DOM is ready
+          document.addEventListener('DOMContentLoaded', function() {
+            forceTopScroll();
+            setTimeout(forceTopScroll, 100);
+            setTimeout(forceTopScroll, 500);
+          });
+          
+          // Also run when window loads
+          window.addEventListener('load', function() {
+            forceTopScroll();
+            setTimeout(forceTopScroll, 100);
+            setTimeout(forceTopScroll, 500);
+            
+            // Clear the flags after we're done
+            setTimeout(() => {
+              sessionStorage.removeItem('force_map_scroll');
+              sessionStorage.removeItem('map_scroll_time');
+            }, 2000);
+          });
+        }
+      })();
+    </script>
+    
+    <!-- Inline critical CSS to prevent flickering -->
+    <style id="critical-css">
+      /* Critical styles that must load immediately */
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f7;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+      
+      /* Stable loading container that won't flicker */
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        background-color: #2563eb;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+      }
+      
+      .loading-container.fade-out {
+        opacity: 0;
+      }
+      
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      .loading-text {
+        color: white;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 18px;
+        margin-top: 20px;
+        text-align: center;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* Root container must be full screen */
+      #root {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        position: relative;
+      }
+      
+      /* iOS PWA specific fixes */
+      @supports (-webkit-touch-callout: none) {
+        /* Target iOS devices */
+        html, body {
+          height: 100vh;
+          width: 100vw;
+          position: fixed;
+          overflow: hidden;
+          /* Prevent iOS rubber-banding effect */
+          -webkit-overflow-scrolling: touch;
+        }
+        
+        #root {
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+      }
+    </style>
+    
+    <!-- Basic initialization script that doesn't rely on async operations -->
+    <script>
+      // Set a global variable to indicate this is a PWA
+      window.IS_PWA = !!(
+        navigator.standalone || 
+        window.matchMedia('(display-mode: standalone)').matches
+      );
+      
+      // Flag to track if we've already handled initialization
+      window.PWA_INITIALIZED = false;
+      
+      // Track app readiness state
+      window.APP_READY = false;
+      
+      // Basic initialization that must happen synchronously
+      function initApp() {
+        // If this script runs twice, exit early
+        if (window.PWA_INITIALIZED) return;
+        window.PWA_INITIALIZED = true;
+        
+        // Mark the loading container to avoid flickering
+        const loadingEl = document.querySelector('.loading-container');
+        if (loadingEl) {
+          loadingEl.setAttribute('data-stable', 'true');
+        }
+        
+        // Clear localStorage and sessionStorage in a try/catch
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+        } catch (e) {
+          console.error('Storage clear failed:', e);
+        }
+        
+        // Store installation info for debugging
+        if (window.IS_PWA) {
+          try {
+            localStorage.setItem('pwa-installed', 'true');
+            localStorage.setItem('pwa-install-time', new Date().toISOString());
+            document.querySelector('meta[name="polis-installed"]').setAttribute('content', 'yes');
+          } catch (e) {
+            console.error('Could not set installation info:', e);
+          }
+        }
+      }
+      
+      // Run initialization immediately
+      initApp();
+      
+      // Function to hide the loading screen with a faster transition
+      function hideLoadingScreen() {
+        const loadingEl = document.querySelector('.loading-container');
+        if (loadingEl) {
+          loadingEl.classList.add('fade-out');
+          setTimeout(function() {
+            if (loadingEl.parentNode) {
+              loadingEl.parentNode.removeChild(loadingEl);
+            }
+          }, 300); // Reduced from 500ms to 300ms
+        }
+      }
+      
+      // Check if #root has content to determine if React has mounted
+      function checkRootContent() {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          window.APP_READY = true;
+          hideLoadingScreen();
+          return true;
+        }
+        return false;
+      }
+      
+      // Setup to hide loading screen as soon as possible
+      window.addEventListener('DOMContentLoaded', function() {
+        // Start interval to check for content in the root element
+        const checkInterval = setInterval(function() {
+          if (checkRootContent()) {
+            clearInterval(checkInterval);
+          }
+        }, 100); // Check every 100ms
+        
+        // Shorter backup timeout
+        setTimeout(function() {
+          if (!window.APP_READY) {
+            console.log('Backup timer removing loading screen after timeout');
+            hideLoadingScreen();
+            clearInterval(checkInterval);
+          }
+        }, 2000); // Reduced to 2 seconds max waiting time
+      });
+    </script>
+    
+    <!-- Caching and service worker management (less critical) -->
+    <script>
+      // App version - change this when deploying updates
+      const APP_VERSION = '1.1.3';
+      
+      // Function to clear all caches
+      const clearAllCaches = async () => {
+        if ('caches' in window) {
+          try {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+              cacheNames.map(cacheName => caches.delete(cacheName))
+            );
+            console.log('All caches cleared successfully');
+            
+            // Also clear IndexedDB
+            if ('indexedDB' in window) {
+              const databases = await indexedDB.databases();
+              databases.forEach(db => {
+                indexedDB.deleteDatabase(db.name);
+              });
+            }
+          } catch (err) {
+            console.error('Error clearing caches:', err);
+          }
+        }
+      };
+      
+      // Unregister existing service workers
+      if ('serviceWorker' in navigator) {
+        // Unregister all service workers
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+            console.log('Service worker unregistered');
+          }
+          
+          // After unregistering, register the new service worker
+          navigator.serviceWorker.register('/polis/sw.js?v=' + APP_VERSION)
+            .then(registration => {
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+              
+              // Notify the service worker to clear caches
+              if (registration.active) {
+                registration.active.postMessage('clearCaches');
+              }
+            })
+            .catch(err => {
+              console.error('ServiceWorker registration failed:', err);
+            });
+        });
+      }
+      
+      // Add a timestamp parameter to all fetch requests to bypass cache
+      const originalFetch = window.fetch;
+      window.fetch = function() {
+        let url = arguments[0];
+        if (typeof url === 'string') {
+          // Add a timestamp to all URLs
+          const timestamp = Date.now();
+          url = url.includes('?') ? 
+            `${url}&_nocache=${timestamp}` : 
+            `${url}?_nocache=${timestamp}`;
+          arguments[0] = url;
+        }
+        return originalFetch.apply(this, arguments);
+      };
+      
+      // Clear caches when page is fully loaded
+      window.addEventListener('load', function() {
+        // Force cache clearing
+        clearAllCaches().then(() => {
+          console.log('Caches cleared on page load');
+        });
+        
+        // Special handling for iOS PWA
+        if (window.IS_PWA) {
+          // Fix dimensions explicitly for iOS PWA
+          document.documentElement.style.height = '100vh';
+          document.body.style.height = '100vh';
+          document.getElementById('root').style.height = '100vh';
+          
+          // For standalone mode, monitor visibility changes
+          document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible' && !sessionStorage.getItem('just-reloaded')) {
+              sessionStorage.setItem('just-reloaded', 'true');
+              setTimeout(() => {
+                sessionStorage.removeItem('just-reloaded');
+              }, 5000);
+              
+              // Refresh content when returning to the app
+              window.location.reload();
+            }
+          });
+        }
+      });
+      
+      // Special handling for page reappearance from history
+      window.addEventListener('pageshow', function(event) {
+        // If the page is coming from cache (back navigation)
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+          window.location.reload();
+        }
+      });
+      
+      // Detect and prevent Safari's back-forward cache
+      window.addEventListener('unload', function() {});
+    </script>
+  </head>
+
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    
+    <!-- Stable loading indicator that will stay visible until React mounts -->
+    <div class="loading-container" data-stable="true">
+      <div class="spinner"></div>
+      <p class="loading-text">Loading Polis...</p>
+    </div>
+    
+    <div id="root"></div>
+    
+    <!-- Script source without query parameters -->
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
+</html> 

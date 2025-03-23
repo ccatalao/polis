@@ -4,18 +4,85 @@
  * This version fixes responsiveness issues and ensures proper rendering of all UI elements
  */
 
+/* Mobile PWA scroll fixes - add these at the beginning of the CSS file */
+html {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  height: 100%;
+  overflow-x: hidden; 
+  overscroll-behavior-y: contain; /* Prevent pull-to-refresh */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation; /* Improves touch response */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f5f5f7;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Use the custom viewport height variable */
+#root {
+  min-height: 100vh; /* Fallback */
+  min-height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Fallback */
+  min-height: calc(var(--vh, 1vh) * 100);
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 60px; /* Ensure content doesn't get hidden behind the nav */
+}
+
+/* Fix for iOS momentum scrolling */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fix for scroll container on mobile */
+@media (max-width: 768px) {
+  .app-content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Make sure fixed elements stay fixed on iOS */
+  .app-header {
+    position: sticky !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .bottom-nav {
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
 /* Reset and base styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #f5f5f7;
-  color: #333;
-  line-height: 1.6;
 }
 
 /* Full-width container styles for Home page */
@@ -1026,20 +1093,6 @@ body {
   .mobile-fullwidth {
     width: 100%;
   }
-}
-
-/* App Container and Layout Styles */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.app-content {
-  flex: 1;
-  padding-bottom: 75px; /* Add padding to prevent content from being hidden by the bottom nav */
 }
 
 /* Search Bar Styles */

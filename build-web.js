@@ -23,15 +23,8 @@ try {
   if (fs.existsSync('web-build/index.html')) {
     console.log('✅ Build verification passed: index.html exists');
     
-    // Force refreshing CSS by adding a timestamp to index.html references
-    const timestamp = Date.now();
-    console.log('🔄 Adding timestamp to CSS references for cache busting...');
-    
-    let indexHtml = fs.readFileSync('web-build/index.html', 'utf8');
-    // Add timestamp query parameter to CSS files
-    indexHtml = indexHtml.replace(/href="([^"]+\.css)"/g, `href="$1?v=${timestamp}"`);
-    fs.writeFileSync('web-build/index.html', indexHtml);
-    console.log('✅ Added timestamp to CSS references');
+    // No aggressive cache busting - rely on Vite's built-in hashing
+    console.log('✅ Using Vite\'s built-in content hashing for cache control');
   } else {
     console.warn('⚠️ Build verification warning: index.html missing');
   }
@@ -45,6 +38,10 @@ try {
   // Create .nojekyll file to prevent Jekyll processing
   fs.writeFileSync('web-build/.nojekyll', '');
   console.log('✅ Created .nojekyll file for GitHub Pages');
+  
+  // Copy the simplified service worker to the build directory
+  fs.copyFileSync('web/public/sw.js', 'web-build/sw.js');
+  console.log('✅ Copied simplified service worker to build directory');
   
 } catch (error) {
   console.error('❌ Build failed:', error);
