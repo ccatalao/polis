@@ -4,6 +4,7 @@ import overpassService from '../services/OverpassService';
 import '../styles/main.css';
 import '../styles/map.css';
 import { highlightSearchTerm } from '../utils/search';
+import { forceScrollToTop } from '../utils/scroll';
 
 // Feature types with user-friendly names
 const featureTypes = [
@@ -36,6 +37,65 @@ const GeoMapping = () => {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [mapStyle, setMapStyle] = useState('streets');
   const [activeFilters, setActiveFilters] = useState({});
+  
+  // Aggressive scroll to top effect that runs ONLY when the component mounts
+  useEffect(() => {
+    // Check if we have a special flag from the card click
+    const hasForceFlag = sessionStorage.getItem('force_map_scroll') === 'true';
+    const mapScrollTime = sessionStorage.getItem('map_scroll_time');
+    const isRecentClick = mapScrollTime && (Date.now() - parseInt(mapScrollTime)) < 10000; // Within 10 seconds
+    
+    // Log current pathname for debugging
+    console.log(`Current pathname: ${window.location.pathname}`);
+    
+    // Super aggressive scroll to top to ensure filters are visible
+    const superAggressiveScrollToTop = () => {
+      // Log for debugging
+      console.log('Executing super aggressive scroll for mapping page');
+      
+      // Immediate scrolls
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Use the utility function
+      forceScrollToTop();
+      
+      // Multiple rapid attempts
+      for (let i = 1; i <= 20; i++) {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }, i * 20);
+      }
+    };
+    
+    // If coming from card, use an even more extreme approach
+    if (hasForceFlag && isRecentClick) {
+      console.log('Special card click flag detected - using extreme scrolling');
+      
+      // Ultra aggressive - run even more times
+      for (let i = 0; i < 10; i++) {
+        setTimeout(superAggressiveScrollToTop, i * 50);
+      }
+      
+      // Clear the flag after processing
+      setTimeout(() => {
+        sessionStorage.removeItem('force_map_scroll');
+        sessionStorage.removeItem('map_scroll_time');
+      }, 2000);
+    } else {
+      // Run immediately
+      superAggressiveScrollToTop();
+      
+      // Also run with a small delay to handle any race conditions
+      setTimeout(superAggressiveScrollToTop, 50);
+      setTimeout(superAggressiveScrollToTop, 150);
+      setTimeout(superAggressiveScrollToTop, 300);
+      setTimeout(superAggressiveScrollToTop, 600);
+    }
+  }, []); // Empty dependency array ensures it only runs once on mount
   
   // Define filter options for each feature type
   const filterOptions = {

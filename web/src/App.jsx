@@ -23,10 +23,36 @@ const NavigationTabs = () => {
     return location.pathname === path ? 'nav-link active' : 'nav-link';
   };
   
-  // Function to scroll to top when clicking navigation
-  const handleNavClick = () => {
-    // Use the utility function to ensure the scroll happens
+  // Enhanced function to ensure scroll to top when clicking navigation
+  const handleNavClick = (e) => {
+    // Immediately scroll to top without smooth behavior for instant results
+    window.scrollTo(0, 0);
+    
+    // Reset any scroll position values directly
+    if (document.documentElement) {
+      document.documentElement.scrollTop = 0;
+    }
+    if (document.body) {
+      document.body.scrollTop = 0;
+    }
+    
+    // Check if this is a navigation to the map page (where filters need to be visible)
+    const isMapLink = e.currentTarget.getAttribute('href') === '/mapping';
+    
+    // Then use the utility function as an additional measure
     forceScrollToTop();
+    
+    // Multiple attempts with short intervals for problematic cases
+    const attempts = isMapLink ? 10 : 5; // More attempts for mapping page
+    const interval = isMapLink ? 30 : 50; // Shorter interval for mapping page
+    
+    for (let i = 1; i <= attempts; i++) {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+      }, i * interval);
+    }
   };
   
   return (
@@ -81,17 +107,43 @@ const NavigationTabs = () => {
 const Layout = ({ children }) => {
   const location = useLocation();
   
-  // Add useEffect to force scroll to top when location changes
+  // Enhanced useEffect to force scroll to top when location changes
   useEffect(() => {
-    // Use the utility function for reliable scroll behavior
+    // Immediately scroll to top without smooth behavior for instant results
+    window.scrollTo(0, 0);
+    
+    // Reset any scroll position values directly
+    if (document.documentElement) {
+      document.documentElement.scrollTop = 0;
+    }
+    if (document.body) {
+      document.body.scrollTop = 0;
+    }
+    
+    // Check if this is the mapping page (where filters need to be visible)
+    const isMappingPage = location.pathname === '/mapping';
+    
+    // Use the utility function as an additional measure
     forceScrollToTop();
+    
+    // Multiple attempts with short intervals for problematic cases
+    const attempts = isMappingPage ? 10 : 5; // More attempts for mapping page
+    const interval = isMappingPage ? 30 : 50; // Shorter interval for mapping page
+    
+    for (let i = 1; i <= attempts; i++) {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+      }, i * interval);
+    }
   }, [location.pathname]);
   
   // Function to get the title based on the current route path
   const getSectionTitle = () => {
     switch (location.pathname) {
       case '/':
-        return 'Polis';
+        return 'Polis - Planeamento Informado';
       case '/municipio':
         return 'Município';
       case '/projects':
@@ -103,19 +155,48 @@ const Layout = ({ children }) => {
       case '/search':
         return 'Resultados da Pesquisa';
       default:
-        return 'Polis';
+        return 'Polis - Planeamento informado';
     }
   };
+  
+  // Function to handle going back to the previous page
+  const handleGoBack = () => {
+    window.history.back();
+  };
+  
+  // Only show back button if we're not on the home page
+  const showBackButton = location.pathname !== '/';
   
   return (
     <div className="app-container">
       <header className="app-header">
         <div className="container">
+          {showBackButton && (
+            <button 
+              className="header-back-button" 
+              onClick={handleGoBack}
+              aria-label="Voltar"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <path d="M19 12H5" />
+                <path d="M12 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
           <h1 className="header-title">{getSectionTitle()}</h1>
+          <SearchBar />
         </div>
       </header>
-      
-      <SearchBar />
       
       <div className="app-content">
         {children}

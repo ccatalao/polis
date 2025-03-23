@@ -20,8 +20,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/municipio/reabilitacao-urbana.webp",
-        "fallback": "/images/municipio/reabilitacao-urbana.jpeg",
+        "webp": "/images/municipio/cm-site.webp",
+        "fallback": "/images/municipio/cm-site.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -44,8 +44,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/municipio/planos-municipais.webp",
-        "fallback": "/images/municipio/planos-municipais.jpeg",
+        "webp": "/images/municipio/cm-site.webp",
+        "fallback": "/images/municipio/cm-site.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -68,8 +68,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/municipio/habitacao.webp",
-        "fallback": "/images/municipio/habitacao.jpeg",
+        "webp": "/images/municipio/cm-site.webp",
+        "fallback": "/images/municipio/cm-site.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300
@@ -88,8 +88,8 @@
         }
       ],
       "imageUrl": {
-        "webp": "/images/municipio/centro-historico.webp",
-        "fallback": "/images/municipio/centro-historico.jpeg",
+        "webp": "/images/municipio/cm-site.webp",
+        "fallback": "/images/municipio/cm-site.jpeg",
         "thumbnail": {
           "width": 400,
           "height": 300

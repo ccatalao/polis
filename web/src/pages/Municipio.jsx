@@ -64,7 +64,7 @@ const ServiceCard = ({ service }) => {
           </picture>
         </div>
         <div className="image-overlay">
-          <span>Website da Câmara Municipal de Palmela</span>
+          <span>Visitar</span>
         </div>
       </div>
 

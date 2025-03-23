@@ -1,22 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/main.css';
+import { forceScrollToTop } from '../utils/scroll';
 
-// Function to scroll to top
-const scrollToTop = () => {
-  // More forceful scroll to top with smooth behavior
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth'
-  });
+// Enhanced function to aggressively scroll to top
+const aggressiveScrollToTop = (isMapLink = false) => {
+  // Immediately scroll to top without smooth behavior for instant results
+  window.scrollTo(0, 0);
   
-  // Fallback for older browsers or if smooth scrolling fails
-  setTimeout(() => {
-    if (window.pageYOffset > 0) {
+  // Reset any scroll position values directly
+  if (document.documentElement) {
+    document.documentElement.scrollTop = 0;
+  }
+  if (document.body) {
+    document.body.scrollTop = 0;
+  }
+  
+  // Use the utility function as an additional measure
+  forceScrollToTop();
+  
+  // Multiple attempts with short intervals for problematic cases
+  const attempts = isMapLink ? 15 : 5; // More attempts for mapping page
+  const interval = isMapLink ? 10 : 50; // Even shorter interval for mapping page (10ms)
+  
+  for (let i = 1; i <= attempts; i++) {
+    setTimeout(() => {
       window.scrollTo(0, 0);
-    }
-  }, 100);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+    }, i * interval);
+  }
+  
+  // For mapping specifically, use requestAnimationFrame for better timing
+  if (isMapLink) {
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
+    });
+    
+    // Set a sessionStorage flag for the mapping page
+    sessionStorage.setItem('force_map_scroll', 'true');
+  }
 };
 
 // Feature Card Component with path handling logic
@@ -62,10 +87,50 @@ const FeatureCard = ({ title, description, imageUrl, linkTo }) => {
         return 'Explorar';
     }
   };
+  
+  // Enhanced handle click function with special handling for map
+  const handleCardClick = (e) => {
+    const isMapLink = linkTo === '/mapping';
+    
+    if (isMapLink) {
+      // For mapping, override the default link behavior to ensure scrolling works
+      e.preventDefault();
+      
+      // Immediately scroll to top without smooth behavior
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Add a stronger hint for the mapping page
+      sessionStorage.setItem('force_map_scroll', 'true');
+      sessionStorage.setItem('map_scroll_time', Date.now().toString());
+      
+      // Extra aggressive approach with repeated attempts
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }, i * 10);
+      }
+      
+      // Call the normal scroll function too
+      aggressiveScrollToTop(true);
+      
+      // After trying to scroll, navigate programmatically with the correct base URL
+      setTimeout(() => {
+        // Use the correct URL with the /polis/ base
+        window.location.href = `/polis${linkTo}`;
+      }, 50);
+    } else {
+      // For non-map links, use the normal approach
+      aggressiveScrollToTop(false);
+    }
+  };
 
   return (
     <div className="content-card mobile-fullwidth">
-      <Link to={linkTo} className="content-image-link" onClick={scrollToTop}>
+      <Link to={linkTo} className="content-image-link" onClick={handleCardClick}>
         <div className={`content-image ${!imageLoaded ? 'loading' : ''}`}>
           <picture>
             <img 
@@ -169,12 +234,11 @@ const Home = () => {
         <div className="footer-content">
           <h3>Sobre o Polis</h3>
           <p>
-            Polis é uma plataforma abrangente de informação sobre planeamento urbano, 
-            desenhada para fornecer acesso a recursos, serviços e conhecimentos 
-            relacionados com planeamento e desenvolvimento urbano. A aplicação serve 
-            como um hub centralizado para diversos interessados, incluindo urbanistas, 
-            funcionários municipais, investigadores e cidadãos interessados no 
-            desenvolvimento urbano.
+          Polis é um recurso desenvolvido pela Comissão de Ordenamento do Território, Urbanismo, Reabilitação Urbana e Obras Públicas no âmbito do seu trabalho na Assembleia Municipal de Palmela.
+          </p>
+          <p></p>
+          <p>
+          Destina-se a cidadãos, decisores políticos e a todos os interessados nas áreas do urbanismo, planeamento territorial e reabilitação urbana em Palmela.
           </p>
         </div>
       </div>

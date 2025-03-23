@@ -1,47 +1,59 @@
 /**
- * Utility function to forcefully scroll to the top of the page.
- * Uses multiple methods to ensure maximum browser compatibility.
+ * Utility function to scroll to the top of the page
+ * Using multiple methods for maximum compatibility
  */
 export const scrollToTop = () => {
-  // Direct method
-  if (typeof window !== 'undefined') {
-    // Primary method
+  // Modern browsers
+  if (window.scrollTo) {
     window.scrollTo(0, 0);
-    
-    // Alternate method
-    if (typeof window.scroll === 'function') {
-      window.scroll(0, 0);
-    }
-    
-    // Browser-specific methods
-    if (typeof document !== 'undefined') {
-      // For Safari
-      if (typeof document.body.scrollTop !== 'undefined') {
-        document.body.scrollTop = 0;
-      }
-      
-      // For Chrome, Firefox, IE and Opera
-      if (typeof document.documentElement.scrollTop !== 'undefined') {
-        document.documentElement.scrollTop = 0;
-      }
-    }
+  }
+  
+  // For older browsers
+  if (document.documentElement) {
+    document.documentElement.scrollTop = 0;
+  }
+  
+  // For Safari
+  if (document.body) {
+    document.body.scrollTop = 0;
   }
 };
 
 /**
- * Utility function to ensure scroll position is at the top.
- * Call this when you need to be absolutely sure the page is scrolled to top.
+ * Aggressively force scrolling to the top using multiple attempts
+ * This ensures the page is scrolled to top.
  */
 export const forceScrollToTop = () => {
-  // Immediate scroll
+  // Immediate scroll with smooth behavior
+  if (window.scrollTo) {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+  
+  // Immediate scroll without smooth behavior as backup
   scrollToTop();
   
-  // Additional scroll attempts with minimal delay
+  // Additional scroll attempts with delays to ensure it works
+  // The first attempt may be blocked by browser optimizations
   setTimeout(() => {
     scrollToTop();
-  }, 0);
+  }, 10);
+  
+  setTimeout(() => {
+    scrollToTop();
+  }, 50);
   
   setTimeout(() => {
     scrollToTop();
   }, 100);
+  
+  // Final attempt with longer delay
+  setTimeout(() => {
+    if (window.pageYOffset > 0) {
+      window.scrollTo(0, 0);
+    }
+  }, 200);
 }; 
